@@ -22,20 +22,32 @@
                 </div>
             </a>
             @* Login *@
-            <div class="d-flex justify-content-end">
-                <div>
-                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Hello, User!
-                    </button>
-                    <div class="dropdown-menu h-50 w-50">
-                        
-                    </div>
-                </div>
-                @* Cart *@
-                <button class="btn btn-success rounded-circle m-3" data-bs-toggle="modal" data-bs-target="#loginModal">
+        <div class="d-flex justify-content-end">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Hello, User!
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+            </div>
+            @* Cart *@
+            <div class="dropdown">
+                <button class="btn btn-success rounded-circle m-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-cart-fill m-2 fs-4"></i>
                 </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
             </div>
+            <button class="btn btn-success rounded-circle m-3" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <i class="bi bi-cart-fill m-2 fs-4"></i>
+            </button>
+        </div>
         </div>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white mb-3 d-flex justify-content-center">
             <div>
