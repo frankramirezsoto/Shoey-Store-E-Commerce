@@ -13,21 +13,7 @@
 <body>
     <!-- Register Modal -->
     <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Register</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Login</button>
-                </div>
-            </div>
-        </div>
+        @Html.Partial("~/Views/Register/Register.cshtml");
     </div>
     <!-- Login Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -43,7 +29,7 @@
                 </div>
             </a>
             @* Login *@
-            <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-end align-items-center">
                 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#registerModal">
                     Register
                 </button>
@@ -51,9 +37,11 @@
                     Log In
                 </button>
                 @* Cart *@
+            <div>
                 <button class="btn btn-success rounded-circle m-3" data-bs-toggle="modal" data-bs-target="#loginModal">
                     <i class="bi bi-cart-fill m-2 fs-4"></i>
                 </button>
+            </div>
             </div>
         </div>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white mb-3 d-flex justify-content-center">
