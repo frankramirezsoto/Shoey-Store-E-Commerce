@@ -45,10 +45,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -121,12 +129,50 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Calificacione.cs">
+      <DependentUpon>StoreModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Cliente.cs">
+      <DependentUpon>StoreModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\ClientViewModel.cs" />
+    <Compile Include="Models\DetallesOrden.cs">
+      <DependentUpon>StoreModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Orden.cs">
+      <DependentUpon>StoreModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Producto.cs">
+      <DependentUpon>StoreModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StoreModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StoreModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StoreModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StoreModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StoreModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StoreModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Vendedor.cs">
+      <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\assets\logo.svg" />
+    <Content Include="Content\assets\Montserrat\OFL.txt" />
+    <Content Include="Content\assets\Montserrat\README.txt" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -146,12 +192,49 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Models\StoreModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>StoreModel.Context.cs</LastGenOutput>
+      <DependentUpon>StoreModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\StoreModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>StoreModel.edmx</DependentUpon>
+      <LastGenOutput>StoreModel.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\assets\Montserrat\Montserrat-Italic-VariableFont_wght.ttf" />
+    <Content Include="Content\assets\Montserrat\Montserrat-VariableFont_wght.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-Black.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-BlackItalic.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-Bold.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-BoldItalic.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-ExtraBold.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-ExtraBoldItalic.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-ExtraLight.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-ExtraLightItalic.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-Italic.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-Light.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-LightItalic.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-Medium.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-MediumItalic.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-Regular.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-SemiBold.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-SemiBoldItalic.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-Thin.ttf" />
+    <Content Include="Content\assets\Montserrat\static\Montserrat-ThinItalic.ttf" />
+    <EntityDeploy Include="Models\StoreModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>StoreModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\StoreModel.edmx.diagram">
+      <DependentUpon>StoreModel.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -178,11 +261,11 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_LayoutLogged.cshtml" />
+    <Content Include="Views\Login\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
-    <Folder Include="Views\assets\" />
+    <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -210,6 +293,9 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

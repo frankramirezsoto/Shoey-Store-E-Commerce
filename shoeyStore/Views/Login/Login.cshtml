@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Login</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <form id="login" class="px-3">
+                <div class="modal-body">
+                    <!-- Email input -->
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="email">Email address</label>
+                        <input type="email" id="Email" name="Email" class="form-control" />
+                    </div>
+
+                    <!-- Password input -->
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="pass">Password</label>
+                        <input type="password" id="Password" name="Password" class="form-control" />
+                    </div>
+
+                    <!-- 2 column grid layout for inline styling -->
+                    <div class="row mb-4">
+                        <div class="col d-flex justify-content-center">
+                            <!-- Checkbox -->
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
+                                <label class="form-check-label" for="form2Example31"> Remember me </label>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <!-- Simple link -->
+                            <a href="#!">Forgot password?</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Register buttons -->
+                <div class="text-center">
+                    <p>Not a member? <a href="#!">Register</a></p>
+                </div>
+                <!-- Modal Footer with Login Button  -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @*<script>
+            $(document).ready(function () {
+            //1. CAPTURAR LO VALORES DEL LOGIN
+            $("#login").submit(function (ev) {
+                ev.preventDefault();
+                console.log("LLEGO A SUBMIT", ev);
+
+                //2. Conectarnos al Controllador / API
+                const URL = "@Url.Content("~/Login/Login")";
+
+                //3. Enviar todo al controler
+                let parametros = $(this).serialize();
+                console.log("Parametros", parametros)
+
+                $.post(URL, parametros, function ( data ) {
+                    if (data == "200") {
+                        document.location.href = "@Url.Content("~/")"
+                        console.log("logueado");
+                    } else {
+                        alert(data)
+                    }
+                })
+            })
+
+        });
+        </script>*@
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("Script loaded");
+
+        //1. CAPTURAR LO VALORES DEL LOGIN
+        const loginForm = document.getElementById("login");
+        if (!loginForm) {
+            console.error("Form with id 'login' not found");
+            return;
+        }
+
+        loginForm.addEventListener("submit", function (ev) {
+            ev.preventDefault();
+            console.log("Form submitted");
+
+            //2. Conectarnos al Controllador / API
+            const URL = "@Url.Content("~/Login/Login")";
+            console.log("URL:", URL);
+
+            //3. Enviar todo al controlador
+            let formData = new FormData(loginForm);
+
+            //4. Use promises with fetch
+            const loginPromise = fetch(URL, {
+                method: "POST",
+                body: formData
+            }).then(function (response) {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.text();
+            });
+
+            //5. Handle the promise
+            loginPromise.then(function (data) {
+                console.log("Response data:", data);
+                if (data === "200") {
+                    window.location.href = "@Url.Content("~/")";
+                    console.log("Redirecting to home page");
+                } else {
+                    alert(data);
+                }
+            }).catch(function (error) {
+                console.error("Error:", error);
+                // Handle the error as needed
+            });
+        });
+    });
+    </script>
+
+
+}
+

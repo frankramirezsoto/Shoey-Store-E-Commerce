@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2834718942b843389c7766b7bd7fda45" Name="Diagram1">
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.Calificacione" Width="1.5" PointX="5.25" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.Cliente" Width="1.5" PointX="0.75" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.DetallesOrden" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.Orden" Width="1.5" PointX="3" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.Producto" Width="1.5" PointX="3" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.Vendedor" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="ShoeyDatabaseModel.FK__Calificac__IDPro__440B1D61" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoeyDatabaseModel.FK__Orden__IDCliente__3D5E1FD2" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoeyDatabaseModel.FK__DetallesO__IDOrd__403A8C7D" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoeyDatabaseModel.FK__DetallesO__IDPro__412EB0B6" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoeyDatabaseModel.FK__Producto__IDVend__38996AB5" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

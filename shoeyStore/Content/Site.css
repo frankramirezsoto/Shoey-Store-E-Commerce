@@ -18,3 +18,12 @@ select,
 textarea {
     max-width: 280px;
 }
+
+@font-face {
+    font-family: montserrat;
+    src: url("assets/Montserrat/Montserrat-VariableFont_wght.ttf")
+}
+
+body {
+    font-family: montserrat;
+}

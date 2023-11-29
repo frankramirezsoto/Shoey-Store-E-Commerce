@@ -1,0 +1,441 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ShoeyDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Calificaciones">
+          <Key>
+            <PropertyRef Name="IDcalificacion" />
+          </Key>
+          <Property Name="IDcalificacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDProducto" Type="int" />
+          <Property Name="Comentarios" Type="varchar" MaxLength="50" />
+          <Property Name="Calificacion" Type="int" />
+        </EntityType>
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="IDCliente" />
+          </Key>
+          <Property Name="IDCliente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombreCliente" Type="varchar" MaxLength="50" />
+          <Property Name="CorreoElectronico" Type="varchar" MaxLength="100" />
+          <Property Name="Contrasenna" Type="varchar" MaxLength="20" />
+          <Property Name="NumeroTelefono" Type="varchar" MaxLength="10" />
+          <Property Name="Direccion" Type="varchar" MaxLength="50" />
+          <Property Name="TarjetaBancaria" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="DetallesOrden">
+          <Key>
+            <PropertyRef Name="IDDetalleOrden" />
+          </Key>
+          <Property Name="IDDetalleOrden" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDOrden" Type="int" />
+          <Property Name="IDProducto" Type="int" />
+          <Property Name="Cantidad" Type="int" />
+          <Property Name="Subtotal" Type="numeric" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="Orden">
+          <Key>
+            <PropertyRef Name="IDOrden" />
+          </Key>
+          <Property Name="IDOrden" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDCliente" Type="int" />
+          <Property Name="FechaOrden" Type="date" />
+          <Property Name="MontoTotal" Type="numeric" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="Producto">
+          <Key>
+            <PropertyRef Name="IDProducto" />
+          </Key>
+          <Property Name="IDProducto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDVendedor" Type="int" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" />
+          <Property Name="Categoria" Type="varchar" MaxLength="50" />
+          <Property Name="Genero" Type="char" MaxLength="1" />
+          <Property Name="Marca" Type="varchar" MaxLength="50" />
+          <Property Name="Modelo" Type="varchar" MaxLength="100" />
+          <Property Name="TipoTalla" Type="varchar" MaxLength="10" />
+          <Property Name="TallaUS" Type="char" MaxLength="1" />
+          <Property Name="Precio" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="Cantidad" Type="int" />
+          <Property Name="Estado" Type="bit" />
+          <Property Name="Imagen" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Vendedor">
+          <Key>
+            <PropertyRef Name="IDVendedor" />
+          </Key>
+          <Property Name="IDVendedor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombreVendedor" Type="varchar" MaxLength="50" />
+          <Property Name="CorreoElectronico" Type="varchar" MaxLength="100" />
+          <Property Name="Contrasenna" Type="varchar" MaxLength="20" />
+          <Property Name="IBAN" Type="varchar" MaxLength="15" />
+          <Property Name="Verificado" Type="bit" />
+        </EntityType>
+        <Association Name="FK__Calificac__IDPro__440B1D61">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="0..1" />
+          <End Role="Calificaciones" Type="Self.Calificaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="IDProducto" />
+            </Principal>
+            <Dependent Role="Calificaciones">
+              <PropertyRef Name="IDProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetallesO__IDOrd__403A8C7D">
+          <End Role="Orden" Type="Self.Orden" Multiplicity="0..1" />
+          <End Role="DetallesOrden" Type="Self.DetallesOrden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orden">
+              <PropertyRef Name="IDOrden" />
+            </Principal>
+            <Dependent Role="DetallesOrden">
+              <PropertyRef Name="IDOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetallesO__IDPro__412EB0B6">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="0..1" />
+          <End Role="DetallesOrden" Type="Self.DetallesOrden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="IDProducto" />
+            </Principal>
+            <Dependent Role="DetallesOrden">
+              <PropertyRef Name="IDProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orden__IDCliente__3D5E1FD2">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+          <End Role="Orden" Type="Self.Orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="IDCliente" />
+            </Principal>
+            <Dependent Role="Orden">
+              <PropertyRef Name="IDCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Producto__IDVend__38996AB5">
+          <End Role="Vendedor" Type="Self.Vendedor" Multiplicity="0..1" />
+          <End Role="Producto" Type="Self.Producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendedor">
+              <PropertyRef Name="IDVendedor" />
+            </Principal>
+            <Dependent Role="Producto">
+              <PropertyRef Name="IDVendedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ShoeyDatabaseModelStoreContainer">
+          <EntitySet Name="Calificaciones" EntityType="Self.Calificaciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DetallesOrden" EntityType="Self.DetallesOrden" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orden" EntityType="Self.Orden" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vendedor" EntityType="Self.Vendedor" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Calificac__IDPro__440B1D61" Association="Self.FK__Calificac__IDPro__440B1D61">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="Calificaciones" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetallesO__IDOrd__403A8C7D" Association="Self.FK__DetallesO__IDOrd__403A8C7D">
+            <End Role="Orden" EntitySet="Orden" />
+            <End Role="DetallesOrden" EntitySet="DetallesOrden" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetallesO__IDPro__412EB0B6" Association="Self.FK__DetallesO__IDPro__412EB0B6">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="DetallesOrden" EntitySet="DetallesOrden" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orden__IDCliente__3D5E1FD2" Association="Self.FK__Orden__IDCliente__3D5E1FD2">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Orden" EntitySet="Orden" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Producto__IDVend__38996AB5" Association="Self.FK__Producto__IDVend__38996AB5">
+            <End Role="Vendedor" EntitySet="Vendedor" />
+            <End Role="Producto" EntitySet="Producto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ShoeyDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Calificacione">
+          <Key>
+            <PropertyRef Name="IDcalificacion" />
+          </Key>
+          <Property Name="IDcalificacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDProducto" Type="Int32" />
+          <Property Name="Comentarios" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Calificacion" Type="Int32" />
+          <NavigationProperty Name="Producto" Relationship="Self.FK__Calificac__IDPro__440B1D61" FromRole="Calificaciones" ToRole="Producto" />
+        </EntityType>
+        <EntityType Name="Cliente">
+          <Key>
+            <PropertyRef Name="IDCliente" />
+          </Key>
+          <Property Name="IDCliente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombreCliente" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CorreoElectronico" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Contrasenna" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="NumeroTelefono" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Direccion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TarjetaBancaria" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Ordens" Relationship="Self.FK__Orden__IDCliente__3D5E1FD2" FromRole="Cliente" ToRole="Orden" />
+        </EntityType>
+        <EntityType Name="DetallesOrden">
+          <Key>
+            <PropertyRef Name="IDDetalleOrden" />
+          </Key>
+          <Property Name="IDDetalleOrden" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDOrden" Type="Int32" />
+          <Property Name="IDProducto" Type="Int32" />
+          <Property Name="Cantidad" Type="Int32" />
+          <Property Name="Subtotal" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Orden" Relationship="Self.FK__DetallesO__IDOrd__403A8C7D" FromRole="DetallesOrden" ToRole="Orden" />
+          <NavigationProperty Name="Producto" Relationship="Self.FK__DetallesO__IDPro__412EB0B6" FromRole="DetallesOrden" ToRole="Producto" />
+        </EntityType>
+        <EntityType Name="Orden">
+          <Key>
+            <PropertyRef Name="IDOrden" />
+          </Key>
+          <Property Name="IDOrden" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDCliente" Type="Int32" />
+          <Property Name="FechaOrden" Type="DateTime" Precision="0" />
+          <Property Name="MontoTotal" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Cliente" Relationship="Self.FK__Orden__IDCliente__3D5E1FD2" FromRole="Orden" ToRole="Cliente" />
+          <NavigationProperty Name="DetallesOrdens" Relationship="Self.FK__DetallesO__IDOrd__403A8C7D" FromRole="Orden" ToRole="DetallesOrden" />
+        </EntityType>
+        <EntityType Name="Producto">
+          <Key>
+            <PropertyRef Name="IDProducto" />
+          </Key>
+          <Property Name="IDProducto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDVendedor" Type="Int32" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Categoria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Genero" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Marca" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Modelo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="TipoTalla" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="TallaUS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Precio" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Cantidad" Type="Int32" />
+          <Property Name="Estado" Type="Boolean" />
+          <Property Name="Imagen" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Calificaciones" Relationship="Self.FK__Calificac__IDPro__440B1D61" FromRole="Producto" ToRole="Calificaciones" />
+          <NavigationProperty Name="DetallesOrdens" Relationship="Self.FK__DetallesO__IDPro__412EB0B6" FromRole="Producto" ToRole="DetallesOrden" />
+          <NavigationProperty Name="Vendedor" Relationship="Self.FK__Producto__IDVend__38996AB5" FromRole="Producto" ToRole="Vendedor" />
+        </EntityType>
+        <EntityType Name="Vendedor">
+          <Key>
+            <PropertyRef Name="IDVendedor" />
+          </Key>
+          <Property Name="IDVendedor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombreVendedor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CorreoElectronico" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Contrasenna" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="IBAN" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Verificado" Type="Boolean" />
+          <NavigationProperty Name="Productoes" Relationship="Self.FK__Producto__IDVend__38996AB5" FromRole="Vendedor" ToRole="Producto" />
+        </EntityType>
+        <Association Name="FK__Calificac__IDPro__440B1D61">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="0..1" />
+          <End Role="Calificaciones" Type="Self.Calificacione" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="IDProducto" />
+            </Principal>
+            <Dependent Role="Calificaciones">
+              <PropertyRef Name="IDProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orden__IDCliente__3D5E1FD2">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+          <End Role="Orden" Type="Self.Orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="IDCliente" />
+            </Principal>
+            <Dependent Role="Orden">
+              <PropertyRef Name="IDCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetallesO__IDOrd__403A8C7D">
+          <End Role="Orden" Type="Self.Orden" Multiplicity="0..1" />
+          <End Role="DetallesOrden" Type="Self.DetallesOrden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orden">
+              <PropertyRef Name="IDOrden" />
+            </Principal>
+            <Dependent Role="DetallesOrden">
+              <PropertyRef Name="IDOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetallesO__IDPro__412EB0B6">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="0..1" />
+          <End Role="DetallesOrden" Type="Self.DetallesOrden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="IDProducto" />
+            </Principal>
+            <Dependent Role="DetallesOrden">
+              <PropertyRef Name="IDProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Producto__IDVend__38996AB5">
+          <End Role="Vendedor" Type="Self.Vendedor" Multiplicity="0..1" />
+          <End Role="Producto" Type="Self.Producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendedor">
+              <PropertyRef Name="IDVendedor" />
+            </Principal>
+            <Dependent Role="Producto">
+              <PropertyRef Name="IDVendedor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ShoeyDatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Calificaciones" EntityType="Self.Calificacione" />
+          <EntitySet Name="Clientes" EntityType="Self.Cliente" />
+          <EntitySet Name="DetallesOrdens" EntityType="Self.DetallesOrden" />
+          <EntitySet Name="Ordens" EntityType="Self.Orden" />
+          <EntitySet Name="Productoes" EntityType="Self.Producto" />
+          <EntitySet Name="Vendedors" EntityType="Self.Vendedor" />
+          <AssociationSet Name="FK__Calificac__IDPro__440B1D61" Association="Self.FK__Calificac__IDPro__440B1D61">
+            <End Role="Producto" EntitySet="Productoes" />
+            <End Role="Calificaciones" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orden__IDCliente__3D5E1FD2" Association="Self.FK__Orden__IDCliente__3D5E1FD2">
+            <End Role="Cliente" EntitySet="Clientes" />
+            <End Role="Orden" EntitySet="Ordens" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetallesO__IDOrd__403A8C7D" Association="Self.FK__DetallesO__IDOrd__403A8C7D">
+            <End Role="Orden" EntitySet="Ordens" />
+            <End Role="DetallesOrden" EntitySet="DetallesOrdens" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetallesO__IDPro__412EB0B6" Association="Self.FK__DetallesO__IDPro__412EB0B6">
+            <End Role="Producto" EntitySet="Productoes" />
+            <End Role="DetallesOrden" EntitySet="DetallesOrdens" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Producto__IDVend__38996AB5" Association="Self.FK__Producto__IDVend__38996AB5">
+            <End Role="Vendedor" EntitySet="Vendedors" />
+            <End Role="Producto" EntitySet="Productoes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ShoeyDatabaseModelStoreContainer" CdmEntityContainer="ShoeyDatabaseEntities">
+          <EntitySetMapping Name="Calificaciones">
+            <EntityTypeMapping TypeName="ShoeyDatabaseModel.Calificacione">
+              <MappingFragment StoreEntitySet="Calificaciones">
+                <ScalarProperty Name="IDcalificacion" ColumnName="IDcalificacion" />
+                <ScalarProperty Name="IDProducto" ColumnName="IDProducto" />
+                <ScalarProperty Name="Comentarios" ColumnName="Comentarios" />
+                <ScalarProperty Name="Calificacion" ColumnName="Calificacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clientes">
+            <EntityTypeMapping TypeName="ShoeyDatabaseModel.Cliente">
+              <MappingFragment StoreEntitySet="Cliente">
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="NombreCliente" ColumnName="NombreCliente" />
+                <ScalarProperty Name="CorreoElectronico" ColumnName="CorreoElectronico" />
+                <ScalarProperty Name="Contrasenna" ColumnName="Contrasenna" />
+                <ScalarProperty Name="NumeroTelefono" ColumnName="NumeroTelefono" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="TarjetaBancaria" ColumnName="TarjetaBancaria" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DetallesOrdens">
+            <EntityTypeMapping TypeName="ShoeyDatabaseModel.DetallesOrden">
+              <MappingFragment StoreEntitySet="DetallesOrden">
+                <ScalarProperty Name="IDDetalleOrden" ColumnName="IDDetalleOrden" />
+                <ScalarProperty Name="IDOrden" ColumnName="IDOrden" />
+                <ScalarProperty Name="IDProducto" ColumnName="IDProducto" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ordens">
+            <EntityTypeMapping TypeName="ShoeyDatabaseModel.Orden">
+              <MappingFragment StoreEntitySet="Orden">
+                <ScalarProperty Name="IDOrden" ColumnName="IDOrden" />
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="FechaOrden" ColumnName="FechaOrden" />
+                <ScalarProperty Name="MontoTotal" ColumnName="MontoTotal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Productoes">
+            <EntityTypeMapping TypeName="ShoeyDatabaseModel.Producto">
+              <MappingFragment StoreEntitySet="Producto">
+                <ScalarProperty Name="IDProducto" ColumnName="IDProducto" />
+                <ScalarProperty Name="IDVendedor" ColumnName="IDVendedor" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Categoria" ColumnName="Categoria" />
+                <ScalarProperty Name="Genero" ColumnName="Genero" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="TipoTalla" ColumnName="TipoTalla" />
+                <ScalarProperty Name="TallaUS" ColumnName="TallaUS" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Imagen" ColumnName="Imagen" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vendedors">
+            <EntityTypeMapping TypeName="ShoeyDatabaseModel.Vendedor">
+              <MappingFragment StoreEntitySet="Vendedor">
+                <ScalarProperty Name="IDVendedor" ColumnName="IDVendedor" />
+                <ScalarProperty Name="NombreVendedor" ColumnName="NombreVendedor" />
+                <ScalarProperty Name="CorreoElectronico" ColumnName="CorreoElectronico" />
+                <ScalarProperty Name="Contrasenna" ColumnName="Contrasenna" />
+                <ScalarProperty Name="IBAN" ColumnName="IBAN" />
+                <ScalarProperty Name="Verificado" ColumnName="Verificado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
