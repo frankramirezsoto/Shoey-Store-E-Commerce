@@ -17,9 +17,6 @@
                 <div>
                     <img src="@Url.Content("~/Content/assets/logo.svg")" alt="logo" class="logo m-2" style="height: 75px; width: 75px;" />
                 </div>
-                <div>
-
-                </div>
             </a>
             @* Login *@
             <div class="d-flex justify-content-end align-items-center">
@@ -31,7 +28,7 @@
                         <li><a class="dropdown-item" href="#"><i class="bi bi-gear-fill me-2"></i>Settings</a></li>
                         <li><a class="dropdown-item" href="#"><i class="bi bi-list-ul me-2"></i>My Orders</a></li>
                         <li><hr class="dropdown-divider"/></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-left me-2"></i>Sign Out</a></li>
+                        <li><a class="dropdown-item" href="@Url.Action("Logout","Login")"><i class="bi bi-box-arrow-left me-2"></i>Sign Out</a></li>
                     </ul>
                 </div>
                 @* Cart *@

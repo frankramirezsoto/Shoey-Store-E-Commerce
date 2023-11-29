@@ -11,19 +11,19 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <!-- Modal Body -->
-        <div class="modal-body">
-            <form id="login" class="px-3">
-                <div class="modal-body">
+        <div class="modal-body p-0">
+            <form id="login" >
+                <div class="modal-body px-5">
                     <!-- Email input -->
                     <div class="form-outline mb-4">
-                        <label class="form-label" for="email">Email address</label>
-                        <input type="email" id="Email" name="Email" class="form-control" />
+                        <label class="form-label" for="Email">Email address</label>
+                        <input type="email" id="Email" name="Email" class="form-control" style="max-width:100%"/>
                     </div>
 
                     <!-- Password input -->
                     <div class="form-outline mb-4">
-                        <label class="form-label" for="pass">Password</label>
-                        <input type="password" id="Password" name="Password" class="form-control" />
+                        <label class="form-label" for="Password">Password</label>
+                        <input type="password" id="Password" name="Password" class="form-control" style="max-width:100%" />
                     </div>
 
                     <!-- 2 column grid layout for inline styling -->
@@ -45,7 +45,7 @@
 
                 <!-- Register buttons -->
                 <div class="text-center">
-                    <p>Not a member? <a onclick="switchRegister()">Register</a></p>
+                    <p>Not a member? <a onclick="switchRegister()" style="text-decoration: underline; color: blue;">Register</a></p>
                 </div>
                 <!-- Modal Footer with Login Button  -->
                 <div class="modal-footer">

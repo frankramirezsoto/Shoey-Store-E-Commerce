@@ -49,7 +49,7 @@ namespace shoeyStore.Controllers
         public ActionResult Logout()
         {
             Session["Logged"] = null;
-            return RedirectToAction("Index", "Login");
+            return RedirectToAction("Index", "Home");
         }
     }
 }
