@@ -12,12 +12,12 @@
         </div>
         <!-- Modal Body -->
         <div class="modal-body p-0">
-            <form id="login" >
+            <form id="login">
                 <div class="modal-body px-5">
                     <!-- Email input -->
                     <div class="form-outline mb-4">
                         <label class="form-label" for="Email">Email address</label>
-                        <input type="email" id="Email" name="Email" class="form-control" style="max-width:100%"/>
+                        <input type="email" id="Email" name="Email" class="form-control" style="max-width:100%" />
                     </div>
 
                     <!-- Password input -->
@@ -38,7 +38,7 @@
 
                         <div class="col">
                             <!-- Simple link -->
-                            <a href="#!">Forgot password?</a>
+                            <a onclick="displayToast('We have sent you a forgot password email.','success')">Forgot password?</a>
                         </div>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                 </div>
                 <!-- Modal Footer with Login Button  -->
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button type="submit" class="btn btn-success">Login</button>
                 </div>
             </form>
         </div>
@@ -60,9 +60,6 @@
 <script>
         document.addEventListener("DOMContentLoaded", function () {
             console.log("Script loaded");
-
-            // Attach the event listener when the modal is fully shown
-            $('#loginModal').on('shown.bs.modal', function () {
                 //1. CAPTURAR LO VALORES DEL LOGIN
                 const loginForm = document.getElementById("login");
                 if (!loginForm) {
@@ -96,16 +93,14 @@
                     loginPromise.then(function (data) {
                         console.log("Response data:", data);
                         if (data === "200") {
-                            window.location.href = "@Url.Content("~/")";
+                            window.location.href = window.location.href;
                             console.log("Redirecting to home page");
                         } else {
-                            alert(data);
+                            displayToast(data,"danger");
                         }
                     }).catch(function (error) {
                         console.error("Error:", error);
-                        // Handle the error as needed
                     });
-                });
             });
         });
 

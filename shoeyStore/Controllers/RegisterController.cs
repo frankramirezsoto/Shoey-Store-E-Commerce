@@ -36,7 +36,7 @@ namespace shoeyStore.Controllers
                     db.Clientes.Add(clientTO);
                     db.SaveChanges();
 
-                    return Redirect(Url.Content("~/Home/Index#loginModal"));
+                    return Redirect(Url.Content("~/Home/Index?showToast=registrationSuccessful"));
             }
         }
     }
