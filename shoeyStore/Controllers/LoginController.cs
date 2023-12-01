@@ -33,17 +33,14 @@ namespace shoeyStore.Controllers
                     }
                     else
                     {
-                        return Content("Invalid User");
+                        return Content("Invalid username or password");
                     }
                 }
-
             }
             catch (Exception ex)
             {
                 return Content("The following error has occurred: " + ex.Message);
             }
-
-
         }
 
         public ActionResult Logout()

@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You get it at Shoey!</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+    </style>
+</head>
+<body>
+    <!-- Toast for Notifications -->
+    <div id="position" class="toast-container p-3 d-none">
+        <div id="notificationToast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <span id="toastMessage"></span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+    <div class="container min-vh-100">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    @RenderSection("scripts", required: false)
+    <script>
+        //Function to show an alert
+        function displayToast(message, background) {
+            var toastContainer = document.getElementById('notificationToast');
+            var toastMessage = document.getElementById('toastMessage');
+            var position = document.getElementById('position');
+
+            //Set the position
+            //Position is added here because if added when initialized the exit button shows static on startup
+            position.classList.remove('d-none')
+            position.classList.add('top-0', 'end-0')
+            // Set the message content
+            toastMessage.innerHTML = message;
+            toastContainer.classList.remove(...toastContainer.classList);
+            toastContainer.classList.add('toast', `text-bg-${background}`);
+
+            // Create a new Toast instance and show it
+            var toast = new bootstrap.Toast(toastContainer);
+            toast.show();
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const showToast = urlParams.get('showToast');
+        switch (showToast) {
+            case "registrationSuccessful":
+                displayToast("Your registration was successful! You may login now.", "success")
+                var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                loginModal.show();
+                break;
+        }
+    </script>
+</body>
+</html>
+

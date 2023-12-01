@@ -11,7 +11,8 @@ namespace shoeyStore.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Cliente
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,8 +22,11 @@ namespace shoeyStore.Models
         }
     
         public int IDCliente { get; set; }
+        [Required]
         public string NombreCliente { get; set; }
+        [Required]
         public string CorreoElectronico { get; set; }
+        [Required]
         public string Contrasenna { get; set; }
         public string NumeroTelefono { get; set; }
         public string Direccion { get; set; }

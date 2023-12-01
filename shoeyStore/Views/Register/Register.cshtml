@@ -1,4 +1,4 @@
-﻿
+﻿@model shoeyStore.Models.ViewModels.ClientViewModel
 @{
     ViewBag.Title = "Register";
 }
@@ -14,27 +14,31 @@
         <div class="modal-body p-0">
             @using (Html.BeginForm("Register", "Register", FormMethod.Post, new { role = "form", @class = "p-5 row", id = "register" }))
             {
-                <div class="col-md-6 px-3"> 
+                <div class="col-md-6 px-3">
                     <div class="form-outline mb-4">
-                        <input type="text" id="NombreCliente" name="NombreCliente" class="form-control" style="max-width:100%" required/>
+                        <input type="text" id="NombreCliente" name="NombreCliente" class="form-control" style="max-width:100%"  />
                         <label class="form-label" for="NombreCliente">Your Name</label>
+                        @Html.ValidationMessageFor(e => e.NombreCliente, "", new { @class = "d-block text-danger mb-2" })
                     </div>
 
                     <div class="form-outline mb-4">
-                        <input type="email" id="CorreoElectronico" name="CorreoElectronico" class="form-control" style="max-width:100%" required />
+                        <input type="email" id="CorreoElectronico" name="CorreoElectronico" class="form-control" style="max-width:100%"  />
                         <label class="form-label" for="CorreoElectronico">Your Email</label>
+                        @Html.ValidationMessageFor(e => e.CorreoElectronico, "", new { @class = "d-block text-danger mb-2" })
                     </div>
                 </div>
 
                 <div class="col-md-6 px-3">
                     <div class="form-outline mb-4">
-                        <input type="password" id="PasswordR" name="Contrasenna" class="form-control" style="max-width:100%" required/>
+                        <input type="password" id="PasswordR" name="Contrasenna" class="form-control" style="max-width:100%"  />
                         <label class="form-label" for="Contrasenna">Password</label>
+                        @Html.ValidationMessageFor(e => e.Contrasenna, "", new { @class = "d-block text-danger mb-2" })
                     </div>
 
                     <div class="form-outline mb-4">
-                        <input type="password" id="PasswordAgain" name="PasswordAgain" class="form-control" style="max-width:100%" required/>
+                        <input type="password" id="PasswordAgain" name="PasswordAgain" class="form-control" style="max-width:100%" />
                         <label class="form-label" for="PasswordAgain">Repeat your password</label>
+                        @Html.ValidationMessageFor(e => e.Contrasenna, "", new { @class = "d-block text-danger mb-2" })
                     </div>
                 </div>
 
@@ -58,7 +62,7 @@
                 </p>
 
             }
-            </div>
+        </div>
     </div>
 </div>
 

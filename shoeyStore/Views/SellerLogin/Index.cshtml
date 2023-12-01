@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutNone.cshtml";
+}
+
+    <div class="container-fluid p-0">
+        <div class="row">
+            <div class="col-sm-6 text-black p-5">
+                <div class="ms-xl-4 d-flex justify-content-center mb-3">
+                    <img src="@Url.Content("~/Content/assets/logo.svg")" alt="logo" class="logo m-2" style="height: 50px; width: 50px;" />
+                </div>
+                <div class="d-flex align-items-center h-custom-2 ">
+                    <form id="sellerlogin">
+                        <h3 class="fw-bold">Seller Administration</h3>
+                        <hr />
+                        <h3 class="fw-normal mb-3 pb-3">Log in</h3>
+
+                        <div class="form-outline mb-3">
+                            <input type="email" id="form2Example18" class="form-control" style="max-width:100%" />
+                            <label class="form-label" for="Email">Email address</label>
+                        </div>
+
+                        <div class="form-outline mb-3">
+                            <input type="password" id="form2Example28" class="form-control" style="max-width:100%" />
+                            <label class="form-label" for="Contrasenna">Password</label>
+                        </div>
+
+                        <div class="pt-1 mb-3">
+                            <button class="btn btn-success btn-lg btn-block text-white" type="submit">Login</button>
+                        </div>
+
+                        <p class="small mb-3 pb-lg-2"><a class="text-muted" onclick="displayToast('We have sent you a forgot password email.','success')">Forgot password?</a></p>
+                        <p>Don't have a seller account? <a href="#!" class="link-info">Register here</a></p>
+                    </form>
+                </div>
+
+            </div>
+            <div id="img-container" class="col-sm-6 px-0 d-none d-sm-block"></div>
+        </div>
+    </div>
+
+    <script>
+    //Fills the image with a call to Unsplash API
+    document.getElementById('img-container').innerHTML = '<img src="https://source.unsplash.com/random/?shoes" alt="Login image" class="w-100 vh-100" style="object-fit: cover; object-position: center;">';
+    document.addEventListener("DOMContentLoaded", function () {
+    console.log("Script loaded");
+        //1. CAPTURAR LO VALORES DEL LOGIN
+        const loginForm = document.getElementById("sellerlogin");
+        if (!loginForm) {
+            console.error("Form with id 'login' not found");
+            return;
+        }
+
+        loginForm.addEventListener("submit", function (ev) {
+            ev.preventDefault();
+            console.log("Form submitted");
+
+            //2. Conectarnos al Controllador / API
+            const URL = "@Url.Content("~/SellerLogin/Login")";
+            console.log("URL:", URL);
+
+            //3. Enviar todo al controlador
+            let formData = new FormData(loginForm);
+
+            //4. Use promises with fetch
+            const loginPromise = fetch(URL, {
+                method: "POST",
+                body: formData
+            }).then(function (response) {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.text();
+            });
+
+            //5. Handle the promise
+            loginPromise.then(function (data) {
+                console.log("Response data:", data);
+                if (data === "200") {
+                    window.location.href = window.location.href;
+                    console.log("Redirecting to home page");
+                } else {
+                    displayToast(data,"danger");
+                }
+            }).catch(function (error) {
+                console.error("Error:", error);
+            });
+    });
+});
+    </script>
+
+

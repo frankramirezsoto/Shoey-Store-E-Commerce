@@ -12,7 +12,7 @@
 </head>
 <body>
     <!-- Toast for Notifications -->
-    <div id="position" class="toast-container p-3">
+    <div id="position" class="toast-container p-3 d-none">
         <div id="notificationToast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
@@ -106,6 +106,7 @@
                         <ul class="list-unstyled">
                             <li><a href="#">Contact Us</a></li>
                             <li><a href="#">Become a seller</a></li>
+                            <li><a href="#">Seller Portal</a></li>
                         </ul>
                     </div>
                     <div class="col-md-4">
@@ -138,8 +139,9 @@
             var toastMessage = document.getElementById('toastMessage');
             var position = document.getElementById('position');
 
-            //Set the position 
+            //Set the position
             //Position is added here because if added when initialized the exit button shows static on startup
+            position.classList.remove('d-none')
             position.classList.add('top-0', 'end-0')
             // Set the message content
             toastMessage.innerHTML = message;
