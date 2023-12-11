@@ -27,6 +27,7 @@ namespace shoeyStore.Models.ViewModels
         public Nullable<int> Cantidad { get; set; }
         public Nullable<bool> Estado { get; set; }
         public byte[] Imagen { get; set; }
+        public string ImagenBase64 { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Calificacione> Calificaciones { get; set; }

@@ -19,7 +19,6 @@ namespace shoeyStore.Controllers
 
         public ActionResult Login(string Email, string Password)
         {
-            Debug.WriteLine($"Email: {Email}, Password: {Password}");
             try
             {
                 using (var db = new ShoeyDatabaseEntities())

@@ -1,0 +1,37 @@
+﻿@model List<shoeyStore.Models.ViewModels.ProductTableViewModel>
+@{
+    ViewBag.Title = "Products";
+    Layout = "~/Views/Shared/_LayoutSellerAdmin.cshtml";
+}
+
+<main class="p-5">
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-success" onclick="document.location.href = '@Url.Content("~/SellerAdmin/AddProduct")'"><i class="bi bi-plus-circle-fill text-white p-2"></i> Add</button>
+    </div>
+    <div class="container mt-4">
+        <div class="row">
+            @foreach (var product in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="data:image/jpeg;base64,@product.ImagenBase64" class="card-img-top" alt="Product Image">
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Nombre</h5>
+                            <p class="card-text">
+                                <strong>Category:</strong> @product.Categoria<br />
+                                <strong>Price:</strong> $@product.Precio<br />
+                                <!-- Add more product details as needed -->
+                            </p>
+                            <div class="btn-group" role="group">
+                                <a href="@Url.Action("EditProduct", "SellerAdmin", new { id = product.IDProducto })" class="btn btn-primary">Edit</a>
+                                <a href="@Url.Action("DeleteProduct", "SellerAdmin", new { id = product.IDProducto })" class="btn btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</main>
+

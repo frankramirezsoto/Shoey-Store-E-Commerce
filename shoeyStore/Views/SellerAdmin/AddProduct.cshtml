@@ -1,0 +1,109 @@
+﻿@model shoeyStore.Models.ViewModels.ProductViewModel
+@{
+    ViewBag.Title = "AddProduct";
+    Layout = "~/Views/Shared/_LayoutSellerAdmin.cshtml";
+    var user = (shoeyStore.Models.Vendedor)Session["SellerLogged"];
+}
+
+<main class="p-5">
+    @using (Html.BeginForm("AddProduct", "SellerAdmin", FormMethod.Post, new { role = "form", @class = "", onsubmit = "convertImageAndSubmit(event)" }))
+    {
+        <div class="row">
+            <div class="col-12 mb-3">
+                <div>
+                    <div class="mb-4 d-flex justify-content-center">
+                        <img id="selectedImage" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg"
+                             alt="example placeholder" style="width: 300px;" />
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="btn btn-success btn-rounded">
+                            <label class="form-label text-white m-1" for="image">Choose image</label>
+                            <input type="file" class="form-control d-none" id="image" name="image" onchange="displaySelectedImage(event, 'selectedImage')" />
+                        </div>
+                    </div>
+                </div>
+                @Html.HiddenFor(e => e.ImagenBase64, new { @id = "ImagenBase64" })
+                @Html.HiddenFor(e => e.IDVendedor, new { @Value = user.IDVendedor })
+            </div>
+            <div class="col-6">
+                @Html.LabelFor(e => e.Marca)
+                @Html.TextBoxFor(e => e.Marca, new { @class = "form-control" })
+                @Html.ValidationMessageFor(e => e.Marca, "", new { @class = "d-block text-danger mb-2" })
+
+                @Html.LabelFor(e => e.Modelo)
+                @Html.TextBoxFor(e => e.Modelo, new { @class = "form-control" })
+                @Html.ValidationMessageFor(e => e.Modelo, "", new { @class = "d-block text-danger mb-2" })
+
+                @Html.LabelFor(e => e.Nombre, "Descripcion")
+                @Html.TextBoxFor(e => e.Nombre, new { @class = "form-control" })
+                @Html.ValidationMessageFor(e => e.Nombre, "", new { @class = "d-block text-danger mb-2" })
+
+            </div>
+            <div class="col-6">
+                @Html.LabelFor(e => e.Cantidad)
+                @Html.TextBoxFor(e => e.Cantidad, new { @class = "form-control" })
+                @Html.ValidationMessageFor(e => e.Cantidad, "", new { @class = "d-block text-danger mb-2" })
+
+                @Html.LabelFor(e => e.Precio)
+                @Html.TextBoxFor(e => e.Precio, new { @class = "form-control" })
+                @Html.ValidationMessageFor(e => e.Precio, "", new { @class = "d-block text-danger mb-2" })
+
+                @*@Html.LabelFor(e => e.TallaUS)
+                @Html.DropDownListFor(model => model.TallaUS, Model.SizeList, "Select Size")
+                @Html.ValidationMessageFor(e => e.TallaUS, "", new { @class = "d-block text-danger mb-2" })
+
+                @Html.LabelFor(e => e.Genero)
+                @Html.DropDownListFor(model => model.Genero, Model.GenderList, "Select Gender")
+                @Html.ValidationMessageFor(e => e.Genero, "", new { @class = "d-block text-danger mb-2" })*@
+
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <input type="submit" class="btn btn-success" value="Add" />
+            <button onclick="document.location.href = '@Url.Content("~/SellerAdmin/Products?SellerId=" + user.IDVendedor)'">Back</button>
+        </div>
+        }
+    </main>
+
+<script>
+
+    function displaySelectedImage(event, elementId) {
+        const selectedImage = document.getElementById(elementId);
+        const fileInput = event.target;
+
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                selectedImage.src = e.target.result;
+            };
+
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    }
+
+    function convertImageAndSubmit(event) {
+        // Prevent the form from being submitted
+        event.preventDefault();
+
+        const input = document.getElementById('image');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                // Convert the image to base64 string
+                const base64String = e.target.result.split(',')[1];
+
+                // Set the value of the hidden input
+                document.getElementById('ImagenBase64').value = base64String;
+
+                // Submit the form
+                event.target.submit();
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+

@@ -277,6 +277,8 @@
     <Content Include="Views\SellerAdmin\Index.cshtml" />
     <Content Include="Views\Shared\_LayoutSellerAdmin.cshtml" />
     <Content Include="Views\SellerLogin\Register.cshtml" />
+    <Content Include="Views\SellerAdmin\Products.cshtml" />
+    <Content Include="Views\SellerAdmin\AddProduct.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
