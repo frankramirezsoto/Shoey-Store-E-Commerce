@@ -17,13 +17,13 @@
                         <h3 class="fw-normal mb-3 pb-3">Log in</h3>
 
                         <div class="form-outline mb-3">
-                            <input type="email" id="form2Example18" class="form-control" style="max-width:100%" />
+                            <input type="email" id="Email" name="Email" class="form-control" style="max-width:100%" />
                             <label class="form-label" for="Email">Email address</label>
                         </div>
 
                         <div class="form-outline mb-3">
-                            <input type="password" id="form2Example28" class="form-control" style="max-width:100%" />
-                            <label class="form-label" for="Contrasenna">Password</label>
+                            <input type="password" id="Password" name="Password" class="form-control" style="max-width:100%" />
+                            <label class="form-label" for="Password">Password</label>
                         </div>
 
                         <div class="pt-1 mb-3">
@@ -62,6 +62,7 @@
 
             //3. Enviar todo al controlador
             let formData = new FormData(loginForm);
+            console.log(formData)
 
             //4. Use promises with fetch
             const loginPromise = fetch(URL, {
@@ -78,7 +79,7 @@
             loginPromise.then(function (data) {
                 console.log("Response data:", data);
                 if (data === "200") {
-                    window.location.href = window.location.href;
+                    window.location.href = "@Url.Content("~/SellerAdmin/Index")";
                     console.log("Redirecting to home page");
                 } else {
                     displayToast(data,"danger");
