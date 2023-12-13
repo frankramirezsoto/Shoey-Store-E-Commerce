@@ -1,0 +1,195 @@
+﻿@model shoeyStore.Models.ViewModels.ProductViewModel
+@{
+    ViewBag.Title = "EditProduct";
+    Layout = "~/Views/Shared/_LayoutSellerAdmin.cshtml";
+    var user = (shoeyStore.Models.Vendedor)Session["SellerLogged"];
+}
+
+<main class="p-5 container-fluid">
+    @using (Html.BeginForm("EditProduct", "SellerAdmin", FormMethod.Post, new { role = "form", @class = "", onsubmit = "Submit(event)" }))
+    {
+        @Html.HiddenFor(e => e.IDProducto)
+
+        <div class="row">
+            <div class="col-12 mb-5">
+                <div>
+                    <div class="mb-4 d-flex justify-content-center">
+                        <img id="selectedImage" src="data:image;base64,@Model.ImagenBase64" alt="example placeholder" style="width: 300px;" />
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="btn btn-success btn-rounded">
+                            <label class="form-label text-white m-1" for="image">Choose image</label>
+                            <input type="file" class="form-control d-none" id="image" name="image" onchange="displaySelectedImage(event, 'selectedImage')" />
+                        </div>
+                    </div>
+                </div>
+                @Html.HiddenFor(e => e.ImagenBase64, new { @id = "ImagenBase64" })
+                @Html.HiddenFor(e => e.IDVendedor, new { @Value = user.IDVendedor })
+            </div>
+            <div class="d-flex justify-content-center">
+                <div class="col-6">
+                    <div>
+                        @Html.LabelFor(e => e.Marca)
+                        @Html.TextBoxFor(e => e.Marca, new { @class = "form-control", @style = "max-width:100%" })
+                        @Html.ValidationMessageFor(e => e.Marca, "", new { @class = "d-block text-danger mb-2" })
+
+                        @Html.LabelFor(e => e.Modelo)
+                        @Html.TextBoxFor(e => e.Modelo, new { @class = "form-control", @style = "max-width:100%" })
+                        @Html.ValidationMessageFor(e => e.Modelo, "", new { @class = "d-block text-danger mb-2" })
+
+                        @Html.LabelFor(e => e.Genero)
+                        @Html.DropDownListFor(e => e.Genero, new SelectList(Model.GenderList, "Value", "Text"), "Select Gender", new { @class = "form-control", @style = "max-width:100%" })
+                        @Html.ValidationMessageFor(e => e.Genero, "", new { @class = "d-block text-danger mb-2" })
+
+                        @Html.LabelFor(e => e.Nombre, "Descripcion")
+                        @Html.TextAreaFor(e => e.Nombre, new { @class = "form-control", @style = "max-width:100%" })
+                        @Html.ValidationMessageFor(e => e.Nombre, "", new { @class = "d-block text-danger mb-2" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="d-flex justify-content-end"><button type="button" class="btn btn-primary" onclick="addInventoryRow()">Add Inventory</button></div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Size</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody">
+                        @if (Model.InventoryEntries != null)
+                        {
+                            int rowCount = 0;
+                            foreach (var entry in Model.InventoryEntries)
+                            {
+                                <tr>
+                                    <input type="hidden" name="InventoryEntries[@rowCount].IDInventario" value="@Model.InventoryEntries[rowCount].IDInventario" />
+                                    <td>
+                                        <input type="number" step="0.01" class="form-control" name="InventoryEntries[@rowCount].TallaUS" value="@entry.TallaUS" />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" class="form-control" name="InventoryEntries[@rowCount].Cantidad" value="@entry.Cantidad" />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" class="form-control" name="InventoryEntries[@rowCount].Precio" value="@entry.Precio" />
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" onclick="removeInventoryRow(this)">Remove</button>
+                                    </td>
+                                </tr>
+                                rowCount++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <input type="submit" class="btn btn-success" value="Edit Product" />
+            <button class="btn btn-danger" onclick="document.location.href = '@Url.Content("~/SellerAdmin/Products")'">Back</button>
+        </div>
+    }
+</main>
+
+<script>
+    function displaySelectedImage(event, elementId) {
+        const selectedImage = document.getElementById(elementId);
+        const fileInput = event.target;
+
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                selectedImage.src = e.target.result;
+            };
+
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    }
+
+    function removeInventoryRow(button) {
+        var row = button.closest('tr');
+        row.parentNode.removeChild(row);
+    }
+
+    function Submit(event) {
+        // Prevent the form from being submitted
+        event.preventDefault();
+
+        const input = document.getElementById('image');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                // Convert the image to base64 string
+                const base64String = e.target.result.split(',')[1];
+
+                // Set the value of the hidden input
+                document.getElementById('ImagenBase64').value = base64String;
+
+                // Submit the form
+                event.target.submit();
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            // Submit the form without changing the image
+            event.target.submit();
+        }
+    }
+
+
+    function addInventoryRow() {
+        var tableBody = document.getElementById("inventoryTableBody");
+        var rowCount = tableBody.getElementsByTagName("tr").length;
+
+        var newRow = document.createElement("tr");
+
+        // Add size input
+        var sizeCell = document.createElement("td");
+        var sizeInput = document.createElement("input");
+        sizeInput.type = "number";
+        sizeInput.step = "0.01";
+        sizeInput.classList.add("form-control");
+        sizeInput.name = "InventoryEntries[" + rowCount + "].TallaUS";
+        sizeCell.appendChild(sizeInput);
+        newRow.appendChild(sizeCell);
+
+        // Add quantity input
+        var quantityCell = document.createElement("td");
+        var quantityInput = document.createElement("input");
+        quantityInput.type = "number";
+        quantityInput.step = "0.01";
+        quantityInput.classList.add("form-control");
+        quantityInput.name = "InventoryEntries[" + rowCount + "].Cantidad";
+        quantityCell.appendChild(quantityInput);
+        newRow.appendChild(quantityCell);
+
+        // Add price input
+        var priceCell = document.createElement("td");
+        var priceInput = document.createElement("input");
+        priceInput.type = "number";
+        priceInput.step = "0.01";
+        priceInput.classList.add("form-control");
+        priceInput.name = "InventoryEntries[" + rowCount + "].Precio";
+        priceCell.appendChild(priceInput);
+        newRow.appendChild(priceCell);
+
+        // Add remove button
+        var actionCell = document.createElement("td");
+        var removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.className = "btn btn-danger";
+        removeButton.textContent = "Remove";
+        removeButton.onclick = function () {
+            tableBody.removeChild(newRow);
+        };
+        actionCell.appendChild(removeButton);
+        newRow.appendChild(actionCell);
+
+        tableBody.appendChild(newRow);
+    }
+</script>

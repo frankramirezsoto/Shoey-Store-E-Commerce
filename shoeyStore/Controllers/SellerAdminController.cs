@@ -20,12 +20,15 @@ namespace shoeyStore.Controllers
 
         public ActionResult Products()
         {
+            //List of Products will be populated with the database request
             List<ProductTableViewModel> listProducts = null;
+            //Check on user session to obtain Seller ID
             var user = (Vendedor)Session["SellerLogged"];
 
             using (ShoeyDatabaseEntities db = new ShoeyDatabaseEntities())
             {
-                if (user != null) 
+                //If logged then it will fill the list of products
+                if (user != null)
                 {
                     listProducts = (from p in db.Productoes
                                     where p.IDVendedor == user.IDVendedor
@@ -52,8 +55,9 @@ namespace shoeyStore.Controllers
 
         [HttpGet]
         public ActionResult AddProduct()
-        {   
-            ProductViewModel model = new ProductViewModel();  
+        {
+            //Model returned to be able to populate the dropdown for gender
+            ProductViewModel model = new ProductViewModel();
 
             return View(model);
         }
@@ -77,7 +81,7 @@ namespace shoeyStore.Controllers
                 };
 
                 db.Productoes.Add(newProduct);
-                db.SaveChanges();  
+                db.SaveChanges();
 
                 if (model.InventoryEntries != null)
                 {
@@ -101,110 +105,133 @@ namespace shoeyStore.Controllers
             }
         }
 
-        //[HttpGet]
-        //public ActionResult EditProduct(int id)
-        //{
-        //    using (var db = new ShoeyDatabaseEntities())
-        //    {
-        //        // Retrieve the product and its associated inventory entries
-        //        var product = db.Productoes.Include(p => p.Inventarios).FirstOrDefault(p => p.IDProducto == id);
+        [HttpGet]
+        public ActionResult EditProduct(int id)
+        {
+            using (var db = new ShoeyDatabaseEntities())
+            {
+                // Retrieve the product from the database based on its id
+                var product = db.Productoes.Find(id);
+                // Fills a list with the Inventory items where the IDProducto matches the same as in the product to edit 
+                List<InventoryViewModel> inventoryList = db.Inventarios.Where(i => i.IDProducto == product.IDProducto).Select(i => new InventoryViewModel
+                {
+                    IDInventario = i.IDInventario,
+                    TallaUS = i.TallaUS,
+                    Cantidad = i.Cantidad,
+                    Precio = i.Precio,
+                }).ToList();
+                //If no product found, we redirect 
+                if (product == null)
+                {
+                    // Handle the case where the product is not found
+                    return RedirectToAction("Products", "SellerAdmin");
+                }
+                // Map the product
+                var viewModel = new ProductViewModel
+                {
+                    IDProducto = product.IDProducto,
+                    IDVendedor = product.IDVendedor,
+                    Nombre = product.Nombre,
+                    Categoria = product.Categoria,
+                    Genero = product.Genero,
+                    Marca = product.Marca,
+                    Modelo = product.Modelo,
+                    ImagenBase64 = Convert.ToBase64String(product.Imagen),
+                    InventoryEntries = inventoryList,
+                };
+                return View(viewModel);
+            }
+        }
 
-        //        if (product == null)
-        //        {
-        //            // Handle the case where the product is not found
-        //            return RedirectToAction("Products", "SellerAdmin");
-        //        }
+        [HttpPost]
+        public ActionResult EditProduct(ProductViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
 
-        //        // Map the product and its inventory entries to the view model
-        //        var viewModel = new ProductViewModel
-        //        {
-        //            IDVendedor = product.IDVendedor,
-        //            Nombre = product.Nombre,
-        //            Categoria = product.Categoria,
-        //            Genero = product.Genero,
-        //            Marca = product.Marca,
-        //            Modelo = product.Modelo,
-        //            ImagenBase64 = Convert.ToBase64String(product.Imagen),
-        //            InventoryEntries = product.Inventarios.Select(i => new InventoryViewModel
-        //            {
-        //                TallaUS = i.TallaUS,
-        //                Cantidad = i.Cantidad,
-        //                Precio = i.Precio
-        //            }).ToList()
-        //        };
+            using (var db = new ShoeyDatabaseEntities())
+            {
+                // Retrieve the product from the database based on its id
+                var existingProduct = db.Productoes.Find(model.IDProducto);
+                List<InventoryViewModel> inventoryList = db.Inventarios.Where(i => i.IDProducto == model.IDProducto).Select(i => new InventoryViewModel
+                {
+                    IDInventario = i.IDInventario,
+                    TallaUS = i.TallaUS,
+                    Cantidad = i.Cantidad,
+                    Precio = i.Precio,
+                }).ToList();
 
-        //        return View(viewModel);
-        //    }
-        //}
+                if (existingProduct == null)
+                {
+                    // Redirects if the product is not found
+                    return RedirectToAction("Products", "SellerAdmin");
+                }
 
-        //[HttpPost]
-        //public ActionResult EditProduct(ProductViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        // Handle invalid model state
-        //        return View(model);
-        //    }
+                // Update the existing product with the new information
+                existingProduct.IDProducto = model.IDProducto;
+                existingProduct.Nombre = model.Nombre;
+                existingProduct.Categoria = model.Categoria;
+                existingProduct.Genero = model.Genero;
+                existingProduct.Marca = model.Marca;
+                existingProduct.Modelo = model.Modelo;
 
-        //    using (var db = new ShoeyDatabaseEntities())
-        //    {
-        //        // Retrieve the existing product and associated inventory entries
-        //        var existingProduct = db.Productoes.Include(p => p.Inventarios).FirstOrDefault(p => p.IDProducto == model.IDProducto);
+                // Update the product image if a new one is provided
+                if (!string.IsNullOrEmpty(model.ImagenBase64))
+                {
+                    existingProduct.Imagen = Convert.FromBase64String(model.ImagenBase64);
+                }
 
-        //        if (existingProduct == null)
-        //        {
-        //            // Handle the case where the product is not found
-        //            return RedirectToAction("Products", "SellerAdmin");
-        //        }
+                db.Entry(existingProduct).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
 
-        //        // Update the existing product with the new information
-        //        existingProduct.Nombre = model.Nombre;
-        //        existingProduct.Categoria = model.Categoria;
-        //        existingProduct.Genero = model.Genero;
-        //        existingProduct.Marca = model.Marca;
-        //        existingProduct.Modelo = model.Modelo;
+                // Update inventory entries
+                if (model.InventoryEntries != null)
+                {
 
-        //        // Update the product image if a new one is provided
-        //        if (!string.IsNullOrEmpty(model.ImagenBase64))
-        //        {
-        //            existingProduct.Imagen = Convert.FromBase64String(model.ImagenBase64);
-        //        }
+                    foreach (var entry in model.InventoryEntries)
+                    {
+                        // Find the corresponding inventory entry
+                        var existingInventory = db.Inventarios.Find(entry.IDInventario);
 
-        //        // Update inventory entries
-        //        if (model.InventoryEntries != null)
-        //        {
-        //            foreach (var entry in model.InventoryEntries)
-        //            {
-        //                // Find the corresponding inventory entry
-        //                var existingInventory = existingProduct.Inventarios.FirstOrDefault(i => i.TallaUS == entry.TallaUS);
+                        if (existingInventory != null)
+                        {
+                            // Update existing inventory entry
+                            existingInventory.TallaUS = entry.TallaUS;
+                            existingInventory.Cantidad = entry.Cantidad;
+                            existingInventory.Precio = entry.Precio;
 
-        //                if (existingInventory != null)
-        //                {
-        //                    // Update existing inventory entry
-        //                    existingInventory.Cantidad = entry.Cantidad;
-        //                    existingInventory.Precio = entry.Precio;
-        //                }
-        //                else
-        //                {
-        //                    // Create a new inventory entry if it doesn't exist
-        //                    var newInventory = new Inventario
-        //                    {
-        //                        IDProducto = existingProduct.IDProducto,
-        //                        TallaUS = entry.TallaUS,
-        //                        Cantidad = entry.Cantidad,
-        //                        Precio = entry.Precio,
-        //                    };
+                            // No need to save changes here
+                        }
+                        else
+                        {
+                            // Create a new inventory entry if it doesn't exist
+                            var newInventory = new Inventario
+                            {
+                                IDProducto = existingProduct.IDProducto,
+                                TallaUS = entry.TallaUS,
+                                Cantidad = entry.Cantidad,
+                                Precio = entry.Precio,
+                            };
 
-        //                    db.Inventarios.Add(newInventory);
-        //                }
-        //            }
-        //        }
+                            db.Inventarios.Add(newInventory);
+                            // Save changes only once after the loop
+                        }
+                    }
 
-        //        db.SaveChanges();
+                    // Remove inventory entries that are not present in the model
+                    var inventoryIds = model.InventoryEntries.Select(e => e.IDInventario).ToList();
+                    var inventoriesToRemove = db.Inventarios.Where(i => i.IDProducto == existingProduct.IDProducto && !inventoryIds.Contains(i.IDInventario)).ToList();
+                    foreach (var inventory in inventoriesToRemove)
+                    {
+                        db.Inventarios.Remove(inventory);
+                    }
 
-        //        return RedirectToAction("Products", "SellerAdmin");
-        //    }
-        //}
+                    // Save changes once after the loop
+                    db.SaveChanges();
+                }
+            }
+            return RedirectToAction("Products", "SellerAdmin");
+        }
+
 
         [HttpPost]
         public ActionResult DeleteProduct(int Id)
