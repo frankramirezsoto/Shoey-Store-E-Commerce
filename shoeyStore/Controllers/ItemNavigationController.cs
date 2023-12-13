@@ -33,11 +33,6 @@ namespace shoeyStore.Controllers
                     query = query.Where(p => p.Marca == brand);
                 }
 
-                if (!string.IsNullOrEmpty(size))
-                {
-                    query = query.Where(p => p.TallaUS == size);
-                }
-
 
                 listProducts = query.Select(p => new ProductTableViewModel
                 {
@@ -47,11 +42,7 @@ namespace shoeyStore.Controllers
                     Genero = p.Genero,
                     Marca = p.Marca,
                     Modelo = p.Modelo,
-                    TipoTalla = p.TipoTalla,
-                    TallaUS = p.TallaUS,
-                    Precio = p.Precio,
-                    Cantidad = p.Cantidad,
-                    Estado = p.Estado,
+
                     Imagen = p.Imagen,
                 }).ToList();
             }

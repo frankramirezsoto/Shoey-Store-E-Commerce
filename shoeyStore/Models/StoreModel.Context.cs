@@ -25,9 +25,10 @@ namespace shoeyStore.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Calificacione> Calificaciones { get; set; }
+        public virtual DbSet<Calificacion> Calificacions { get; set; }
         public virtual DbSet<Cliente> Clientes { get; set; }
         public virtual DbSet<DetallesOrden> DetallesOrdens { get; set; }
+        public virtual DbSet<Inventario> Inventarios { get; set; }
         public virtual DbSet<Orden> Ordens { get; set; }
         public virtual DbSet<Producto> Productoes { get; set; }
         public virtual DbSet<Vendedor> Vendedors { get; set; }

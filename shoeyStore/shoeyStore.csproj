@@ -133,20 +133,20 @@
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\SellerAdminController.cs" />
     <Compile Include="Controllers\SellerLoginController.cs" />
+    <Compile Include="Filters\VerificarSesion.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Calificacione.cs">
+    <Compile Include="Models\Calificacion.cs">
       <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Cliente.cs">
       <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TableViewModels\ProductTableViewModel.cs" />
-    <Compile Include="Models\ViewModels\ItemNavigationViewModel.cs" />
-    <Compile Include="Models\ViewModels\ProductViewModel.cs" />
-    <Compile Include="Models\ViewModels\ClientViewModel.cs" />
     <Compile Include="Models\DetallesOrden.cs">
+      <DependentUpon>StoreModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Inventario.cs">
       <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Orden.cs">
@@ -170,9 +170,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StoreModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\TableViewModels\ProductTableViewModel.cs" />
     <Compile Include="Models\Vendedor.cs">
       <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\InventoryViewModel.cs" />
+    <Compile Include="Models\ViewModels\ItemNavigationViewModel.cs" />
+    <Compile Include="Models\ViewModels\ProductViewModel.cs" />
+    <Compile Include="Models\ViewModels\ClientViewModel.cs" />
     <Compile Include="Models\ViewModels\SellerViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -202,8 +207,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Models\StoreModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>StoreModel.Context.cs</LastGenOutput>
       <DependentUpon>StoreModel.edmx</DependentUpon>
+      <LastGenOutput>StoreModel.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\StoreModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -282,7 +287,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Filters\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\ItemNavigation\" />
   </ItemGroup>

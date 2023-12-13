@@ -5,11 +5,11 @@
     var user = (shoeyStore.Models.Vendedor)Session["SellerLogged"];
 }
 
-<main class="p-5">
-    @using (Html.BeginForm("AddProduct", "SellerAdmin", FormMethod.Post, new { role = "form", @class = "", onsubmit = "convertImageAndSubmit(event)" }))
+<main class="p-5 container-fluid">
+    @using (Html.BeginForm("AddProduct", "SellerAdmin", FormMethod.Post, new { role = "form", @class = "", onsubmit = "Submit(event)" }))
     {
         <div class="row">
-            <div class="col-12 mb-3">
+            <div class="col-12 mb-5">
                 <div>
                     <div class="mb-4 d-flex justify-content-center">
                         <img id="selectedImage" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg"
@@ -25,49 +25,52 @@
                 @Html.HiddenFor(e => e.ImagenBase64, new { @id = "ImagenBase64" })
                 @Html.HiddenFor(e => e.IDVendedor, new { @Value = user.IDVendedor })
             </div>
-            <div class="col-6">
-                @Html.LabelFor(e => e.Marca)
-                @Html.TextBoxFor(e => e.Marca, new { @class = "form-control" })
-                @Html.ValidationMessageFor(e => e.Marca, "", new { @class = "d-block text-danger mb-2" })
+            <div class="d-flex justify-content-center">
+                <div class="col-6">
+                    <div>
+                        @Html.LabelFor(e => e.Marca)
+                    @Html.TextBoxFor(e => e.Marca, new { @class = "form-control", @style = "max-width:100%" })
+                    @Html.ValidationMessageFor(e => e.Marca, "", new { @class = "d-block text-danger mb-2" })
 
-                @Html.LabelFor(e => e.Modelo)
-                @Html.TextBoxFor(e => e.Modelo, new { @class = "form-control" })
-                @Html.ValidationMessageFor(e => e.Modelo, "", new { @class = "d-block text-danger mb-2" })
+                    @Html.LabelFor(e => e.Modelo)
+                    @Html.TextBoxFor(e => e.Modelo, new { @class = "form-control", @style = "max-width:100%" })
+                    @Html.ValidationMessageFor(e => e.Modelo, "", new { @class = "d-block text-danger mb-2" })
 
-                @Html.LabelFor(e => e.Nombre, "Descripcion")
-                @Html.TextBoxFor(e => e.Nombre, new { @class = "form-control" })
-                @Html.ValidationMessageFor(e => e.Nombre, "", new { @class = "d-block text-danger mb-2" })
+                    @Html.LabelFor(e => e.Genero)
+                    @Html.DropDownListFor(e => e.Genero, new SelectList(Model.GenderList, "Value", "Text"), "Select Gender", new { @class = "form-control", @style = "max-width:100%" })
+                    @Html.ValidationMessageFor(e => e.Genero, "", new { @class = "d-block text-danger mb-2" })
 
+                    @Html.LabelFor(e => e.Nombre, "Descripcion")
+                    @Html.TextAreaFor(e => e.Nombre, new { @class = "form-control", @style = "max-width:100%" })
+                    @Html.ValidationMessageFor(e => e.Nombre, "", new { @class = "d-block text-danger mb-2" })
+                </div>
             </div>
-            <div class="col-6">
-                @Html.LabelFor(e => e.Cantidad)
-                @Html.TextBoxFor(e => e.Cantidad, new { @class = "form-control" })
-                @Html.ValidationMessageFor(e => e.Cantidad, "", new { @class = "d-block text-danger mb-2" })
+            </div>
 
-                @Html.LabelFor(e => e.Precio)
-                @Html.TextBoxFor(e => e.Precio, new { @class = "form-control" })
-                @Html.ValidationMessageFor(e => e.Precio, "", new { @class = "d-block text-danger mb-2" })
-
-                @*@Html.LabelFor(e => e.TallaUS)
-                @Html.DropDownListFor(model => model.TallaUS, Model.SizeList, "Select Size")
-                @Html.ValidationMessageFor(e => e.TallaUS, "", new { @class = "d-block text-danger mb-2" })
-
-                @Html.LabelFor(e => e.Genero)
-                @Html.DropDownListFor(model => model.Genero, Model.GenderList, "Select Gender")
-                @Html.ValidationMessageFor(e => e.Genero, "", new { @class = "d-block text-danger mb-2" })*@
-
+            <div class="col-12">
+                <div class="d-flex justify-content-end"><button type="button" class="btn btn-primary" onclick="addInventoryRow()">Add Inventory</button></div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Size</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody"></tbody>
+                </table>
             </div>
         </div>
 
         <div class="mt-2">
-            <input type="submit" class="btn btn-success" value="Add" />
-            <button onclick="document.location.href = '@Url.Content("~/SellerAdmin/Products?SellerId=" + user.IDVendedor)'">Back</button>
+            <input type="submit" class="btn btn-success" value="Add Product" />
+            <button class="btn btn-danger" onclick="document.location.href = '@Url.Content("~/SellerAdmin/Products")'">Back</button>
         </div>
         }
     </main>
 
 <script>
-
     function displaySelectedImage(event, elementId) {
         const selectedImage = document.getElementById(elementId);
         const fileInput = event.target;
@@ -83,7 +86,7 @@
         }
     }
 
-    function convertImageAndSubmit(event) {
+    function Submit(event) {
         // Prevent the form from being submitted
         event.preventDefault();
 
@@ -104,6 +107,57 @@
 
             reader.readAsDataURL(input.files[0]);
         }
+    }
+
+    function addInventoryRow() {
+        var tableBody = document.getElementById("inventoryTableBody");
+        var rowCount = tableBody.getElementsByTagName("tr").length;
+
+        var newRow = document.createElement("tr");
+
+        // Add size input
+        var sizeCell = document.createElement("td");
+        var sizeInput = document.createElement("input");
+        sizeInput.type = "number";
+        sizeInput.step = "0.01";
+        sizeInput.classList.add("form-control");
+        sizeInput.name = "InventoryEntries[" + rowCount + "].TallaUS";
+        sizeCell.appendChild(sizeInput);
+        newRow.appendChild(sizeCell);
+
+        // Add quantity input
+        var quantityCell = document.createElement("td");
+        var quantityInput = document.createElement("input");
+        quantityInput.type = "number";
+        quantityInput.step = "0.01";
+        quantityInput.classList.add("form-control");
+        quantityInput.name = "InventoryEntries[" + rowCount + "].Cantidad";
+        quantityCell.appendChild(quantityInput);
+        newRow.appendChild(quantityCell);
+
+        // Add price input
+        var priceCell = document.createElement("td");
+        var priceInput = document.createElement("input");
+        priceInput.type = "number";
+        priceInput.step = "0.01";
+        priceInput.classList.add("form-control");
+        priceInput.name = "InventoryEntries[" + rowCount + "].Precio";
+        priceCell.appendChild(priceInput);
+        newRow.appendChild(priceCell);
+
+        // Add remove button
+        var actionCell = document.createElement("td");
+        var removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.className = "btn btn-danger";
+        removeButton.textContent = "Remove";
+        removeButton.onclick = function () {
+            tableBody.removeChild(newRow);
+        };
+        actionCell.appendChild(removeButton);
+        newRow.appendChild(actionCell);
+
+        tableBody.appendChild(newRow);
     }
 </script>
 

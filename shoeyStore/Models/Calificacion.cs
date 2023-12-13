@@ -12,12 +12,12 @@ namespace shoeyStore.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Calificacione
+    public partial class Calificacion
     {
         public int IDcalificacion { get; set; }
         public Nullable<int> IDProducto { get; set; }
         public string Comentarios { get; set; }
-        public Nullable<int> Calificacion { get; set; }
+        public Nullable<int> Calificacion1 { get; set; }
     
         public virtual Producto Producto { get; set; }
     }

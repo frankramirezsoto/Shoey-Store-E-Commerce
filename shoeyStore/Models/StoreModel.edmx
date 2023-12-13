@@ -5,7 +5,7 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="ShoeyDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Calificaciones">
+        <EntityType Name="Calificacion">
           <Key>
             <PropertyRef Name="IDcalificacion" />
           </Key>
@@ -34,7 +34,17 @@
           <Property Name="IDOrden" Type="int" />
           <Property Name="IDProducto" Type="int" />
           <Property Name="Cantidad" Type="int" />
-          <Property Name="Subtotal" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="Subtotal" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="Inventario">
+          <Key>
+            <PropertyRef Name="IDInventario" />
+          </Key>
+          <Property Name="IDInventario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDProducto" Type="int" Nullable="false" />
+          <Property Name="TallaUS" Type="decimal" Precision="2" Scale="1" />
+          <Property Name="Cantidad" Type="int" />
+          <Property Name="Precio" Type="decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="Orden">
           <Key>
@@ -42,8 +52,8 @@
           </Key>
           <Property Name="IDOrden" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IDCliente" Type="int" />
-          <Property Name="FechaOrden" Type="date" />
-          <Property Name="MontoTotal" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="FechaOrden" Type="datetime" />
+          <Property Name="MontoTotal" Type="decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="Producto">
           <Key>
@@ -56,11 +66,6 @@
           <Property Name="Genero" Type="char" MaxLength="1" />
           <Property Name="Marca" Type="varchar" MaxLength="50" />
           <Property Name="Modelo" Type="varchar" MaxLength="100" />
-          <Property Name="TipoTalla" Type="varchar" MaxLength="10" />
-          <Property Name="TallaUS" Type="char" MaxLength="1" />
-          <Property Name="Precio" Type="numeric" Precision="10" Scale="2" />
-          <Property Name="Cantidad" Type="int" />
-          <Property Name="Estado" Type="bit" />
           <Property Name="Imagen" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="Vendedor">
@@ -76,12 +81,12 @@
         </EntityType>
         <Association Name="FK__Calificac__IDPro__440B1D61">
           <End Role="Producto" Type="Self.Producto" Multiplicity="0..1" />
-          <End Role="Calificaciones" Type="Self.Calificaciones" Multiplicity="*" />
+          <End Role="Calificacion" Type="Self.Calificacion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Producto">
               <PropertyRef Name="IDProducto" />
             </Principal>
-            <Dependent Role="Calificaciones">
+            <Dependent Role="Calificacion">
               <PropertyRef Name="IDProducto" />
             </Dependent>
           </ReferentialConstraint>
@@ -134,16 +139,29 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Inventario_Producto1">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="Inventario" Type="Self.Inventario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="IDProducto" />
+            </Principal>
+            <Dependent Role="Inventario">
+              <PropertyRef Name="IDProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ShoeyDatabaseModelStoreContainer">
-          <EntitySet Name="Calificaciones" EntityType="Self.Calificaciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Calificacion" EntityType="Self.Calificacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DetallesOrden" EntityType="Self.DetallesOrden" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Inventario" EntityType="Self.Inventario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orden" EntityType="Self.Orden" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Vendedor" EntityType="Self.Vendedor" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__Calificac__IDPro__440B1D61" Association="Self.FK__Calificac__IDPro__440B1D61">
             <End Role="Producto" EntitySet="Producto" />
-            <End Role="Calificaciones" EntitySet="Calificaciones" />
+            <End Role="Calificacion" EntitySet="Calificacion" />
           </AssociationSet>
           <AssociationSet Name="FK__DetallesO__IDOrd__403A8C7D" Association="Self.FK__DetallesO__IDOrd__403A8C7D">
             <End Role="Orden" EntitySet="Orden" />
@@ -161,21 +179,25 @@
             <End Role="Vendedor" EntitySet="Vendedor" />
             <End Role="Producto" EntitySet="Producto" />
           </AssociationSet>
+          <AssociationSet Name="FK_Inventario_Producto1" Association="Self.FK_Inventario_Producto1">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="Inventario" EntitySet="Inventario" />
+          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ShoeyDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Calificacione">
+        <EntityType Name="Calificacion">
           <Key>
             <PropertyRef Name="IDcalificacion" />
           </Key>
           <Property Name="IDcalificacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IDProducto" Type="Int32" />
           <Property Name="Comentarios" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Calificacion" Type="Int32" />
-          <NavigationProperty Name="Producto" Relationship="Self.FK__Calificac__IDPro__440B1D61" FromRole="Calificaciones" ToRole="Producto" />
+          <Property Name="Calificacion1" Type="Int32" />
+          <NavigationProperty Name="Producto" Relationship="Self.FK__Calificac__IDPro__440B1D61" FromRole="Calificacion" ToRole="Producto" />
         </EntityType>
         <EntityType Name="Cliente">
           <Key>
@@ -202,13 +224,24 @@
           <NavigationProperty Name="Orden" Relationship="Self.FK__DetallesO__IDOrd__403A8C7D" FromRole="DetallesOrden" ToRole="Orden" />
           <NavigationProperty Name="Producto" Relationship="Self.FK__DetallesO__IDPro__412EB0B6" FromRole="DetallesOrden" ToRole="Producto" />
         </EntityType>
+        <EntityType Name="Inventario">
+          <Key>
+            <PropertyRef Name="IDInventario" />
+          </Key>
+          <Property Name="IDInventario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDProducto" Type="Int32" Nullable="false" />
+          <Property Name="TallaUS" Type="Decimal" Precision="2" Scale="1" />
+          <Property Name="Cantidad" Type="Int32" />
+          <Property Name="Precio" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Producto" Relationship="Self.FK_Inventario_Producto1" FromRole="Inventario" ToRole="Producto" />
+        </EntityType>
         <EntityType Name="Orden">
           <Key>
             <PropertyRef Name="IDOrden" />
           </Key>
           <Property Name="IDOrden" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IDCliente" Type="Int32" />
-          <Property Name="FechaOrden" Type="DateTime" Precision="0" />
+          <Property Name="FechaOrden" Type="DateTime" Precision="3" />
           <Property Name="MontoTotal" Type="Decimal" Precision="10" Scale="2" />
           <NavigationProperty Name="Cliente" Relationship="Self.FK__Orden__IDCliente__3D5E1FD2" FromRole="Orden" ToRole="Cliente" />
           <NavigationProperty Name="DetallesOrdens" Relationship="Self.FK__DetallesO__IDOrd__403A8C7D" FromRole="Orden" ToRole="DetallesOrden" />
@@ -224,14 +257,10 @@
           <Property Name="Genero" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="Marca" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Modelo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="TipoTalla" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="TallaUS" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="Precio" Type="Decimal" Precision="10" Scale="2" />
-          <Property Name="Cantidad" Type="Int32" />
-          <Property Name="Estado" Type="Boolean" />
           <Property Name="Imagen" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <NavigationProperty Name="Calificaciones" Relationship="Self.FK__Calificac__IDPro__440B1D61" FromRole="Producto" ToRole="Calificaciones" />
+          <NavigationProperty Name="Calificacions" Relationship="Self.FK__Calificac__IDPro__440B1D61" FromRole="Producto" ToRole="Calificacion" />
           <NavigationProperty Name="DetallesOrdens" Relationship="Self.FK__DetallesO__IDPro__412EB0B6" FromRole="Producto" ToRole="DetallesOrden" />
+          <NavigationProperty Name="Inventarios" Relationship="Self.FK_Inventario_Producto1" FromRole="Producto" ToRole="Inventario" />
           <NavigationProperty Name="Vendedor" Relationship="Self.FK__Producto__IDVend__38996AB5" FromRole="Producto" ToRole="Vendedor" />
         </EntityType>
         <EntityType Name="Vendedor">
@@ -248,12 +277,12 @@
         </EntityType>
         <Association Name="FK__Calificac__IDPro__440B1D61">
           <End Role="Producto" Type="Self.Producto" Multiplicity="0..1" />
-          <End Role="Calificaciones" Type="Self.Calificacione" Multiplicity="*" />
+          <End Role="Calificacion" Type="Self.Calificacion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Producto">
               <PropertyRef Name="IDProducto" />
             </Principal>
-            <Dependent Role="Calificaciones">
+            <Dependent Role="Calificacion">
               <PropertyRef Name="IDProducto" />
             </Dependent>
           </ReferentialConstraint>
@@ -294,6 +323,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Inventario_Producto1">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="Inventario" Type="Self.Inventario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="IDProducto" />
+            </Principal>
+            <Dependent Role="Inventario">
+              <PropertyRef Name="IDProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Producto__IDVend__38996AB5">
           <End Role="Vendedor" Type="Self.Vendedor" Multiplicity="0..1" />
           <End Role="Producto" Type="Self.Producto" Multiplicity="*" />
@@ -307,15 +348,16 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="ShoeyDatabaseEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Calificaciones" EntityType="Self.Calificacione" />
+          <EntitySet Name="Calificacions" EntityType="Self.Calificacion" />
           <EntitySet Name="Clientes" EntityType="Self.Cliente" />
           <EntitySet Name="DetallesOrdens" EntityType="Self.DetallesOrden" />
+          <EntitySet Name="Inventarios" EntityType="Self.Inventario" />
           <EntitySet Name="Ordens" EntityType="Self.Orden" />
           <EntitySet Name="Productoes" EntityType="Self.Producto" />
           <EntitySet Name="Vendedors" EntityType="Self.Vendedor" />
           <AssociationSet Name="FK__Calificac__IDPro__440B1D61" Association="Self.FK__Calificac__IDPro__440B1D61">
             <End Role="Producto" EntitySet="Productoes" />
-            <End Role="Calificaciones" EntitySet="Calificaciones" />
+            <End Role="Calificacion" EntitySet="Calificacions" />
           </AssociationSet>
           <AssociationSet Name="FK__Orden__IDCliente__3D5E1FD2" Association="Self.FK__Orden__IDCliente__3D5E1FD2">
             <End Role="Cliente" EntitySet="Clientes" />
@@ -329,6 +371,10 @@
             <End Role="Producto" EntitySet="Productoes" />
             <End Role="DetallesOrden" EntitySet="DetallesOrdens" />
           </AssociationSet>
+          <AssociationSet Name="FK_Inventario_Producto1" Association="Self.FK_Inventario_Producto1">
+            <End Role="Producto" EntitySet="Productoes" />
+            <End Role="Inventario" EntitySet="Inventarios" />
+          </AssociationSet>
           <AssociationSet Name="FK__Producto__IDVend__38996AB5" Association="Self.FK__Producto__IDVend__38996AB5">
             <End Role="Vendedor" EntitySet="Vendedors" />
             <End Role="Producto" EntitySet="Productoes" />
@@ -340,13 +386,13 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ShoeyDatabaseModelStoreContainer" CdmEntityContainer="ShoeyDatabaseEntities">
-          <EntitySetMapping Name="Calificaciones">
-            <EntityTypeMapping TypeName="ShoeyDatabaseModel.Calificacione">
-              <MappingFragment StoreEntitySet="Calificaciones">
+          <EntitySetMapping Name="Calificacions">
+            <EntityTypeMapping TypeName="ShoeyDatabaseModel.Calificacion">
+              <MappingFragment StoreEntitySet="Calificacion">
                 <ScalarProperty Name="IDcalificacion" ColumnName="IDcalificacion" />
                 <ScalarProperty Name="IDProducto" ColumnName="IDProducto" />
                 <ScalarProperty Name="Comentarios" ColumnName="Comentarios" />
-                <ScalarProperty Name="Calificacion" ColumnName="Calificacion" />
+                <ScalarProperty Name="Calificacion1" ColumnName="Calificacion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -374,6 +420,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Inventarios">
+            <EntityTypeMapping TypeName="ShoeyDatabaseModel.Inventario">
+              <MappingFragment StoreEntitySet="Inventario">
+                <ScalarProperty Name="IDInventario" ColumnName="IDInventario" />
+                <ScalarProperty Name="IDProducto" ColumnName="IDProducto" />
+                <ScalarProperty Name="TallaUS" ColumnName="TallaUS" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Ordens">
             <EntityTypeMapping TypeName="ShoeyDatabaseModel.Orden">
               <MappingFragment StoreEntitySet="Orden">
@@ -394,11 +451,6 @@
                 <ScalarProperty Name="Genero" ColumnName="Genero" />
                 <ScalarProperty Name="Marca" ColumnName="Marca" />
                 <ScalarProperty Name="Modelo" ColumnName="Modelo" />
-                <ScalarProperty Name="TipoTalla" ColumnName="TipoTalla" />
-                <ScalarProperty Name="TallaUS" ColumnName="TallaUS" />
-                <ScalarProperty Name="Precio" ColumnName="Precio" />
-                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
-                <ScalarProperty Name="Estado" ColumnName="Estado" />
                 <ScalarProperty Name="Imagen" ColumnName="Imagen" />
               </MappingFragment>
             </EntityTypeMapping>

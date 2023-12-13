@@ -2,6 +2,7 @@
 using shoeyStore.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -17,54 +18,32 @@ namespace shoeyStore.Controllers
         }
 
 
-        public ActionResult Products(int SellerId)
+        public ActionResult Products()
         {
             List<ProductTableViewModel> listProducts = null;
+            var user = (Vendedor)Session["SellerLogged"];
 
             using (ShoeyDatabaseEntities db = new ShoeyDatabaseEntities())
             {
-                var productsFromDb = (from p in db.Productoes
-                                      where p.IDVendedor == SellerId
-                                      select new ProductTableViewModel
-                                      {
-                                          IDProducto = p.IDProducto,
-                                          IDVendedor = p.IDVendedor,
-                                          Nombre = p.Nombre,
-                                          Categoria = p.Categoria,
-                                          Genero = p.Genero,
-                                          Marca = p.Marca,
-                                          Modelo = p.Modelo,
-                                          TipoTalla = p.TipoTalla,
-                                          TallaUS = p.TallaUS,
-                                          Precio = p.Precio,
-                                          Cantidad = p.Cantidad,
-                                          Estado = p.Estado,
-                                          Imagen = p.Imagen,
-                                          Calificaciones = p.Calificaciones,
-                                          DetallesOrdens = p.DetallesOrdens,
-                                          Vendedor = p.Vendedor
-                                      }).ToList();
-
-                // Perform the conversion of the image in-memory
-                listProducts = productsFromDb.Select(p => new ProductTableViewModel
+                if (user != null) 
                 {
-                    IDProducto = p.IDProducto,
-                    IDVendedor = p.IDVendedor,
-                    Nombre = p.Nombre,
-                    Categoria = p.Categoria,
-                    Genero = p.Genero,
-                    Marca = p.Marca,
-                    Modelo = p.Modelo,
-                    TipoTalla = p.TipoTalla,
-                    TallaUS = p.TallaUS,
-                    Precio = p.Precio,
-                    Cantidad = p.Cantidad,
-                    Estado = p.Estado,
-                    ImagenBase64 = Convert.ToBase64String(p.Imagen),
-                    Calificaciones = p.Calificaciones,
-                    DetallesOrdens = p.DetallesOrdens,
-                    Vendedor = p.Vendedor
-                }).ToList();
+                    listProducts = (from p in db.Productoes
+                                    where p.IDVendedor == user.IDVendedor
+                                    select new ProductTableViewModel
+                                    {
+                                        IDProducto = p.IDProducto,
+                                        IDVendedor = p.IDVendedor,
+                                        Nombre = p.Nombre,
+                                        Categoria = p.Categoria,
+                                        Genero = p.Genero,
+                                        Marca = p.Marca,
+                                        Modelo = p.Modelo,
+                                        Imagen = p.Imagen,
+                                        Calificaciones = p.Calificacions,
+                                        DetallesOrdens = p.DetallesOrdens,
+                                        Vendedor = p.Vendedor
+                                    }).ToList();
+                }
             }
 
             return View(listProducts);
@@ -73,8 +52,10 @@ namespace shoeyStore.Controllers
 
         [HttpGet]
         public ActionResult AddProduct()
-        {
-            return View();
+        {   
+            ProductViewModel model = new ProductViewModel();  
+
+            return View(model);
         }
 
         [HttpPost]
@@ -83,89 +64,163 @@ namespace shoeyStore.Controllers
             if (!ModelState.IsValid) return View(model);
 
             using (var db = new ShoeyDatabaseEntities())
+            {
+                Producto newProduct = new Producto
                 {
-                    Producto newProduct = new Producto
+                    IDVendedor = model.IDVendedor,
+                    Nombre = model.Nombre,
+                    Categoria = model.Categoria,
+                    Genero = model.Genero,
+                    Marca = model.Marca,
+                    Modelo = model.Modelo,
+                    Imagen = Convert.FromBase64String(model.ImagenBase64),
+                };
+
+                db.Productoes.Add(newProduct);
+                db.SaveChanges();  
+
+                if (model.InventoryEntries != null)
+                {
+                    foreach (var entry in model.InventoryEntries)
                     {
-                        IDVendedor = model.IDVendedor,
-                        Nombre = model.Nombre,
-                        Categoria = model.Categoria,
-                        Genero = model.Genero,
-                        Marca = model.Marca,
-                        Modelo = model.Modelo,
-                        TipoTalla = model.TipoTalla,
-                        TallaUS = model.TallaUS,
-                        Precio = model.Precio,
-                        Cantidad = model.Cantidad,
-                        Estado = model.Estado,
-                        // Convert base64-encoded string to byte array for image
-                        Imagen = Convert.FromBase64String(model.ImagenBase64),
-                    };
+                        Inventario newInventory = new Inventario
+                        {
+                            IDProducto = newProduct.IDProducto,
+                            TallaUS = entry.TallaUS,
+                            Cantidad = entry.Cantidad,
+                            Precio = entry.Precio,
+                        };
 
-                    db.Productoes.Add(newProduct);
-                    db.SaveChanges();
-
-                    return RedirectToAction("Products", "SellerAdmin");
+                        db.Inventarios.Add(newInventory);
+                    }
                 }
+
+                db.SaveChanges();
+
+                return RedirectToAction("Products", "SellerAdmin");
+            }
         }
 
+        //[HttpGet]
+        //public ActionResult EditProduct(int id)
+        //{
+        //    using (var db = new ShoeyDatabaseEntities())
+        //    {
+        //        // Retrieve the product and its associated inventory entries
+        //        var product = db.Productoes.Include(p => p.Inventarios).FirstOrDefault(p => p.IDProducto == id);
 
-        public ActionResult EditProduct(int id)
+        //        if (product == null)
+        //        {
+        //            // Handle the case where the product is not found
+        //            return RedirectToAction("Products", "SellerAdmin");
+        //        }
+
+        //        // Map the product and its inventory entries to the view model
+        //        var viewModel = new ProductViewModel
+        //        {
+        //            IDVendedor = product.IDVendedor,
+        //            Nombre = product.Nombre,
+        //            Categoria = product.Categoria,
+        //            Genero = product.Genero,
+        //            Marca = product.Marca,
+        //            Modelo = product.Modelo,
+        //            ImagenBase64 = Convert.ToBase64String(product.Imagen),
+        //            InventoryEntries = product.Inventarios.Select(i => new InventoryViewModel
+        //            {
+        //                TallaUS = i.TallaUS,
+        //                Cantidad = i.Cantidad,
+        //                Precio = i.Precio
+        //            }).ToList()
+        //        };
+
+        //        return View(viewModel);
+        //    }
+        //}
+
+        //[HttpPost]
+        //public ActionResult EditProduct(ProductViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        // Handle invalid model state
+        //        return View(model);
+        //    }
+
+        //    using (var db = new ShoeyDatabaseEntities())
+        //    {
+        //        // Retrieve the existing product and associated inventory entries
+        //        var existingProduct = db.Productoes.Include(p => p.Inventarios).FirstOrDefault(p => p.IDProducto == model.IDProducto);
+
+        //        if (existingProduct == null)
+        //        {
+        //            // Handle the case where the product is not found
+        //            return RedirectToAction("Products", "SellerAdmin");
+        //        }
+
+        //        // Update the existing product with the new information
+        //        existingProduct.Nombre = model.Nombre;
+        //        existingProduct.Categoria = model.Categoria;
+        //        existingProduct.Genero = model.Genero;
+        //        existingProduct.Marca = model.Marca;
+        //        existingProduct.Modelo = model.Modelo;
+
+        //        // Update the product image if a new one is provided
+        //        if (!string.IsNullOrEmpty(model.ImagenBase64))
+        //        {
+        //            existingProduct.Imagen = Convert.FromBase64String(model.ImagenBase64);
+        //        }
+
+        //        // Update inventory entries
+        //        if (model.InventoryEntries != null)
+        //        {
+        //            foreach (var entry in model.InventoryEntries)
+        //            {
+        //                // Find the corresponding inventory entry
+        //                var existingInventory = existingProduct.Inventarios.FirstOrDefault(i => i.TallaUS == entry.TallaUS);
+
+        //                if (existingInventory != null)
+        //                {
+        //                    // Update existing inventory entry
+        //                    existingInventory.Cantidad = entry.Cantidad;
+        //                    existingInventory.Precio = entry.Precio;
+        //                }
+        //                else
+        //                {
+        //                    // Create a new inventory entry if it doesn't exist
+        //                    var newInventory = new Inventario
+        //                    {
+        //                        IDProducto = existingProduct.IDProducto,
+        //                        TallaUS = entry.TallaUS,
+        //                        Cantidad = entry.Cantidad,
+        //                        Precio = entry.Precio,
+        //                    };
+
+        //                    db.Inventarios.Add(newInventory);
+        //                }
+        //            }
+        //        }
+
+        //        db.SaveChanges();
+
+        //        return RedirectToAction("Products", "SellerAdmin");
+        //    }
+        //}
+
+        [HttpPost]
+        public ActionResult DeleteProduct(int Id)
         {
             using (var db = new ShoeyDatabaseEntities())
             {
-                Producto existingProduct = db.Productoes.Find(id);
-                if (existingProduct == null) return HttpNotFound();
-                var model = new ProductViewModel
-                {
-                    IDProducto = existingProduct.IDProducto,
-                    IDVendedor = existingProduct.IDVendedor,
-                    Nombre = existingProduct.Nombre,
-                    Categoria = existingProduct.Categoria,
-                    Genero = existingProduct.Genero,
-                    Marca = existingProduct.Marca,
-                    Modelo = existingProduct.Modelo,
-                    TipoTalla = existingProduct.TipoTalla,
-                    TallaUS = existingProduct.TallaUS,
-                    Precio = existingProduct.Precio,
-                    Cantidad = existingProduct.Cantidad,
-                    Estado = existingProduct.Estado,
-                    // Convert the image byte array to base64 for editing
-                    ImagenBase64 = Convert.ToBase64String(existingProduct.Imagen),
-                };
+                var productTO = db.Productoes.Find(Id);
 
-                return View(model);
+                var inventoryItems = db.Inventarios.Where(i => i.IDProducto == Id);
+                db.Inventarios.RemoveRange(inventoryItems);
+
+                db.Entry(productTO).State = System.Data.Entity.EntityState.Deleted;
+                db.SaveChanges();
             }
-        }
 
-        // POST: SellerAdmin/EditProduct/5
-        [HttpPost]
-        public ActionResult EditProduct(ProductViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                using (var db = new ShoeyDatabaseEntities())
-                {
-                    Producto existingProduct = db.Productoes.Find(model.IDProducto);
-                    if (existingProduct == null) return HttpNotFound();
-
-                    existingProduct.Nombre = model.Nombre;
-                    existingProduct.Categoria = model.Categoria;
-                    existingProduct.Genero = model.Genero;
-                    existingProduct.Marca = model.Marca;
-                    existingProduct.Modelo = model.Modelo;
-                    existingProduct.TipoTalla = model.TipoTalla;
-                    existingProduct.TallaUS = model.TallaUS;
-                    existingProduct.Precio = model.Precio;
-                    existingProduct.Cantidad = model.Cantidad;
-                    existingProduct.Estado = model.Estado;
-
-                    existingProduct.Imagen = Convert.FromBase64String(model.ImagenBase64);
-
-                    db.SaveChanges();
-                    return RedirectToAction("Products", "SellerAdmin");
-                }
-            }
-            return View(model);
+            return Content("200");
         }
     }
 }

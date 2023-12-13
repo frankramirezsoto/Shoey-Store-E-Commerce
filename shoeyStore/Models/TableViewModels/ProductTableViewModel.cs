@@ -10,7 +10,7 @@ namespace shoeyStore.Models.ViewModels
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ProductTableViewModel()
         {
-            this.Calificaciones = new HashSet<Calificacione>();
+            this.Calificaciones = new HashSet<Calificacion>();
             this.DetallesOrdens = new HashSet<DetallesOrden>();
         }
 
@@ -21,16 +21,21 @@ namespace shoeyStore.Models.ViewModels
         public string Genero { get; set; }
         public string Marca { get; set; }
         public string Modelo { get; set; }
-        public string TipoTalla { get; set; }
-        public string TallaUS { get; set; }
-        public Nullable<decimal> Precio { get; set; }
-        public Nullable<int> Cantidad { get; set; }
-        public Nullable<bool> Estado { get; set; }
         public byte[] Imagen { get; set; }
-        public string ImagenBase64 { get; set; }
+
+        public string ItemName
+        {
+            get
+            {
+                return $"{Marca} {Modelo}";
+            }
+
+            set => ItemName = value;
+        }
+        public List<InventoryViewModel> InventoryEntries { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Calificacione> Calificaciones { get; set; }
+        public virtual ICollection<Calificacion> Calificaciones { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetallesOrden> DetallesOrdens { get; set; }
         public virtual Vendedor Vendedor { get; set; }
