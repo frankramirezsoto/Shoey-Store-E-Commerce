@@ -12,6 +12,7 @@
     <link href="@Url.Content("~/Content/assets/stylesSellerAdmin.css")" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/Content/assets/logo.svg")">
     <style>
     </style>
 </head>
@@ -21,7 +22,7 @@
         <div class="w-100 d-flex justify-content-between align-items-center">
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn" id="sidebarToggle" href="#!"><i class="fas fa-bars text-white fs-3"></i></button>
-            <a class="d-flex align-items-center text-decoration-none" asp-area="" asp-controller="Home" asp-action="Index">
+            <a class="d-flex align-items-center text-decoration-none" href="@Url.Content("~/Index")" asp-area="" asp-controller="Home" asp-action="Index">
                 <div>
                     <img src="@Url.Content("~/Content/assets/logo.svg")" alt="logo" class="logo m-2" style="height: 50px; width: 50px;" />
                 </div>

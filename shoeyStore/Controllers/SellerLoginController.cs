@@ -54,6 +54,11 @@ namespace shoeyStore.Controllers
             return RedirectToAction("Index", "SellerLogin");
         }
 
+        public ActionResult Register()
+        {
+            return View();
+        }
+
         [HttpPost]
         public ActionResult Register(SellerViewModel model)
         {

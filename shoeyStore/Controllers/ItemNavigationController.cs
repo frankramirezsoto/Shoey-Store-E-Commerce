@@ -14,15 +14,39 @@ namespace shoeyStore.Controllers
     public class ItemNavigationController : Controller
     {
         // GET: ItemNavigation
-        public ActionResult Index(string gender, string brand, string size)
+        public ActionResult Index(string gender, string brand, decimal? minPrice, decimal? maxPrice)
         {
+            // ViewBag to pass the list of brands to the view
+            var allBrands = GetAllBrands();
+            ViewBag.Brands = allBrands;
 
-            List<ProductTableViewModel> listProducts = null;
-
-            using (ShoeyDatabaseEntities db = new ShoeyDatabaseEntities())
+            using (var db = new ShoeyDatabaseEntities())
             {
-                var query = from e in db.Productoes select e;
+                // Start with all products
+                IQueryable<ProductTableViewModel> query = db.Productoes
+                    .Select(p => new ProductTableViewModel
+                    {
+                        IDProducto = p.IDProducto,
+                        IDVendedor = p.IDVendedor,
+                        Nombre = p.Nombre,
+                        Categoria = p.Categoria,
+                        Genero = p.Genero,
+                        Marca = p.Marca,
+                        Modelo = p.Modelo,
+                        Imagen = p.Imagen,
+                        InventoryEntries = db.Inventarios.Where(i => i.IDProducto == p.IDProducto).Select(i => new InventoryViewModel
+                        {
+                            IDInventario = i.IDInventario,
+                            TallaUS = i.TallaUS,
+                            Cantidad = i.Cantidad,
+                            Precio = i.Precio,
+                        }).ToList(),
+                        Calificaciones = p.Calificacions,
+                        DetallesOrdens = p.DetallesOrdens,
+                        Vendedor = p.Vendedor
+                    });
 
+                // Apply filters
                 if (!string.IsNullOrEmpty(gender))
                 {
                     query = query.Where(p => p.Genero == gender);
@@ -33,21 +57,39 @@ namespace shoeyStore.Controllers
                     query = query.Where(p => p.Marca == brand);
                 }
 
-
-                listProducts = query.Select(p => new ProductTableViewModel
+                if (minPrice.HasValue)
                 {
-                    IDProducto = p.IDProducto,
-                    Nombre = p.Nombre,
-                    Categoria = p.Categoria,
-                    Genero = p.Genero,
-                    Marca = p.Marca,
-                    Modelo = p.Modelo,
+                    query = query.Where(p => p.InventoryEntries.Any(i => i.Precio >= minPrice));
+                }
 
-                    Imagen = p.Imagen,
-                }).ToList();
+                if (maxPrice.HasValue)
+                {
+                    query = query.Where(p => p.InventoryEntries.Any(i => i.Precio <= maxPrice));
+                }
+
+                // Now 'query' contains the filtered products
+                var products = query.ToList();
+
+                // You can pass the 'products' to the view
+                return View(products);
             }
+        }
 
-            return View(listProducts);
+        private List<SelectListItem> GetAllBrands()
+        {
+            using (var db = new ShoeyDatabaseEntities())
+            {
+                var uniqueBrands = db.Productoes.Select(p => p.Marca).Distinct().ToList();
+
+                // Convert strings to SelectListItem
+                var brandItems = uniqueBrands.Select(brand => new SelectListItem
+                {
+                    Text = brand,
+                    Value = brand
+                }).ToList();
+
+                return brandItems;
+            }
         }
     }
 }

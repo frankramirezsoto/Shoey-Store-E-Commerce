@@ -185,6 +185,7 @@
     <Content Include="Content\assets\logo.svg" />
     <Content Include="Content\assets\Montserrat\OFL.txt" />
     <Content Include="Content\assets\Montserrat\README.txt" />
+    <Content Include="Content\assets\shoeyVideo.mp4" />
     <Content Include="Content\assets\stylesSellerAdmin.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -285,11 +286,11 @@
     <Content Include="Views\SellerAdmin\Products.cshtml" />
     <Content Include="Views\SellerAdmin\AddProduct.cshtml" />
     <Content Include="Views\SellerAdmin\EditProduct.cshtml" />
+    <Content Include="Views\ItemNavigation\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
-    <Folder Include="Views\ItemNavigation\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

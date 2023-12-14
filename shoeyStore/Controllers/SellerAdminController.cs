@@ -66,7 +66,7 @@ namespace shoeyStore.Controllers
         public ActionResult AddProduct(ProductViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-
+            //If model is valid it will connect to the database and Add a new product to the Product table with the values of the model provided 
             using (var db = new ShoeyDatabaseEntities())
             {
                 Producto newProduct = new Producto
@@ -82,7 +82,7 @@ namespace shoeyStore.Controllers
 
                 db.Productoes.Add(newProduct);
                 db.SaveChanges();
-
+                //If the model has items on the InventoryEntries list, it will add an entry to the Inventory table for each entry
                 if (model.InventoryEntries != null)
                 {
                     foreach (var entry in model.InventoryEntries)

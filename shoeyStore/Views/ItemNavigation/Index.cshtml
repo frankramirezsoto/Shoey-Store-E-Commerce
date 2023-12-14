@@ -1,0 +1,59 @@
+﻿@model List<shoeyStore.Models.ViewModels.ProductTableViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Left Panel - Filters -->
+        <div class="col-md-3">
+            <h4>Filters</h4>
+            <form asp-action="Index" method="get">
+                <div class="form-group mb-3">
+                    <label for="genderFilter">Gender:</label>
+                    @Html.DropDownList("gender", new SelectList(Model.Select(p => p.Genero).Distinct()), "All Genders", new { @class = "form-control" })
+                </div>
+                <div class="form-group mb-3">
+                    <label for="brandFilter">Brand:</label>
+                    @Html.DropDownList("brand", (List<SelectListItem>)ViewBag.Brands, "All Brands", new { @class = "form-control" })
+                </div>
+                <div class="form-group mb-3">
+                    <label for="minPriceFilter">Min Price:</label>
+                    <input type="number" name="minPrice" class="form-control" />
+                </div>
+                <div class="form-group mb-3">
+                    <label for="maxPriceFilter">Max Price:</label>
+                    <input type="number" name="maxPrice" class="form-control" />
+                </div>
+                <button type="submit" class="btn btn-success">Apply Filters</button>
+            </form>
+        </div>
+
+        <!-- Right Panel - Product Cards -->
+        <div class="col-md-9">
+            <div class="row">
+                @foreach (var product in Model)
+                {
+                    if(product.InventoryEntries != null) 
+                    { 
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="data:image;base64,@(Convert.ToBase64String(product.Imagen))" class="card-img-top" alt="Product Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">@product.ItemName</h5>
+                                    <p class="card-tex d-inline-block text-truncate">@product.Nombre</p>
+                                    <p class="card-title">Price: $@product.GetMinimumPrice()</p>
+                                    <div class="d-flex">
+                                        <a href="#" class="btn btn-dark flex-fill me-3">View Item</a>
+                                        <a href="#" class="btn btn-success"><i class="bi bi-plus-lg text-white p-2"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

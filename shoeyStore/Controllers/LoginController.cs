@@ -15,7 +15,7 @@ namespace shoeyStore.Controllers
         {
             return View();
         }
-
+        //Obtains parameters for Login and Password
         public ActionResult Login(string Email, string Password)
         {
             try
@@ -25,15 +25,18 @@ namespace shoeyStore.Controllers
                     var list = from user in db.Clientes
                               where user.CorreoElectronico == Email && user.Contrasenna == Password
                               select user;
-
+                    //If the list count is more than 0 it means the list was filled and the user was found 
                     if (list.Count() > 0)
                     {
                         Cliente user = list.First();
+                        //Sets the session called 'Logged' to be the user who just logged in 
                         Session["Logged"] = user;
+                        //Return '200' will be read by the View through JS
                         return Content("200");
                     }
                     else
                     {
+                        //If list empty, return error 
                         return Content("Invalid username or password");
                     }
                 }
@@ -46,6 +49,7 @@ namespace shoeyStore.Controllers
 
         public ActionResult Logout()
         {
+            //Sets the current session Logged to be null and redirect to Home Screen
             Session["Logged"] = null;
             return RedirectToAction("Index", "Home");
         }

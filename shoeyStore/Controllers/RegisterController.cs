@@ -25,6 +25,7 @@ namespace shoeyStore.Controllers
         public ActionResult Register(ClientViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
+            //If model is valid it will create a new Client and send it to the database
             using (var db = new ShoeyDatabaseEntities())
             {
                     Cliente clientTO = new Cliente();
@@ -35,7 +36,7 @@ namespace shoeyStore.Controllers
 
                     db.Clientes.Add(clientTO);
                     db.SaveChanges();
-
+                    //Returns to Home Screen and enables the Toast to confirm registration
                     return Redirect(Url.Content("~/Home/Index?showToast=registrationSuccessful"));
             }
         }
