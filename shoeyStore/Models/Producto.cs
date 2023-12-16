@@ -18,6 +18,7 @@ namespace shoeyStore.Models
         public Producto()
         {
             this.Calificacions = new HashSet<Calificacion>();
+            this.Carritoes = new HashSet<Carrito>();
             this.DetallesOrdens = new HashSet<DetallesOrden>();
             this.Inventarios = new HashSet<Inventario>();
         }
@@ -33,6 +34,8 @@ namespace shoeyStore.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Calificacion> Calificacions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Carrito> Carritoes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetallesOrden> DetallesOrdens { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

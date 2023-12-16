@@ -1,0 +1,58 @@
+﻿@model List<shoeyStore.Models.ViewModels.CartViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+@foreach (var cartItem in Model)
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <div class="d-flex flex-row align-items-center">
+                    <div>
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(cartItem.Producto.Imagen)"
+                             class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+                    </div>
+                    <div class="ms-3">
+                        <h5>@cartItem.Producto.Marca @cartItem.Producto.Modelo</h5>
+                    </div>
+                </div>
+                <div class="d-flex flex-row align-items-center">
+                    <div style="width: 50px;">
+                        <h5 class="fw-normal mb-0">@cartItem.Cantidad</h5>
+                    </div>
+                    <div style="width: 80px;">
+                        <h5 class="mb-0">$@cartItem.Inventario.Precio</h5>
+                        <p class="text-muted">+tax and shipping fees</p>
+                    </div>
+                    <a onclick="deleteProduct(@cartItem.IDCarrito)" style="color: #cecece;"><i class="bi bi-trash-fill text-muted"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="p-3">
+
+</div>
+
+<script>
+    function deleteProduct(Id) {
+
+    if (confirm("Do you want to delete this item?")) {
+            let url = "@Url.Content("~/Cart/Delete/")" + Id;
+            console.log(url)
+            $.post(url, function (response) {
+
+                console.log(response)
+                if  (response == "200") {
+                    document.location.href = document.location.href;
+                    displayToast("Item deleted","success");
+                } else {
+                    alert("Error: " + response)
+                }
+            })
+        }
+    }
+</script>
+

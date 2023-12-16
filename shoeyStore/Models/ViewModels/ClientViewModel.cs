@@ -10,6 +10,7 @@ namespace shoeyStore.Models.ViewModels
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ClientViewModel()
         {
+            this.Carritoes = new HashSet<Carrito>();
             this.Ordens = new HashSet<Orden>();
         }
 
@@ -20,6 +21,9 @@ namespace shoeyStore.Models.ViewModels
         public string NumeroTelefono { get; set; }
         public string Direccion { get; set; }
         public string TarjetaBancaria { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Carrito> Carritoes { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Orden> Ordens { get; set; }

@@ -26,6 +26,7 @@ namespace shoeyStore.Models
         }
     
         public virtual DbSet<Calificacion> Calificacions { get; set; }
+        public virtual DbSet<Carrito> Carritoes { get; set; }
         public virtual DbSet<Cliente> Clientes { get; set; }
         public virtual DbSet<DetallesOrden> DetallesOrdens { get; set; }
         public virtual DbSet<Inventario> Inventarios { get; set; }

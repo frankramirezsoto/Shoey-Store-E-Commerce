@@ -41,10 +41,8 @@
                     <button class="btn btn-success rounded-circle m-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-cart-fill m-2 fs-4"></i>
                     </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    <ul class="dropdown-menu" style="min-width:35vw">
+                        @Html.Action("Index", "Cart")
                     </ul>
                 </div>
             </div>

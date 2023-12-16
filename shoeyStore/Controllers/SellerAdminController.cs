@@ -17,7 +17,6 @@ namespace shoeyStore.Controllers
             return View();
         }
 
-
         public ActionResult Products()
         {
             //List of Products will be populated with the database request
@@ -198,8 +197,6 @@ namespace shoeyStore.Controllers
                             existingInventory.TallaUS = entry.TallaUS;
                             existingInventory.Cantidad = entry.Cantidad;
                             existingInventory.Precio = entry.Precio;
-
-                            // No need to save changes here
                         }
                         else
                         {

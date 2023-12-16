@@ -13,6 +13,7 @@ namespace shoeyStore.Models.ViewModels
         public ProductViewModel()
         {
             this.Calificaciones = new HashSet<Calificacion>();
+            this.Carritoes = new HashSet<Carrito>();
             this.DetallesOrdens = new HashSet<DetallesOrden>();
         }
 
@@ -25,13 +26,26 @@ namespace shoeyStore.Models.ViewModels
         public string Modelo { get; set; }
         public byte[] Imagen { get; set; }
         public string ImagenBase64 { get; set; }
-        public List<InventoryViewModel> InventoryEntries { get; set; }
+        public string ItemName
+        {
+            get
+            {
+                return $"{Marca} {Modelo}";
+            }
 
+            set => ItemName = value;
+        }
+        //InventoryEntries is a list of Inventory entries 
+        public List<InventoryViewModel> InventoryEntries { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Calificacion> Calificaciones { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Carrito> Carritoes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetallesOrden> DetallesOrdens { get; set; }
         public virtual Vendedor Vendedor { get; set; }
+        //References a specific Inventory when the inventory is instanced for the cart
+        public InventoryViewModel Inventory { get; set; }
 
         public IEnumerable<SelectListItem> GenderList =>
             new List<SelectListItem>

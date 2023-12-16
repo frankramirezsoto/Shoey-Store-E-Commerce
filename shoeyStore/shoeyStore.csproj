@@ -126,10 +126,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemNavigationController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\SellerAdminController.cs" />
     <Compile Include="Controllers\SellerLoginController.cs" />
@@ -138,6 +139,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Calificacion.cs">
+      <DependentUpon>StoreModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Carrito.cs">
       <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Cliente.cs">
@@ -170,12 +174,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StoreModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\TableViewModels\OrderTableViewModel.cs" />
     <Compile Include="Models\TableViewModels\ProductTableViewModel.cs" />
     <Compile Include="Models\Vendedor.cs">
       <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\CartViewModel.cs" />
     <Compile Include="Models\ViewModels\InventoryViewModel.cs" />
     <Compile Include="Models\ViewModels\ItemNavigationViewModel.cs" />
+    <Compile Include="Models\ViewModels\OrderDetailViewModel.cs" />
+    <Compile Include="Models\ViewModels\OrderViewModel.cs" />
     <Compile Include="Models\ViewModels\ProductViewModel.cs" />
     <Compile Include="Models\ViewModels\ClientViewModel.cs" />
     <Compile Include="Models\ViewModels\SellerViewModel.cs" />
@@ -287,10 +295,12 @@
     <Content Include="Views\SellerAdmin\AddProduct.cshtml" />
     <Content Include="Views\SellerAdmin\EditProduct.cshtml" />
     <Content Include="Views\ItemNavigation\Index.cshtml" />
+    <Content Include="Views\Cart\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Order\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

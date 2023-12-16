@@ -12,14 +12,16 @@ namespace shoeyStore.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class DetallesOrden
+    public partial class Carrito
     {
-        public int IDDetalleOrden { get; set; }
-        public Nullable<int> IDOrden { get; set; }
+        public int IDCarrito { get; set; }
+        public Nullable<int> IDCliente { get; set; }
         public Nullable<int> IDProducto { get; set; }
+        public Nullable<int> IDInventario { get; set; }
         public Nullable<int> Cantidad { get; set; }
     
-        public virtual Orden Orden { get; set; }
+        public virtual Cliente Cliente { get; set; }
+        public virtual Inventario Inventario { get; set; }
         public virtual Producto Producto { get; set; }
     }
 }

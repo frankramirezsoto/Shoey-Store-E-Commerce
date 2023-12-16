@@ -14,6 +14,16 @@
           <Property Name="Comentarios" Type="varchar" MaxLength="50" />
           <Property Name="Calificacion" Type="int" />
         </EntityType>
+        <EntityType Name="Carrito">
+          <Key>
+            <PropertyRef Name="IDCarrito" />
+          </Key>
+          <Property Name="IDCarrito" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDCliente" Type="int" />
+          <Property Name="IDProducto" Type="int" />
+          <Property Name="IDInventario" Type="int" />
+          <Property Name="Cantidad" Type="int" />
+        </EntityType>
         <EntityType Name="Cliente">
           <Key>
             <PropertyRef Name="IDCliente" />
@@ -34,7 +44,6 @@
           <Property Name="IDOrden" Type="int" />
           <Property Name="IDProducto" Type="int" />
           <Property Name="Cantidad" Type="int" />
-          <Property Name="Subtotal" Type="decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="Inventario">
           <Key>
@@ -54,6 +63,7 @@
           <Property Name="IDCliente" Type="int" />
           <Property Name="FechaOrden" Type="datetime" />
           <Property Name="MontoTotal" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Estado" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Producto">
           <Key>
@@ -139,6 +149,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Carrito_Cliente1">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+          <End Role="Carrito" Type="Self.Carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="IDCliente" />
+            </Principal>
+            <Dependent Role="Carrito">
+              <PropertyRef Name="IDCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Carrito_Inventario1">
+          <End Role="Inventario" Type="Self.Inventario" Multiplicity="0..1" />
+          <End Role="Carrito" Type="Self.Carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Inventario">
+              <PropertyRef Name="IDInventario" />
+            </Principal>
+            <Dependent Role="Carrito">
+              <PropertyRef Name="IDInventario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Carrito_Producto1">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="0..1" />
+          <End Role="Carrito" Type="Self.Carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="IDProducto" />
+            </Principal>
+            <Dependent Role="Carrito">
+              <PropertyRef Name="IDProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Inventario_Producto1">
           <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
           <End Role="Inventario" Type="Self.Inventario" Multiplicity="*" />
@@ -153,6 +199,7 @@
         </Association>
         <EntityContainer Name="ShoeyDatabaseModelStoreContainer">
           <EntitySet Name="Calificacion" EntityType="Self.Calificacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Carrito" EntityType="Self.Carrito" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DetallesOrden" EntityType="Self.DetallesOrden" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Inventario" EntityType="Self.Inventario" Schema="dbo" store:Type="Tables" />
@@ -179,6 +226,18 @@
             <End Role="Vendedor" EntitySet="Vendedor" />
             <End Role="Producto" EntitySet="Producto" />
           </AssociationSet>
+          <AssociationSet Name="FK_Carrito_Cliente1" Association="Self.FK_Carrito_Cliente1">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Carrito" EntitySet="Carrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Carrito_Inventario1" Association="Self.FK_Carrito_Inventario1">
+            <End Role="Inventario" EntitySet="Inventario" />
+            <End Role="Carrito" EntitySet="Carrito" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Carrito_Producto1" Association="Self.FK_Carrito_Producto1">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="Carrito" EntitySet="Carrito" />
+          </AssociationSet>
           <AssociationSet Name="FK_Inventario_Producto1" Association="Self.FK_Inventario_Producto1">
             <End Role="Producto" EntitySet="Producto" />
             <End Role="Inventario" EntitySet="Inventario" />
@@ -199,6 +258,19 @@
           <Property Name="Calificacion1" Type="Int32" />
           <NavigationProperty Name="Producto" Relationship="Self.FK__Calificac__IDPro__440B1D61" FromRole="Calificacion" ToRole="Producto" />
         </EntityType>
+        <EntityType Name="Carrito">
+          <Key>
+            <PropertyRef Name="IDCarrito" />
+          </Key>
+          <Property Name="IDCarrito" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDCliente" Type="Int32" />
+          <Property Name="IDProducto" Type="Int32" />
+          <Property Name="IDInventario" Type="Int32" />
+          <Property Name="Cantidad" Type="Int32" />
+          <NavigationProperty Name="Cliente" Relationship="Self.FK_Carrito_Cliente1" FromRole="Carrito" ToRole="Cliente" />
+          <NavigationProperty Name="Inventario" Relationship="Self.FK_Carrito_Inventario1" FromRole="Carrito" ToRole="Inventario" />
+          <NavigationProperty Name="Producto" Relationship="Self.FK_Carrito_Producto1" FromRole="Carrito" ToRole="Producto" />
+        </EntityType>
         <EntityType Name="Cliente">
           <Key>
             <PropertyRef Name="IDCliente" />
@@ -210,6 +282,7 @@
           <Property Name="NumeroTelefono" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Direccion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="TarjetaBancaria" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Carritoes" Relationship="Self.FK_Carrito_Cliente1" FromRole="Cliente" ToRole="Carrito" />
           <NavigationProperty Name="Ordens" Relationship="Self.FK__Orden__IDCliente__3D5E1FD2" FromRole="Cliente" ToRole="Orden" />
         </EntityType>
         <EntityType Name="DetallesOrden">
@@ -220,7 +293,6 @@
           <Property Name="IDOrden" Type="Int32" />
           <Property Name="IDProducto" Type="Int32" />
           <Property Name="Cantidad" Type="Int32" />
-          <Property Name="Subtotal" Type="Decimal" Precision="10" Scale="2" />
           <NavigationProperty Name="Orden" Relationship="Self.FK__DetallesO__IDOrd__403A8C7D" FromRole="DetallesOrden" ToRole="Orden" />
           <NavigationProperty Name="Producto" Relationship="Self.FK__DetallesO__IDPro__412EB0B6" FromRole="DetallesOrden" ToRole="Producto" />
         </EntityType>
@@ -233,6 +305,7 @@
           <Property Name="TallaUS" Type="Decimal" Precision="2" Scale="1" />
           <Property Name="Cantidad" Type="Int32" />
           <Property Name="Precio" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Carritoes" Relationship="Self.FK_Carrito_Inventario1" FromRole="Inventario" ToRole="Carrito" />
           <NavigationProperty Name="Producto" Relationship="Self.FK_Inventario_Producto1" FromRole="Inventario" ToRole="Producto" />
         </EntityType>
         <EntityType Name="Orden">
@@ -243,6 +316,7 @@
           <Property Name="IDCliente" Type="Int32" />
           <Property Name="FechaOrden" Type="DateTime" Precision="3" />
           <Property Name="MontoTotal" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Estado" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Cliente" Relationship="Self.FK__Orden__IDCliente__3D5E1FD2" FromRole="Orden" ToRole="Cliente" />
           <NavigationProperty Name="DetallesOrdens" Relationship="Self.FK__DetallesO__IDOrd__403A8C7D" FromRole="Orden" ToRole="DetallesOrden" />
         </EntityType>
@@ -259,6 +333,7 @@
           <Property Name="Modelo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Imagen" Type="Binary" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="Calificacions" Relationship="Self.FK__Calificac__IDPro__440B1D61" FromRole="Producto" ToRole="Calificacion" />
+          <NavigationProperty Name="Carritoes" Relationship="Self.FK_Carrito_Producto1" FromRole="Producto" ToRole="Carrito" />
           <NavigationProperty Name="DetallesOrdens" Relationship="Self.FK__DetallesO__IDPro__412EB0B6" FromRole="Producto" ToRole="DetallesOrden" />
           <NavigationProperty Name="Inventarios" Relationship="Self.FK_Inventario_Producto1" FromRole="Producto" ToRole="Inventario" />
           <NavigationProperty Name="Vendedor" Relationship="Self.FK__Producto__IDVend__38996AB5" FromRole="Producto" ToRole="Vendedor" />
@@ -283,6 +358,42 @@
               <PropertyRef Name="IDProducto" />
             </Principal>
             <Dependent Role="Calificacion">
+              <PropertyRef Name="IDProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Carrito_Cliente1">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+          <End Role="Carrito" Type="Self.Carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="IDCliente" />
+            </Principal>
+            <Dependent Role="Carrito">
+              <PropertyRef Name="IDCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Carrito_Inventario1">
+          <End Role="Inventario" Type="Self.Inventario" Multiplicity="0..1" />
+          <End Role="Carrito" Type="Self.Carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Inventario">
+              <PropertyRef Name="IDInventario" />
+            </Principal>
+            <Dependent Role="Carrito">
+              <PropertyRef Name="IDInventario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Carrito_Producto1">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="0..1" />
+          <End Role="Carrito" Type="Self.Carrito" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="IDProducto" />
+            </Principal>
+            <Dependent Role="Carrito">
               <PropertyRef Name="IDProducto" />
             </Dependent>
           </ReferentialConstraint>
@@ -349,6 +460,7 @@
         </Association>
         <EntityContainer Name="ShoeyDatabaseEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Calificacions" EntityType="Self.Calificacion" />
+          <EntitySet Name="Carritoes" EntityType="Self.Carrito" />
           <EntitySet Name="Clientes" EntityType="Self.Cliente" />
           <EntitySet Name="DetallesOrdens" EntityType="Self.DetallesOrden" />
           <EntitySet Name="Inventarios" EntityType="Self.Inventario" />
@@ -358,6 +470,18 @@
           <AssociationSet Name="FK__Calificac__IDPro__440B1D61" Association="Self.FK__Calificac__IDPro__440B1D61">
             <End Role="Producto" EntitySet="Productoes" />
             <End Role="Calificacion" EntitySet="Calificacions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Carrito_Cliente1" Association="Self.FK_Carrito_Cliente1">
+            <End Role="Cliente" EntitySet="Clientes" />
+            <End Role="Carrito" EntitySet="Carritoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Carrito_Inventario1" Association="Self.FK_Carrito_Inventario1">
+            <End Role="Inventario" EntitySet="Inventarios" />
+            <End Role="Carrito" EntitySet="Carritoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Carrito_Producto1" Association="Self.FK_Carrito_Producto1">
+            <End Role="Producto" EntitySet="Productoes" />
+            <End Role="Carrito" EntitySet="Carritoes" />
           </AssociationSet>
           <AssociationSet Name="FK__Orden__IDCliente__3D5E1FD2" Association="Self.FK__Orden__IDCliente__3D5E1FD2">
             <End Role="Cliente" EntitySet="Clientes" />
@@ -396,6 +520,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Carritoes">
+            <EntityTypeMapping TypeName="ShoeyDatabaseModel.Carrito">
+              <MappingFragment StoreEntitySet="Carrito">
+                <ScalarProperty Name="IDCarrito" ColumnName="IDCarrito" />
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="IDProducto" ColumnName="IDProducto" />
+                <ScalarProperty Name="IDInventario" ColumnName="IDInventario" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Clientes">
             <EntityTypeMapping TypeName="ShoeyDatabaseModel.Cliente">
               <MappingFragment StoreEntitySet="Cliente">
@@ -416,7 +551,6 @@
                 <ScalarProperty Name="IDOrden" ColumnName="IDOrden" />
                 <ScalarProperty Name="IDProducto" ColumnName="IDProducto" />
                 <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
-                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -438,6 +572,7 @@
                 <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
                 <ScalarProperty Name="FechaOrden" ColumnName="FechaOrden" />
                 <ScalarProperty Name="MontoTotal" ColumnName="MontoTotal" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

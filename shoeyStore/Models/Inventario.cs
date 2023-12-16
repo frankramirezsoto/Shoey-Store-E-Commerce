@@ -14,12 +14,20 @@ namespace shoeyStore.Models
     
     public partial class Inventario
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Inventario()
+        {
+            this.Carritoes = new HashSet<Carrito>();
+        }
+    
         public int IDInventario { get; set; }
         public int IDProducto { get; set; }
         public Nullable<decimal> TallaUS { get; set; }
         public Nullable<int> Cantidad { get; set; }
         public Nullable<decimal> Precio { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Carrito> Carritoes { get; set; }
         public virtual Producto Producto { get; set; }
     }
 }
