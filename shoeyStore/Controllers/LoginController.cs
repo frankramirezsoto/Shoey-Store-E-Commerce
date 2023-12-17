@@ -1,4 +1,5 @@
 ﻿using shoeyStore.Models;
+using shoeyStore.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,8 +30,9 @@ namespace shoeyStore.Controllers
                     if (list.Count() > 0)
                     {
                         Cliente user = list.First();
-                        //Sets the session called 'Logged' to be the user who just logged in 
+
                         Session["Logged"] = user;
+
                         //Return '200' will be read by the View through JS
                         return Content("200");
                     }

@@ -29,5 +29,7 @@ namespace shoeyStore.Models.ViewModels
         public virtual ICollection<Direccion> Direccions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tarjeta> Tarjetas { get; set; }
+
+        public List<CardViewModel> Cards { get; set; }
     }
 }
