@@ -15,7 +15,7 @@
 
                             <div class="col-lg-7">
                                 <h5 class="mb-3">
-                                    <a href="@Url.Content("~/Home")" class="text-body text-decoration-none">
+                                    <a href="@Url.Content("~/ItemNavigation")" class="text-body text-decoration-none">
                                         <i class="bi bi-backspace-fill me-2"></i>Continue shopping
                                     </a>
                                 </h5>
@@ -30,7 +30,6 @@
 
                                 @if (Model != null)
                                 {
-                                    decimal? total = 0;
                                     foreach (var cartItem in Model)
                                     {
                                         <div class="card mb-3">
@@ -83,19 +82,23 @@
                                                 if (user.Tarjetas != null)
                                                 {
                                                     <!-- Display existing cards dynamically -->
-                                                    <div class="card-deck mt-4 d-flex">
+                                                    <div class="row g-2 mt-4">
                                                         <!-- Add  Section -->
-                                                        <div class="card me-2" style="cursor: pointer;" onclick="enableCardFields()">
-                                                            <div class="card-body">
-                                                                <p class="card-title text-dark">Add</p>
+                                                        <div class="col-lg-3">
+                                                            <div class="card me-2" style="cursor: pointer;" onclick="enableCardFields()">
+                                                                <div class="card-body">
+                                                                    <p class="card-title text-dark fw-bold">Add</p>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         @foreach (var card in user.Tarjetas)
                                                         {
                                                             <!-- Card Section -->
-                                                            <div class="card me-2" style="cursor: pointer;" onclick="selectCard('@card.Numero', '@card.Expiracion', '@card.CVV')">
-                                                                <div class="card-body">
-                                                                    <p class="card-title text-dark"><b>**** @card.Numero.Substring(card.Numero.Length - 4)</b></p>
+                                                            <div class="col-lg-3">
+                                                                <div class="card me-2" style="cursor: pointer;" onclick="selectCard('@card.IDTarjeta','@card.Numero', '@card.Expiracion', '@card.CVV')">
+                                                                    <div class="card-body">
+                                                                        <p class="card-title text-dark"><b>**** @card.Numero.Substring(card.Numero.Length - 4)</b></p>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         }
@@ -107,6 +110,7 @@
                                             <div class="form-row mt-3">
                                                 <!-- Selected Card Input -->
                                                 <div class="form-row mt-3">
+                                                    <input type="hidden" id="cardId" name="IDTarjeta">
                                                     <div class="form-group col-md-6">
                                                         <label for="selectedCardNumber">Card Number</label>
                                                         <input type="text" class="form-control" id="selectedCardNumber">
@@ -125,75 +129,76 @@
 
                                         <hr class="my-4">
 
-                                        <div class="container mt-5">
-                                            <h2>Shipping Address</h2>
+                                        <div class="container">
+                                            <h5>Shipping Address</h5>
 
                                             <!-- Display existing addresses -->
-                                            <div class="card-deck mt-4">
-
-                                                @if (user != null)
+                                            @if (user != null)
+                                            {
+                                                if (user.Direccions != null)
                                                 {
-                                                    if (user.Direccions != null)
-                                                    {
-                                                        <!-- Display existing cards dynamically -->
-                                                        <div class="card-deck mt-4 d-flex">
-                                                            <!-- Add Address Section -->
-                                                            <div class="card me-2" style="cursor: pointer;" onclick="enableAddressFields()">
-                                                                <div class="card-body">
+                                                    <!-- Display existing cards dynamically -->
+                                                    <div class="row g-2 mt-4 d-flex">
+                                                        <!-- Add Address Section -->
+                                                        <div class="col-lg-6">
+                                                            <div class="card h-100" style="cursor: pointer;" onclick="enableAddressFields()">
+                                                                <div class="card-body text-dark fw-bold">
                                                                     <h5 class="card-title">Add</h5>
                                                                 </div>
                                                             </div>
-                                                            @foreach (var address in user.Direccions)
-                                                            {
-                                                                <!-- Card Section -->
-                                                                <div class="card" style="cursor: pointer;" onclick="selectAddress(@address.Nombre, @address.Apellido, @address.Linea, @address.Ciudad, @address.Estado, @address.ZIP, @address.Telefono">
-                                                                    <div class="card-body">
+                                                        </div>
+                                                        @foreach (var address in user.Direccions)
+                                                        {
+                                                            <!-- Card Section -->
+                                                            <div class="col-lg-6">
+                                                                <div class="card" style="cursor: pointer;" onclick='selectAddress("@address.IDDireccion","@address.Nombre","@address.Apellido", "@address.Linea", "@address.Ciudad", "@address.Estado", "@address.ZIP", "@address.Telefono")'>
+                                                                    <div class="card-body text-dark">
                                                                         <p class="card-title"><b>@address.Nombre @address.Apellido</b></p>
                                                                         <p class="card-text">@address.Linea, @address.Ciudad, @address.Estado</p>
                                                                         <p class="card-text">Phone: @address.Telefono</p>
                                                                     </div>
                                                                 </div>
-                                                            }
-                                                        </div>
-                                                    }
+                                                            </div>
+                                                        }
+                                                    </div>
                                                 }
-                                            </div>
+                                            }
 
                                             <!-- Selected Address Input -->
-                                            <div class="form-row mt-3">
+                                            <div class="row mt-3">
+                                                <input type="hidden" id="addressId" name="IDDireccion">
                                                 <div class="form-group col-md-6">
                                                     <label for="firstName">First Name</label>
-                                                    <input type="text" class="form-control" id="firstName" readonly>
+                                                    <input type="text" class="form-control" id="firstName">
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label for="lastName">Last Name</label>
-                                                    <input type="text" class="form-control" id="lastName" readonly>
+                                                    <input type="text" class="form-control" id="lastName">
                                                 </div>
                                             </div>
 
-                                            <div class="form-group">
-                                                <label for="line1">Address Line 1</label>
-                                                <input type="text" class="form-control" id="line1" readonly>
-                                            </div>
 
-                                            <div class="form-row">
-                                                <div class="form-group col-md-6">
+                                            <div class="row mt-3">
+                                                <div class="form-group col-md-12">
+                                                    <label for="line1">Address Line 1</label>
+                                                    <input type="text" class="form-control" id="line1" style="max-width:100%">
+                                                </div>
+                                                <div class="form-group  mt-3 col-md-6">
                                                     <label for="city">City</label>
-                                                    <input type="text" class="form-control" id="city" readonly>
+                                                    <input type="text" class="form-control" id="city" style="max-width:100%">
                                                 </div>
-                                                <div class="form-group col-md-4">
+                                                <div class="form-group  mt-3 col-md-6">
                                                     <label for="state">State</label>
-                                                    <input type="text" class="form-control" id="state" readonly>
+                                                    <input type="text" class="form-control" id="state" style="max-width:100%">
                                                 </div>
-                                                <div class="form-group col-md-2">
+                                                <div class="form-group  mt-3 col-md-6">
                                                     <label for="zip">ZIP Code</label>
-                                                    <input type="text" class="form-control" id="zip" readonly>
+                                                    <input type="text" class="form-control" id="zip" style="max-width:100%">
                                                 </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="phoneNumber">Phone Number</label>
-                                                <input type="text" class="form-control" id="phoneNumber" readonly>
+                                                <div class="form-group mt-3 col-md-6">
+                                                    <label for="phoneNumber">Phone Number</label>
+                                                    <input type="text" class="form-control" id="phoneNumber" style="max-width:100%">
+                                                </div>
                                             </div>
 
                                         </div>
@@ -202,23 +207,41 @@
 
                                         <div class="d-flex justify-content-between">
                                             <p class="mb-2">Subtotal</p>
-                                            <p class="mb-2">$4798.00</p>
+                                            <p class="mb-2">
+                                                $@{ 
+                                                    decimal? subtotald = 0;
+                                                    decimal subtotal = 0;
+                                                    if (Model != null)
+                                                    {
+                                                        foreach (var item in Model)
+                                                        {
+                                                            subtotald += item.Inventario.Precio;
+                                                        }
+                                                        subtotal = (decimal)subtotald;
+                                                    }
+                                                    <span>@subtotal</span>
+                                                }
+                                            </p>
                                         </div>
 
                                         <div class="d-flex justify-content-between">
                                             <p class="mb-2">Shipping</p>
-                                            <p class="mb-2">$20.00</p>
+                                            <p class="mb-2">$50.00</p>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between">
+                                            <p class="mb-2">Taxes</p>
+                                            <p class="mb-2">$@{decimal tax = Math.Round(subtotal * 0.10m, 2);<span>@tax</span>}</p>
                                         </div>
 
                                         <div class="d-flex justify-content-between mb-4">
                                             <p class="mb-2">Total(Incl. taxes)</p>
-                                            <p class="mb-2">$4818.00</p>
+                                            <p class="mb-2">$@{var total = (subtotal + tax)+50;<span>@total</span>}</p>
                                         </div>
 
-                                        <button type="button" class="btn btn-info btn-block btn-lg">
-                                            <div class="d-flex justify-content-between">
-                                                <span>$4818.00</span>
-                                                <span>Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                                        <button type="button" class="btn btn-dark text-white btn-block btn-lg w-100">
+                                            <div class="d-flex justify-content-center">
+                                                <span>Checkout <i class="bi bi-arrow-right-circle-fill m"></i></span>
                                             </div>
                                         </button>
 
@@ -238,10 +261,11 @@
 
 <script>
     // Function to update the selected card input and change the background color
-    function selectCard(cardNumber, expirationDate, cvv) {
+    function selectCard(cardId,cardNumber, expirationDate, cvv) {
         // Crop card number to show only the last 4 digits
         var croppedCardNumber = '**** **** **** ' + cardNumber.slice(-4);
 
+        document.getElementById('cardId').value = cardId;
         document.getElementById('selectedCardNumber').value = croppedCardNumber;
         var parsedExpirationDate = new Date(expirationDate);
         var formattedExpirationDate = parsedExpirationDate.toISOString().split('T')[0];
@@ -286,7 +310,8 @@
     }
 
     // Function to update the selected address input and change the background color
-    function selectAddress(firstName, lastName, line1, city, state, zip, phoneNumber) {
+    function selectAddress(addressId, firstName, lastName, line1, city, state, zip, phoneNumber) {
+        document.getElementById('addressId').value = addressId;
         document.getElementById('firstName').value = firstName;
         document.getElementById('lastName').value = lastName;
         document.getElementById('line1').value = line1;
