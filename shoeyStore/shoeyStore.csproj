@@ -150,6 +150,9 @@
     <Compile Include="Models\DetallesOrden.cs">
       <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Direccion.cs">
+      <DependentUpon>StoreModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Inventario.cs">
       <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
@@ -176,6 +179,9 @@
     </Compile>
     <Compile Include="Models\TableViewModels\OrderTableViewModel.cs" />
     <Compile Include="Models\TableViewModels\ProductTableViewModel.cs" />
+    <Compile Include="Models\Tarjeta.cs">
+      <DependentUpon>StoreModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Vendedor.cs">
       <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
@@ -296,6 +302,7 @@
     <Content Include="Views\SellerAdmin\EditProduct.cshtml" />
     <Content Include="Views\ItemNavigation\Index.cshtml" />
     <Content Include="Views\Cart\Index.cshtml" />
+    <Content Include="Views\Cart\Checkout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

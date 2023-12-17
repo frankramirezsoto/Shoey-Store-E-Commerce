@@ -32,9 +32,6 @@
           <Property Name="NombreCliente" Type="varchar" MaxLength="50" />
           <Property Name="CorreoElectronico" Type="varchar" MaxLength="100" />
           <Property Name="Contrasenna" Type="varchar" MaxLength="20" />
-          <Property Name="NumeroTelefono" Type="varchar" MaxLength="10" />
-          <Property Name="Direccion" Type="varchar" MaxLength="50" />
-          <Property Name="TarjetaBancaria" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="DetallesOrden">
           <Key>
@@ -44,6 +41,20 @@
           <Property Name="IDOrden" Type="int" />
           <Property Name="IDProducto" Type="int" />
           <Property Name="Cantidad" Type="int" />
+        </EntityType>
+        <EntityType Name="Direccion">
+          <Key>
+            <PropertyRef Name="IDDireccion" />
+          </Key>
+          <Property Name="IDDireccion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDCliente" Type="int" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" />
+          <Property Name="Apellido" Type="varchar" MaxLength="100" />
+          <Property Name="Direccion" Type="varchar" MaxLength="500" />
+          <Property Name="Ciudad" Type="varchar" MaxLength="100" />
+          <Property Name="Estado" Type="varchar" MaxLength="100" />
+          <Property Name="ZIP" Type="varchar" MaxLength="100" />
+          <Property Name="Telefono" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Inventario">
           <Key>
@@ -77,6 +88,16 @@
           <Property Name="Marca" Type="varchar" MaxLength="50" />
           <Property Name="Modelo" Type="varchar" MaxLength="100" />
           <Property Name="Imagen" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Tarjeta">
+          <Key>
+            <PropertyRef Name="IDTarjeta" />
+          </Key>
+          <Property Name="IDTarjeta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDCliente" Type="int" />
+          <Property Name="Numero" Type="varchar" MaxLength="100" />
+          <Property Name="Expiracion" Type="date" />
+          <Property Name="CVV" Type="varchar" MaxLength="3" />
         </EntityType>
         <EntityType Name="Vendedor">
           <Key>
@@ -185,6 +206,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Direccion_Cliente1">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+          <End Role="Direccion" Type="Self.Direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="IDCliente" />
+            </Principal>
+            <Dependent Role="Direccion">
+              <PropertyRef Name="IDCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Inventario_Producto1">
           <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
           <End Role="Inventario" Type="Self.Inventario" Multiplicity="*" />
@@ -197,14 +230,28 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Tarjeta_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+          <End Role="Tarjeta" Type="Self.Tarjeta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="IDCliente" />
+            </Principal>
+            <Dependent Role="Tarjeta">
+              <PropertyRef Name="IDCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ShoeyDatabaseModelStoreContainer">
           <EntitySet Name="Calificacion" EntityType="Self.Calificacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Carrito" EntityType="Self.Carrito" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DetallesOrden" EntityType="Self.DetallesOrden" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Direccion" EntityType="Self.Direccion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Inventario" EntityType="Self.Inventario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orden" EntityType="Self.Orden" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tarjeta" EntityType="Self.Tarjeta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Vendedor" EntityType="Self.Vendedor" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__Calificac__IDPro__440B1D61" Association="Self.FK__Calificac__IDPro__440B1D61">
             <End Role="Producto" EntitySet="Producto" />
@@ -238,9 +285,17 @@
             <End Role="Producto" EntitySet="Producto" />
             <End Role="Carrito" EntitySet="Carrito" />
           </AssociationSet>
+          <AssociationSet Name="FK_Direccion_Cliente1" Association="Self.FK_Direccion_Cliente1">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Direccion" EntitySet="Direccion" />
+          </AssociationSet>
           <AssociationSet Name="FK_Inventario_Producto1" Association="Self.FK_Inventario_Producto1">
             <End Role="Producto" EntitySet="Producto" />
             <End Role="Inventario" EntitySet="Inventario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tarjeta_Cliente" Association="Self.FK_Tarjeta_Cliente">
+            <End Role="Cliente" EntitySet="Cliente" />
+            <End Role="Tarjeta" EntitySet="Tarjeta" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -279,11 +334,10 @@
           <Property Name="NombreCliente" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CorreoElectronico" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Contrasenna" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="NumeroTelefono" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Direccion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="TarjetaBancaria" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Carritoes" Relationship="Self.FK_Carrito_Cliente1" FromRole="Cliente" ToRole="Carrito" />
           <NavigationProperty Name="Ordens" Relationship="Self.FK__Orden__IDCliente__3D5E1FD2" FromRole="Cliente" ToRole="Orden" />
+          <NavigationProperty Name="Direccions" Relationship="Self.FK_Direccion_Cliente1" FromRole="Cliente" ToRole="Direccion" />
+          <NavigationProperty Name="Tarjetas" Relationship="Self.FK_Tarjeta_Cliente" FromRole="Cliente" ToRole="Tarjeta" />
         </EntityType>
         <EntityType Name="DetallesOrden">
           <Key>
@@ -295,6 +349,21 @@
           <Property Name="Cantidad" Type="Int32" />
           <NavigationProperty Name="Orden" Relationship="Self.FK__DetallesO__IDOrd__403A8C7D" FromRole="DetallesOrden" ToRole="Orden" />
           <NavigationProperty Name="Producto" Relationship="Self.FK__DetallesO__IDPro__412EB0B6" FromRole="DetallesOrden" ToRole="Producto" />
+        </EntityType>
+        <EntityType Name="Direccion">
+          <Key>
+            <PropertyRef Name="IDDireccion" />
+          </Key>
+          <Property Name="IDDireccion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDCliente" Type="Int32" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Apellido" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Direccion1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Ciudad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Estado" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ZIP" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Telefono" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Cliente" Relationship="Self.FK_Direccion_Cliente1" FromRole="Direccion" ToRole="Cliente" />
         </EntityType>
         <EntityType Name="Inventario">
           <Key>
@@ -337,6 +406,17 @@
           <NavigationProperty Name="DetallesOrdens" Relationship="Self.FK__DetallesO__IDPro__412EB0B6" FromRole="Producto" ToRole="DetallesOrden" />
           <NavigationProperty Name="Inventarios" Relationship="Self.FK_Inventario_Producto1" FromRole="Producto" ToRole="Inventario" />
           <NavigationProperty Name="Vendedor" Relationship="Self.FK__Producto__IDVend__38996AB5" FromRole="Producto" ToRole="Vendedor" />
+        </EntityType>
+        <EntityType Name="Tarjeta">
+          <Key>
+            <PropertyRef Name="IDTarjeta" />
+          </Key>
+          <Property Name="IDTarjeta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDCliente" Type="Int32" />
+          <Property Name="Numero" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Expiracion" Type="DateTime" Precision="0" />
+          <Property Name="CVV" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Cliente" Relationship="Self.FK_Tarjeta_Cliente" FromRole="Tarjeta" ToRole="Cliente" />
         </EntityType>
         <EntityType Name="Vendedor">
           <Key>
@@ -410,6 +490,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Direccion_Cliente1">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+          <End Role="Direccion" Type="Self.Direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="IDCliente" />
+            </Principal>
+            <Dependent Role="Direccion">
+              <PropertyRef Name="IDCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tarjeta_Cliente">
+          <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+          <End Role="Tarjeta" Type="Self.Tarjeta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cliente">
+              <PropertyRef Name="IDCliente" />
+            </Principal>
+            <Dependent Role="Tarjeta">
+              <PropertyRef Name="IDCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__DetallesO__IDOrd__403A8C7D">
           <End Role="Orden" Type="Self.Orden" Multiplicity="0..1" />
           <End Role="DetallesOrden" Type="Self.DetallesOrden" Multiplicity="*" />
@@ -463,9 +567,11 @@
           <EntitySet Name="Carritoes" EntityType="Self.Carrito" />
           <EntitySet Name="Clientes" EntityType="Self.Cliente" />
           <EntitySet Name="DetallesOrdens" EntityType="Self.DetallesOrden" />
+          <EntitySet Name="Direccions" EntityType="Self.Direccion" />
           <EntitySet Name="Inventarios" EntityType="Self.Inventario" />
           <EntitySet Name="Ordens" EntityType="Self.Orden" />
           <EntitySet Name="Productoes" EntityType="Self.Producto" />
+          <EntitySet Name="Tarjetas" EntityType="Self.Tarjeta" />
           <EntitySet Name="Vendedors" EntityType="Self.Vendedor" />
           <AssociationSet Name="FK__Calificac__IDPro__440B1D61" Association="Self.FK__Calificac__IDPro__440B1D61">
             <End Role="Producto" EntitySet="Productoes" />
@@ -486,6 +592,14 @@
           <AssociationSet Name="FK__Orden__IDCliente__3D5E1FD2" Association="Self.FK__Orden__IDCliente__3D5E1FD2">
             <End Role="Cliente" EntitySet="Clientes" />
             <End Role="Orden" EntitySet="Ordens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Direccion_Cliente1" Association="Self.FK_Direccion_Cliente1">
+            <End Role="Cliente" EntitySet="Clientes" />
+            <End Role="Direccion" EntitySet="Direccions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tarjeta_Cliente" Association="Self.FK_Tarjeta_Cliente">
+            <End Role="Cliente" EntitySet="Clientes" />
+            <End Role="Tarjeta" EntitySet="Tarjetas" />
           </AssociationSet>
           <AssociationSet Name="FK__DetallesO__IDOrd__403A8C7D" Association="Self.FK__DetallesO__IDOrd__403A8C7D">
             <End Role="Orden" EntitySet="Ordens" />
@@ -538,9 +652,6 @@
                 <ScalarProperty Name="NombreCliente" ColumnName="NombreCliente" />
                 <ScalarProperty Name="CorreoElectronico" ColumnName="CorreoElectronico" />
                 <ScalarProperty Name="Contrasenna" ColumnName="Contrasenna" />
-                <ScalarProperty Name="NumeroTelefono" ColumnName="NumeroTelefono" />
-                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
-                <ScalarProperty Name="TarjetaBancaria" ColumnName="TarjetaBancaria" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -551,6 +662,21 @@
                 <ScalarProperty Name="IDOrden" ColumnName="IDOrden" />
                 <ScalarProperty Name="IDProducto" ColumnName="IDProducto" />
                 <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Direccions">
+            <EntityTypeMapping TypeName="ShoeyDatabaseModel.Direccion">
+              <MappingFragment StoreEntitySet="Direccion">
+                <ScalarProperty Name="IDDireccion" ColumnName="IDDireccion" />
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Direccion1" ColumnName="Direccion" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="ZIP" ColumnName="ZIP" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -587,6 +713,17 @@
                 <ScalarProperty Name="Marca" ColumnName="Marca" />
                 <ScalarProperty Name="Modelo" ColumnName="Modelo" />
                 <ScalarProperty Name="Imagen" ColumnName="Imagen" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tarjetas">
+            <EntityTypeMapping TypeName="ShoeyDatabaseModel.Tarjeta">
+              <MappingFragment StoreEntitySet="Tarjeta">
+                <ScalarProperty Name="IDTarjeta" ColumnName="IDTarjeta" />
+                <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="Expiracion" ColumnName="Expiracion" />
+                <ScalarProperty Name="CVV" ColumnName="CVV" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -3,38 +3,60 @@
     ViewBag.Title = "Index";
 }
 
-@foreach (var cartItem in Model)
+@if (Model != null)
 {
-    <div class="card mb-3">
-        <div class="card-body">
-            <div class="d-flex justify-content-between">
-                <div class="d-flex flex-row align-items-center">
-                    <div>
-                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(cartItem.Producto.Imagen)"
-                             class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+    decimal? total = 0;
+    foreach (var cartItem in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex flex-row align-items-center">
+                        <div>
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(cartItem.Producto.Imagen)"
+                                 class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+                        </div>
+                        <div class="ms-3">
+                            <h6>@cartItem.Producto.Marca @cartItem.Producto.Modelo</h6>
+                        </div>
                     </div>
-                    <div class="ms-3">
-                        <h5>@cartItem.Producto.Marca @cartItem.Producto.Modelo</h5>
+                    <div class="d-flex flex-row align-items-center">
+                        <div style="width: 50px;">
+                            <h5 class="fw-normal mb-0 text-center">@cartItem.Cantidad</h5>
+                        </div>
+                        <div style="width: 80px;">
+                            <h5 class="mb-0">$@cartItem.Inventario.Precio</h5>
+                        </div>
+                        <button class="btn" onclick="deleteProduct(@cartItem.IDCarrito)" style="color: #cecece;">
+                            <i class="bi bi-trash-fill text-muted"></i>
+                        </button>
                     </div>
-                </div>
-                <div class="d-flex flex-row align-items-center">
-                    <div style="width: 50px;">
-                        <h5 class="fw-normal mb-0">@cartItem.Cantidad</h5>
-                    </div>
-                    <div style="width: 80px;">
-                        <h5 class="mb-0">$@cartItem.Inventario.Precio</h5>
-                        <p class="text-muted">+tax and shipping fees</p>
-                    </div>
-                    <a onclick="deleteProduct(@cartItem.IDCarrito)" style="color: #cecece;"><i class="bi bi-trash-fill text-muted"></i></a>
                 </div>
             </div>
         </div>
+    }
+    <div class="d-flex justify-content-end">
+        <h5>
+            Total: $@{
+                foreach (var item in Model)
+                {
+                    total += item.Inventario.Precio;
+                }
+                <span>@total</span>
+            }
+        </h5>
+    </div>
+    <p class="text-muted d-block d-flex justify-content-end mb-0"><sm>+tax and shipping fees</sm></p>
+    <div class="p-3 pb-0 d-flex justify-content-end">
+        <button class="btn btn-dark text-white" onclick="document.location.href = @Url.Content("~/Cart/CartItems")">Checkout</button>
     </div>
 }
-
-<div class="p-3">
-
-</div>
+else
+{
+    <div class="h-25">
+        <p>There are no items on the Cart.</p>
+    </div>
+}
 
 <script>
     function deleteProduct(Id) {

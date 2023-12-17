@@ -1,0 +1,130 @@
+﻿@model List<shoeyStore.Models.ViewModels.CartViewModel>
+@{
+    ViewBag.Title = "Checkout";
+}
+
+<section class="h-100 h-custom" style="background-color: #eee;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body p-4">
+
+                        <div class="row">
+
+                            <div class="col-lg-7">
+                                <h5 class="mb-3">
+                                    <a href="@Url.Content("~/Home")" class="text-body text-decoration-none">
+                                        <i class="bi bi-backspace-fill me-2"></i>Continue shopping
+                                    </a>
+                                </h5>
+                                <hr>
+
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div>
+                                        <p class="mb-1">Shopping cart</p>
+                                        <p class="mb-0">You have @if (Model != null) { <span>Model.Count</span>} items in your cart</p>
+                                    </div>
+                                </div>
+
+                                @if (Model != null)
+                                {
+                                    decimal? total = 0;
+                                    foreach (var cartItem in Model)
+                                    {
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <div class="d-flex flex-row align-items-center">
+                                                        <div>
+                                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(cartItem.Producto.Imagen)"
+                                                                 class="img-fluid rounded-3" alt="Shopping item" style="width: 65px;">
+                                                        </div>
+                                                        <div class="ms-3">
+                                                            <h6>@cartItem.Producto.Marca @cartItem.Producto.Modelo</h6>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex flex-row align-items-center">
+                                                        <div style="width: 50px;">
+                                                            <h5 class="fw-normal mb-0 text-center">@cartItem.Cantidad</h5>
+                                                        </div>
+                                                        <div style="width: 80px;">
+                                                            <h5 class="mb-0">$@cartItem.Inventario.Precio</h5>
+                                                        </div>
+                                                        <button class="btn" onclick="deleteProduct(@cartItem.IDCarrito)" style="color: #cecece;">
+                                                            <i class="bi bi-trash-fill text-muted"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="d-flex justify-content-end">
+                                        <h5>
+                                            Total: $@{
+                                                foreach (var item in Model)
+                                                {
+                                                    total += item.Inventario.Precio;
+                                                }
+                                                <span>@total</span>
+                                            }
+                                        </h5>
+                                    </div>
+                                    <p class="text-muted d-block d-flex justify-content-end mb-0"><sm>+tax and shipping fees</sm></p>
+                                    <div class="p-3 pb-0 d-flex justify-content-end">
+                                        <button class="btn btn-dark text-white" onclick="document.location.href = @Url.Content("~/Cart/CartItems")">Checkout</button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="h-25">
+                                        <p>There are no items on the Cart.</p>
+                                    </div>
+                                }
+
+
+                            </div>
+                            <div class="col-lg-5">
+
+                                <div class="card bg-success text-white rounded-3">
+                                    <div class="card-body">
+                                        
+
+                                        <hr class="my-4">
+
+                                        <div class="d-flex justify-content-between">
+                                            <p class="mb-2">Subtotal</p>
+                                            <p class="mb-2">$4798.00</p>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between">
+                                            <p class="mb-2">Shipping</p>
+                                            <p class="mb-2">$20.00</p>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between mb-4">
+                                            <p class="mb-2">Total(Incl. taxes)</p>
+                                            <p class="mb-2">$4818.00</p>
+                                        </div>
+
+                                        <button type="button" class="btn btn-info btn-block btn-lg">
+                                            <div class="d-flex justify-content-between">
+                                                <span>$4818.00</span>
+                                                <span>Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                                            </div>
+                                        </button>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

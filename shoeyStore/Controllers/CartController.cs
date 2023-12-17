@@ -23,6 +23,7 @@ namespace shoeyStore.Controllers
             {
                 if (user != null)
                 {
+                    //Fills the list with cart items 
                     CartItems = (from c in db.Carritoes
                                  where c.IDCliente == user.IDCliente
                                  select new CartViewModel
@@ -33,18 +34,54 @@ namespace shoeyStore.Controllers
                                      IDInventario = c.IDInventario,
                                      Cantidad = c.Cantidad,
                                  }).ToList();
+                    //Then populates the object reference of the CartViewModel
                     foreach(var cartItem in CartItems) 
                     {
-                        cartItem.Cliente = user;
+                        cartItem.Cliente = db.Clientes.Find(user.IDCliente);
                         cartItem.Inventario = db.Inventarios.Find(cartItem.IDInventario);
                         cartItem.Producto = db.Productoes.Find(cartItem.IDProducto);
                     }
                 }
             }
             CartItems?.Reverse();
-            return PartialView(CartItems);
+            return PartialView(CartItems);//Returns a partial view to be rendered when the cart icon is pressed
         }
+        //Same function as above but this one returns a View
+        [HttpGet]
+        public ActionResult Checkout()
+        {
+            //List of Orders will be populated with the database request
+            List<CartViewModel> CartItems = null;
 
+            //Check on user session to see if it's logged
+            var user = (Cliente)Session["Logged"];
+
+            using (ShoeyDatabaseEntities db = new ShoeyDatabaseEntities())
+            {
+                if (user != null)
+                {
+                    CartItems = (from c in db.Carritoes
+                                 where c.IDCliente == user.IDCliente
+                                 select new CartViewModel
+                                 {
+                                     IDCarrito = c.IDCarrito,
+                                     IDCliente = c.IDCliente,
+                                     IDProducto = c.IDProducto,
+                                     IDInventario = c.IDInventario,
+                                     Cantidad = c.Cantidad,
+                                 }).ToList();
+                    foreach (var cartItem in CartItems)
+                    {
+                        cartItem.Cliente = db.Clientes.Find(user.IDCliente);
+                        cartItem.Inventario = db.Inventarios.Find(cartItem.IDInventario);
+                        cartItem.Producto = db.Productoes.Find(cartItem.IDProducto);
+                    }
+                }
+            }
+            CartItems?.Reverse();
+            return View(CartItems);
+        }
+        //Function to add an item to the cart
         [HttpPost]
         public ActionResult Add(CartViewModel model)
         {
@@ -73,7 +110,7 @@ namespace shoeyStore.Controllers
             }
             return Content("We're sorry, but it looks like we don't have enough in stock");
         }
-
+        //Function to delete an item from the cart
         [HttpPost]
         public ActionResult Delete(int id)
         {
