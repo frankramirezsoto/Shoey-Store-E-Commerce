@@ -50,7 +50,7 @@
           <Property Name="IDCliente" Type="int" />
           <Property Name="Nombre" Type="varchar" MaxLength="100" />
           <Property Name="Apellido" Type="varchar" MaxLength="100" />
-          <Property Name="Direccion" Type="varchar" MaxLength="500" />
+          <Property Name="Linea" Type="varchar" MaxLength="500" />
           <Property Name="Ciudad" Type="varchar" MaxLength="100" />
           <Property Name="Estado" Type="varchar" MaxLength="100" />
           <Property Name="ZIP" Type="varchar" MaxLength="100" />
@@ -358,7 +358,7 @@
           <Property Name="IDCliente" Type="Int32" />
           <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Apellido" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Direccion1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Linea" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="Ciudad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Estado" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ZIP" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
@@ -672,7 +672,7 @@
                 <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Apellido" ColumnName="Apellido" />
-                <ScalarProperty Name="Direccion1" ColumnName="Direccion" />
+                <ScalarProperty Name="Linea" ColumnName="Linea" />
                 <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
                 <ScalarProperty Name="Estado" ColumnName="Estado" />
                 <ScalarProperty Name="ZIP" ColumnName="ZIP" />

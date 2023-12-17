@@ -60,6 +60,36 @@ namespace shoeyStore.Controllers
             {
                 if (user != null)
                 {
+                    user.Tarjetas =(from t in db.Tarjetas
+                                    where t.IDCliente == user.IDCliente
+                                    select new Tarjeta 
+                                    { 
+                                        IDTarjeta = t.IDTarjeta,
+                                        IDCliente = t.IDCliente,
+                                        Numero = t.Numero,
+                                        Expiracion = t.Expiracion,
+                                        CVV = t.CVV,
+                                        Cliente = user,
+                                    }
+                        ).ToList();
+                    user.Direccions = (from d in db.Direccions
+                                     where d.IDCliente == user.IDCliente
+                                     select new Direccion
+                                     {
+                                         IDDireccion = d.IDDireccion,
+                                         IDCliente = d.IDCliente,
+                                         Nombre = d.Nombre,
+                                         Apellido = d.Apellido,
+                                         Linea = d.Linea,
+                                         Ciudad = d.Ciudad,
+                                         Estado = d.Estado,
+                                         ZIP = d.ZIP,
+                                         Telefono = d.Telefono,
+                                         Cliente = user,
+                                     }
+                        ).ToList();
+                    ViewBag.User = user;
+
                     CartItems = (from c in db.Carritoes
                                  where c.IDCliente == user.IDCliente
                                  select new CartViewModel

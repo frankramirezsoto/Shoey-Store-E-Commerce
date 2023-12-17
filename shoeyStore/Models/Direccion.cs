@@ -18,7 +18,7 @@ namespace shoeyStore.Models
         public Nullable<int> IDCliente { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
-        public string Direccion1 { get; set; }
+        public string Linea { get; set; }
         public string Ciudad { get; set; }
         public string Estado { get; set; }
         public string ZIP { get; set; }

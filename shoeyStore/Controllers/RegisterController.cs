@@ -30,7 +30,6 @@ namespace shoeyStore.Controllers
             {
                     Cliente clientTO = new Cliente();
                     clientTO.NombreCliente = model.NombreCliente;
-                    clientTO.NumeroTelefono = model.NumeroTelefono;
                     clientTO.CorreoElectronico = model.CorreoElectronico;
                     clientTO.Contrasenna = model.Contrasenna;
 

@@ -1,6 +1,7 @@
 ﻿@model List<shoeyStore.Models.ViewModels.CartViewModel>
 @{
     ViewBag.Title = "Checkout";
+    shoeyStore.Models.Cliente user = ViewBag.User;
 }
 
 <section class="h-100 h-custom" style="background-color: #eee;">
@@ -88,7 +89,53 @@
 
                                 <div class="card bg-success text-white rounded-3">
                                     <div class="card-body">
-                                        
+
+                                        <div class="container mt-5">
+                                            <h2>Payment</h2>
+
+                                            <!-- Display existing cards dynamically -->
+                                            <div class="card-deck mt-4">
+                                                <!-- Add Card Section -->
+                                                <div class="card" style="cursor: pointer;" onclick="enableCardFields()">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Add</h5>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Display existing cards based on the model -->
+                                                @if (user != null)
+                                                {
+                                                    foreach (var card in user.Tarjetas)
+                                                    {
+                                                        <div class="card" style="cursor: pointer;" onclick="selectCard('@card.Numero', '@card.Expiracion', '@card.CVV')">
+                                                            <div class="card-body">
+                                                                <h5 class="card-title">**** **** **** @card.Numero.Substring(0, @card.Numero.Length - 4)</h5>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+
+                                            <!-- Selected Card Input -->
+                                            <div class="form-row mt-3">
+                                                <!-- Selected Card Input -->
+                                                <div class="form-row mt-3">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="selectedCardNumber">Card Number</label>
+                                                        <input type="text" class="form-control" id="selectedCardNumber" readonly>
+                                                    </div>
+                                                    <div class="form-group col-md-3">
+                                                        <label for="selectedExpirationDate">Expiration Date</label>
+                                                        <input type="text" class="form-control" id="selectedExpirationDate" readonly>
+                                                    </div>
+                                                    <div class="form-group col-md-3">
+                                                        <label for="selectedCvv">CVV</label>
+                                                        <input type="text" class="form-control" id="selectedCvv" readonly>
+                                                    </div>
+                                                </div>444
+                                            </div>
+                                        </div>
+
 
                                         <hr class="my-4">
 
@@ -127,4 +174,52 @@
         </div>
     </div>
 </section>
+
+<script>
+    // Function to update the selected card input and change the background color
+    function selectCard(cardNumber, expirationDate, cvv) {
+        // Crop card number to show only the last 4 digits
+        var croppedCardNumber = '**** **** **** ' + cardNumber.slice(-4);
+
+        document.getElementById('selectedCardNumber').value = croppedCardNumber;
+        document.getElementById('selectedExpirationDate').value = expirationDate;
+        document.getElementById('selectedCvv').value = cvv;
+
+        // Reset background color for all cards
+        var cards = document.getElementsByClassName('card');
+        for (var i = 0; i < cards.length; i++) {
+            cards[i].style.backgroundColor = '';
+        }
+
+        // Set background color for the selected card
+        event.currentTarget.style.backgroundColor = '#cce5ff'; // You can set your desired color here
+
+        // Disable input fields for existing cards
+        disableCardFields();
+    }
+
+    // Function to enable card fields for manual input
+    function enableCardFields() {
+        document.getElementById('selectedCardNumber').value = '';
+        document.getElementById('selectedExpirationDate').value = '';
+        document.getElementById('selectedCvv').value = '';
+
+        document.getElementById('selectedCardNumber').readOnly = false;
+        document.getElementById('selectedExpirationDate').readOnly = false;
+        document.getElementById('selectedCvv').readOnly = false;
+
+        // Reset background color for all cards
+        var cards = document.getElementsByClassName('card');
+        for (var i = 0; i < cards.length; i++) {
+            cards[i].style.backgroundColor = '';
+        }
+    }
+
+    // Function to disable input fields for existing cards
+    function disableCardFields() {
+        document.getElementById('selectedCardNumber').readOnly = true;
+        document.getElementById('selectedExpirationDate').readOnly = true;
+        document.getElementById('selectedCvv').readOnly = true;
+    }
+</script>
 

@@ -42,20 +42,20 @@
                 </div>
             </a>
             @* Login *@
-        <div class="d-flex justify-content-end align-items-center">
-            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#registerModal">
-                Register
-            </button>
-            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#loginModal">
-                Log In
-            </button>
-            @* Cart *@
-            <div>
-                <button class="btn btn-success rounded-circle m-3" data-bs-toggle="modal" data-bs-target="#loginModal">
-                    <i class="bi bi-cart-fill m-2 fs-4"></i>
+            <div class="d-flex justify-content-end align-items-center">
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#registerModal">
+                    Register
                 </button>
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#loginModal">
+                    Log In
+                </button>
+                @* Cart *@
+                <div>
+                    <button class="btn btn-success rounded-circle m-3" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        <i class="bi bi-cart-fill m-2 fs-4"></i>
+                    </button>
+                </div>
             </div>
-        </div>
         </div>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white mb-3 d-flex justify-content-center">
             <div>
@@ -133,10 +133,13 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     @RenderSection("scripts", required: false)
 
     <script>
-        //Function to show an alert 
+        //Function to show an alert
         function displayToast(message, background) {
             var toastContainer = document.getElementById('notificationToast');
             var toastMessage = document.getElementById('toastMessage');
@@ -160,7 +163,7 @@
         const showToast = urlParams.get('showToast');
         switch (showToast) {
             case "registrationSuccessful":
-                displayToast("Your registration was successful! You may login now.","success")
+                displayToast("Your registration was successful! You may login now.", "success")
                 var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
                 loginModal.show();
                 break;
