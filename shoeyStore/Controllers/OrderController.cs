@@ -45,7 +45,7 @@ namespace shoeyStore.Controllers
                                                           IDProducto = od.IDProducto,
                                                           Orden = o,
                                                           Producto = od.Producto,
-                                                          Product = getProduct(od.IDProducto), //Function declared in Base Controller 
+                                                          Product = getProduct(od.IDProducto),  
                                                       }).ToList()
                                   }).ToList(); 
                 }
@@ -56,7 +56,54 @@ namespace shoeyStore.Controllers
         [HttpPost]
         public ActionResult AddOrder(OrderViewModel order)
         {
-            return View();
+            //Checks if model is valid
+            if (!ModelState.IsValid) return View(order);
+            //Check on user session to see if it's logged
+            var user = (Cliente)Session["SellerLogged"];
+            using (var db = new ShoeyDatabaseEntities())
+            {
+                Orden orderTO = new Orden();
+                //If the card ID is null then it will add the new card to the database 
+                if (order.IDTarjeta == null)
+                {
+                    Tarjeta cardTO = new Tarjeta
+                    {
+                        IDCliente = user.IDCliente,
+                        Numero = order.Tarjeta.Numero,
+                        Expiracion = order.Tarjeta.Expiracion,
+                        CVV = order.Tarjeta.CVV,
+                    };
+                    db.Tarjetas.Add(cardTO);
+                    db.SaveChanges();
+                }
+                else 
+                {
+                    orderTO.IDTarjeta = order.IDTarjeta;
+                }
+
+                if (order.IDDireccion == null) 
+                { 
+                    Direccion addressTO = new Direccion { 
+                        Nombre = order.Direccion.Nombre,
+                        Apellido = order.Direccion.Apellido,
+                        Linea = order.Direccion.Linea,
+                        Ciudad = order.Direccion.Ciudad,
+                        Estado = order.Direccion.Estado,
+                        ZIP = order.Direccion.ZIP,
+                        Telefono = order.Direccion.Telefono,
+                    };
+                    db.Direccions.Add(addressTO);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    orderTO.IDDireccion = order.IDDireccion;
+                }
+
+                orderTO
+            }
+
+                return View();
         }
 
         //This functions returns a ProductViewModel that will be used to populate the Order Object 

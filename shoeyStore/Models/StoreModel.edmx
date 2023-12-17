@@ -72,6 +72,8 @@
           </Key>
           <Property Name="IDOrden" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IDCliente" Type="int" />
+          <Property Name="IDDireccion" Type="int" />
+          <Property Name="IDTarjeta" Type="int" />
           <Property Name="FechaOrden" Type="datetime" />
           <Property Name="MontoTotal" Type="decimal" Precision="10" Scale="2" />
           <Property Name="Estado" Type="varchar" MaxLength="50" />
@@ -230,6 +232,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Orden_Direccion">
+          <End Role="Direccion" Type="Self.Direccion" Multiplicity="0..1" />
+          <End Role="Orden" Type="Self.Orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Direccion">
+              <PropertyRef Name="IDDireccion" />
+            </Principal>
+            <Dependent Role="Orden">
+              <PropertyRef Name="IDDireccion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orden_Tarjeta">
+          <End Role="Tarjeta" Type="Self.Tarjeta" Multiplicity="0..1" />
+          <End Role="Orden" Type="Self.Orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tarjeta">
+              <PropertyRef Name="IDTarjeta" />
+            </Principal>
+            <Dependent Role="Orden">
+              <PropertyRef Name="IDTarjeta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Tarjeta_Cliente">
           <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
           <End Role="Tarjeta" Type="Self.Tarjeta" Multiplicity="*" />
@@ -292,6 +318,14 @@
           <AssociationSet Name="FK_Inventario_Producto1" Association="Self.FK_Inventario_Producto1">
             <End Role="Producto" EntitySet="Producto" />
             <End Role="Inventario" EntitySet="Inventario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orden_Direccion" Association="Self.FK_Orden_Direccion">
+            <End Role="Direccion" EntitySet="Direccion" />
+            <End Role="Orden" EntitySet="Orden" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orden_Tarjeta" Association="Self.FK_Orden_Tarjeta">
+            <End Role="Tarjeta" EntitySet="Tarjeta" />
+            <End Role="Orden" EntitySet="Orden" />
           </AssociationSet>
           <AssociationSet Name="FK_Tarjeta_Cliente" Association="Self.FK_Tarjeta_Cliente">
             <End Role="Cliente" EntitySet="Cliente" />
@@ -364,6 +398,7 @@
           <Property Name="ZIP" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Telefono" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Cliente" Relationship="Self.FK_Direccion_Cliente1" FromRole="Direccion" ToRole="Cliente" />
+          <NavigationProperty Name="Ordens" Relationship="Self.FK_Orden_Direccion" FromRole="Direccion" ToRole="Orden" />
         </EntityType>
         <EntityType Name="Inventario">
           <Key>
@@ -383,11 +418,15 @@
           </Key>
           <Property Name="IDOrden" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IDCliente" Type="Int32" />
+          <Property Name="IDDireccion" Type="Int32" />
+          <Property Name="IDTarjeta" Type="Int32" />
           <Property Name="FechaOrden" Type="DateTime" Precision="3" />
           <Property Name="MontoTotal" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="Estado" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Cliente" Relationship="Self.FK__Orden__IDCliente__3D5E1FD2" FromRole="Orden" ToRole="Cliente" />
           <NavigationProperty Name="DetallesOrdens" Relationship="Self.FK__DetallesO__IDOrd__403A8C7D" FromRole="Orden" ToRole="DetallesOrden" />
+          <NavigationProperty Name="Direccion" Relationship="Self.FK_Orden_Direccion" FromRole="Orden" ToRole="Direccion" />
+          <NavigationProperty Name="Tarjeta" Relationship="Self.FK_Orden_Tarjeta" FromRole="Orden" ToRole="Tarjeta" />
         </EntityType>
         <EntityType Name="Producto">
           <Key>
@@ -417,6 +456,7 @@
           <Property Name="Expiracion" Type="DateTime" Precision="0" />
           <Property Name="CVV" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Cliente" Relationship="Self.FK_Tarjeta_Cliente" FromRole="Tarjeta" ToRole="Cliente" />
+          <NavigationProperty Name="Ordens" Relationship="Self.FK_Orden_Tarjeta" FromRole="Tarjeta" ToRole="Orden" />
         </EntityType>
         <EntityType Name="Vendedor">
           <Key>
@@ -538,6 +578,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Orden_Direccion">
+          <End Role="Direccion" Type="Self.Direccion" Multiplicity="0..1" />
+          <End Role="Orden" Type="Self.Orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Direccion">
+              <PropertyRef Name="IDDireccion" />
+            </Principal>
+            <Dependent Role="Orden">
+              <PropertyRef Name="IDDireccion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Inventario_Producto1">
           <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
           <End Role="Inventario" Type="Self.Inventario" Multiplicity="*" />
@@ -547,6 +599,18 @@
             </Principal>
             <Dependent Role="Inventario">
               <PropertyRef Name="IDProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orden_Tarjeta">
+          <End Role="Tarjeta" Type="Self.Tarjeta" Multiplicity="0..1" />
+          <End Role="Orden" Type="Self.Orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tarjeta">
+              <PropertyRef Name="IDTarjeta" />
+            </Principal>
+            <Dependent Role="Orden">
+              <PropertyRef Name="IDTarjeta" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -609,9 +673,17 @@
             <End Role="Producto" EntitySet="Productoes" />
             <End Role="DetallesOrden" EntitySet="DetallesOrdens" />
           </AssociationSet>
+          <AssociationSet Name="FK_Orden_Direccion" Association="Self.FK_Orden_Direccion">
+            <End Role="Direccion" EntitySet="Direccions" />
+            <End Role="Orden" EntitySet="Ordens" />
+          </AssociationSet>
           <AssociationSet Name="FK_Inventario_Producto1" Association="Self.FK_Inventario_Producto1">
             <End Role="Producto" EntitySet="Productoes" />
             <End Role="Inventario" EntitySet="Inventarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orden_Tarjeta" Association="Self.FK_Orden_Tarjeta">
+            <End Role="Tarjeta" EntitySet="Tarjetas" />
+            <End Role="Orden" EntitySet="Ordens" />
           </AssociationSet>
           <AssociationSet Name="FK__Producto__IDVend__38996AB5" Association="Self.FK__Producto__IDVend__38996AB5">
             <End Role="Vendedor" EntitySet="Vendedors" />
@@ -696,6 +768,8 @@
               <MappingFragment StoreEntitySet="Orden">
                 <ScalarProperty Name="IDOrden" ColumnName="IDOrden" />
                 <ScalarProperty Name="IDCliente" ColumnName="IDCliente" />
+                <ScalarProperty Name="IDDireccion" ColumnName="IDDireccion" />
+                <ScalarProperty Name="IDTarjeta" ColumnName="IDTarjeta" />
                 <ScalarProperty Name="FechaOrden" ColumnName="FechaOrden" />
                 <ScalarProperty Name="MontoTotal" ColumnName="MontoTotal" />
                 <ScalarProperty Name="Estado" ColumnName="Estado" />

@@ -85,7 +85,7 @@
                                                     <div class="row g-2 mt-4">
                                                         <!-- Add  Section -->
                                                         <div class="col-lg-3">
-                                                            <div class="card me-2" style="cursor: pointer;" onclick="enableCardFields()">
+                                                            <div class="card h-100" style="cursor: pointer;" onclick="enableCardFields()">
                                                                 <div class="card-body">
                                                                     <p class="card-title text-dark fw-bold">Add</p>
                                                                 </div>
@@ -95,7 +95,7 @@
                                                         {
                                                             <!-- Card Section -->
                                                             <div class="col-lg-3">
-                                                                <div class="card me-2" style="cursor: pointer;" onclick="selectCard('@card.IDTarjeta','@card.Numero', '@card.Expiracion', '@card.CVV')">
+                                                                <div class="card h-100" style="cursor: pointer;" onclick="selectCard('@card.IDTarjeta','@card.Numero', '@card.Expiracion', '@card.CVV')">
                                                                     <div class="card-body">
                                                                         <p class="card-title text-dark"><b>**** @card.Numero.Substring(card.Numero.Length - 4)</b></p>
                                                                     </div>
@@ -143,7 +143,7 @@
                                                         <div class="col-lg-6">
                                                             <div class="card h-100" style="cursor: pointer;" onclick="enableAddressFields()">
                                                                 <div class="card-body text-dark fw-bold">
-                                                                    <h5 class="card-title">Add</h5>
+                                                                    <p class="card-title text-bold">Add</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -151,7 +151,7 @@
                                                         {
                                                             <!-- Card Section -->
                                                             <div class="col-lg-6">
-                                                                <div class="card" style="cursor: pointer;" onclick='selectAddress("@address.IDDireccion","@address.Nombre","@address.Apellido", "@address.Linea", "@address.Ciudad", "@address.Estado", "@address.ZIP", "@address.Telefono")'>
+                                                                <div class="card h-100" style="cursor: pointer;" onclick='selectAddress("@address.IDDireccion","@address.Nombre","@address.Apellido", "@address.Linea", "@address.Ciudad", "@address.Estado", "@address.ZIP", "@address.Telefono")'>
                                                                     <div class="card-body text-dark">
                                                                         <p class="card-title"><b>@address.Nombre @address.Apellido</b></p>
                                                                         <p class="card-text">@address.Linea, @address.Ciudad, @address.Estado</p>
@@ -287,6 +287,7 @@
 
     // Function to enable card fields for manual input
     function enableCardFields() {
+        document.getElementById('cardId').value = '';
         document.getElementById('selectedCardNumber').value = '';
         document.getElementById('selectedExpirationDate').value = '';
         document.getElementById('selectedCvv').value = '';
@@ -335,6 +336,7 @@
 
     // Function to enable address fields for manual input
     function enableAddressFields() {
+        document.getElementById('addressId').value = '';
         document.getElementById('firstName').value = '';
         document.getElementById('lastName').value = '';
         document.getElementById('line1').value = '';

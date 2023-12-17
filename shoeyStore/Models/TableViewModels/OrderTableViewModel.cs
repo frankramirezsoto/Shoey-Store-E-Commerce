@@ -22,6 +22,8 @@ namespace shoeyStore.Models.ViewModels
         public virtual Cliente Cliente { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetallesOrden> DetallesOrdens { get; set; }
+        public virtual Direccion Direccion { get; set; }
+        public virtual Tarjeta Tarjeta { get; set; }
 
         public List<OrderDetailViewModel> OrderDetails { get; set; }
     }

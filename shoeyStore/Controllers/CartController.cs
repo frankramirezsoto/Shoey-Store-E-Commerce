@@ -55,7 +55,6 @@ namespace shoeyStore.Controllers
             List<CartViewModel> CartItems = null;
 
             //Check on user session to see if it's logged
-            //var user = (Cliente)Session["Logged"];
             var user = (Cliente)Session["Logged"];
 
             using (ShoeyDatabaseEntities db = new ShoeyDatabaseEntities())
@@ -73,22 +72,6 @@ namespace shoeyStore.Controllers
                         address.Cliente = user;
                     }
                     Session["Logged"] = user;
-                    //user.Direccions = (from d in db.Direccions
-                    //                 where d.IDCliente == user.IDCliente
-                    //                 select new Direccion
-                    //                 {
-                    //                     IDDireccion = d.IDDireccion,
-                    //                     IDCliente = d.IDCliente,
-                    //                     Nombre = d.Nombre,
-                    //                     Apellido = d.Apellido,
-                    //                     Linea = d.Linea,
-                    //                     Ciudad = d.Ciudad,
-                    //                     Estado = d.Estado,
-                    //                     ZIP = d.ZIP,
-                    //                     Telefono = d.Telefono,
-                    //                     Cliente = user,
-                    //                 }
-                    //    ).ToList();
                     ViewBag.User = user;
 
                     CartItems = (from c in db.Carritoes

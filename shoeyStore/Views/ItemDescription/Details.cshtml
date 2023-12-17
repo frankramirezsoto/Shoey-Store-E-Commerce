@@ -1,0 +1,50 @@
+﻿@model shoeyStore.Models.ViewModels.ProductViewModel
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            Placeholder for Product Image
+            <img src="data:image;base64,@Model.ImagenBase64" class="img-fluid" alt="Product Image">
+        </div>
+        <div class="col-md-6">
+            <h3 id="price">$XX.XX</h3>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="size">Size</label>
+                        <select id="size" class="form-control" onchange="updatePrice()">
+                            @foreach (var inventoryItem in Model.InventoryEntries)
+                            {
+                                <option value="@inventoryItem.TallaUS" data-price="@inventoryItem.Precio">@inventoryItem.TallaUS</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" id="quantity" class="form-control" min="1" max="100" value="1">
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-lg btn-block">Buy Now</button>
+            <button type="button" class="btn btn-outline-primary btn-lg btn-block">Add to Cart</button>
+        </div>
+    </div>
+</div>
+ Seccion scripts
+<script type="text/javascript">
+    function updatePrice() {
+        var sizeElement = document.getElementById('size');
+        var selectedOption = sizeElement.options[sizeElement.selectedIndex];
+        var selectedPrice = selectedOption.getAttribute('data-price');
+
+        // Update the price display
+        document.getElementById('price').innerText = '$' + selectedPrice;
+    }
+    window.onload = updatePrice;
+</script>
+

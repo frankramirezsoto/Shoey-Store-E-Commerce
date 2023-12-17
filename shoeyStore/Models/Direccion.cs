@@ -14,6 +14,12 @@ namespace shoeyStore.Models
     
     public partial class Direccion
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Direccion()
+        {
+            this.Ordens = new HashSet<Orden>();
+        }
+    
         public int IDDireccion { get; set; }
         public Nullable<int> IDCliente { get; set; }
         public string Nombre { get; set; }
@@ -25,5 +31,7 @@ namespace shoeyStore.Models
         public string Telefono { get; set; }
     
         public virtual Cliente Cliente { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Orden> Ordens { get; set; }
     }
 }
