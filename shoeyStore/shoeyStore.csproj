@@ -307,11 +307,12 @@
     <Content Include="Views\Cart\Checkout.cshtml" />
     <Content Include="Views\ItemDescription\Details.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Carousel.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
-    <Folder Include="Views\Order\" />
     <Folder Include="Views\Settings\" />
   </ItemGroup>
   <ItemGroup>

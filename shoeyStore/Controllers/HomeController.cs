@@ -12,6 +12,11 @@ namespace shoeyStore.Controllers
     {
         public ActionResult Index()
         {
+            return View();
+        }
+
+        public ActionResult Carousel() 
+        {
             using (var db = new ShoeyDatabaseEntities())
             {
                 // Start with all products

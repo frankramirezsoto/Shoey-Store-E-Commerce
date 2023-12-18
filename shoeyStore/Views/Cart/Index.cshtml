@@ -1,6 +1,7 @@
 ﻿@model List<shoeyStore.Models.ViewModels.CartViewModel>
 @{
     ViewBag.Title = "Index";
+    Layout = null;
 }
 
 @if (Model != null)
@@ -47,8 +48,8 @@
         </h5>
     </div>
     <p class="text-muted d-block d-flex justify-content-end mb-0"><sm>+tax and shipping fees</sm></p>
-    <div class="p-3 pb-0 d-flex justify-content-end">
-        <button class="btn btn-dark text-white" onclick="document.location.href = @Url.Content("~/Cart/CartItems")">Checkout</button>
+    <div class="p-3 pe-0 pb-0 d-flex justify-content-end">
+        <button class="btn btn-dark text-white" onclick="document.location.href = @Url.Content("~/Cart/Checkout")">Checkout</button>
     </div>
 }
 else
@@ -57,7 +58,7 @@ else
         <p>There are no items on the Cart.</p>
     </div>
 }
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
 <script>
     function deleteProduct(Id) {
 

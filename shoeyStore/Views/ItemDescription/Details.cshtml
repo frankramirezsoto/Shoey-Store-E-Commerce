@@ -1,41 +1,102 @@
 ﻿@model shoeyStore.Models.ViewModels.ProductViewModel
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = Model.ItemName;
+    var user = (shoeyStore.Models.Cliente)Session["Logged"];
 }
 
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
-            Placeholder for Product Image
-            <img src="data:image;base64,@Model.ImagenBase64" class="img-fluid" alt="Product Image">
-        </div>
-        <div class="col-md-6">
-            <h3 id="price">$XX.XX</h3>
-            <div class="row">
-                <div class="col-6">
-                    <div class="form-group">
-                        <label for="size">Size</label>
-                        <select id="size" class="form-control" onchange="updatePrice()">
-                            @foreach (var inventoryItem in Model.InventoryEntries)
-                            {
-                                <option value="@inventoryItem.TallaUS" data-price="@inventoryItem.Precio">@inventoryItem.TallaUS</option>
-                            }
-                        </select>
+        <div class="col-md-4">
+            <div class="card p-5">
+                <h1>@Model.ItemName</h1>
+                <p>@Model.Nombre</p>
+                <div class="d-flex-justify-content-end"><h3 id="price">Price: $XX.XX</h3></div>
+                <form id="cartEntry">
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="size">Size</label>
+                                <select id="size" name="IDInventario" class="form-control" onchange="updatePrice()">
+                                    @foreach (var inventoryItem in Model.InventoryEntries)
+                                    {
+                                        <option value="@inventoryItem.IDInventario" data-price="@inventoryItem.Precio">@inventoryItem.TallaUS</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="quantity">Quantity</label>
+                                <input type="number" id="quantity" name="Cantidad" class="form-control" min="1" max="100" value="1">
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label for="quantity">Quantity</label>
-                        <input type="number" id="quantity" class="form-control" min="1" max="100" value="1">
+                    
+                    <input type="hidden" id="productId" name="IDProducto" value="@Model.IDProducto">
+                    <div class="row g-2">
+                        <div class="col-6"><button type="button" class="btn btn-success btn-block btn-lg h-100 w-100">Buy Now</button></div>
+                        <div class="col-6"><button type="submit" class="btn btn-dark btn-block btn-lg h-100 w-100"><i class="bi bi-plus-lg text-white p-2"></i></button></div>
                     </div>
-                </div>
+                </form>
             </div>
-            <button type="button" class="btn btn-primary btn-lg btn-block">Buy Now</button>
-            <button type="button" class="btn btn-outline-primary btn-lg btn-block">Add to Cart</button>
+        </div>
+        <div class="col-md-8">
+            <img src="data:image;base64,@Model.ImagenBase64" class="img-fluid" alt="Product Image">
         </div>
     </div>
 </div>
- Seccion scripts
+
+<div id="carousel">@Html.Action("Carousel", "Home");</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    console.log("Script loaded");
+
+    //1. CAPTURAR LO VALORES DEL CART
+    const cartForm = document.getElementById("cartEntry");
+    if (!cartForm) {
+        console.error("Form with id 'cartEntry' not found");
+        return;
+    }
+
+    cartForm.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        console.log("Form submitted");
+
+        //2. Conectarnos al Controllador / API
+        const URL = "@Url.Content("~/Cart/Add")";
+        console.log("URL:", URL);
+
+        //3. Enviar todo al controlador
+        let formData = new FormData(cartForm);
+
+        //4. Use promises with fetch
+        const loginPromise = fetch(URL, {
+            method: "POST",
+            body: formData
+        }).then(function (response) {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        });
+
+        //5. Handle the promise
+        loginPromise.then(function (data) {
+            console.log("Response data:", data);
+            if (data === "200") {
+                window.location.href = window.location.href.includes('?') ? '&' : '?' + 'showToast=cartItemAdded';
+                console.log("Redirecting to home page");
+            } else {
+                displayToast(data, "danger");
+            }
+        }).catch(function (error) {
+            console.error("Error:", error);
+        });
+    });
+});
+
+</script>
+
 <script type="text/javascript">
     function updatePrice() {
         var sizeElement = document.getElementById('size');

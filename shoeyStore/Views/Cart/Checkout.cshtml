@@ -9,255 +9,271 @@
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col">
                 <div class="card">
-                    <div class="card-body p-4">
+                    <form id="checkout" >
+                        <div class="card-body p-4">
 
-                        <div class="row">
+                            <div class="row">
 
-                            <div class="col-lg-7">
-                                <h5 class="mb-3">
-                                    <a href="@Url.Content("~/ItemNavigation")" class="text-body text-decoration-none">
-                                        <i class="bi bi-backspace-fill me-2"></i>Continue shopping
-                                    </a>
-                                </h5>
-                                <hr>
+                                <div class="col-lg-7">
+                                    <h5 class="mb-3">
+                                        <a href="@Url.Content("~/ItemNavigation")" class="text-body text-decoration-none">
+                                            <i class="bi bi-backspace-fill me-2"></i>Continue shopping
+                                        </a>
+                                    </h5>
+                                    <hr>
 
-                                <div class="d-flex justify-content-between align-items-center mb-4">
-                                    <div>
-                                        <p class="mb-1">Shopping cart</p>
-                                        <p class="mb-0">You have @if (Model != null) { <span>@Model.Count</span>} items in your cart</p>
-                                    </div>
-                                </div>
-
-                                @if (Model != null)
-                                {
-                                    foreach (var cartItem in Model)
-                                    {
-                                        <div class="card mb-3">
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between">
-                                                    <div class="d-flex flex-row align-items-center">
-                                                        <div>
-                                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(cartItem.Producto.Imagen)"
-                                                                 class="img-fluid rounded-3" alt="Shopping item" style="width: 150px;">
-                                                        </div>
-                                                        <div class="ms-3">
-                                                            <h6>@cartItem.Producto.Marca @cartItem.Producto.Modelo</h6>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-row align-items-center">
-                                                        <div style="width: 50px;">
-                                                            <h5 class="fw-normal mb-0 text-center">@cartItem.Cantidad</h5>
-                                                        </div>
-                                                        <div style="width: 80px;">
-                                                            <h5 class="mb-0">$@cartItem.Inventario.Precio</h5>
-                                                        </div>
-                                                        <button class="btn" onclick="deleteProduct(@cartItem.IDCarrito)" style="color: #cecece;">
-                                                            <i class="bi bi-trash-fill text-muted"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                }
-                                else
-                                {
-                                    <div class="h-25">
-                                        <p>There are no items on the Cart.</p>
-                                    </div>
-                                }
-
-                            </div>
-                            <div class="col-lg-5">
-
-                                <div class="card bg-success text-white rounded-3">
-                                    <div class="card-body">
-                                        <h5>Checkout</h5>
-                                        <hr class="my">
-                                        <div class="container">
-                                            <h5>Payment</h5>
-
-                                            @if (user != null)
-                                            {
-                                                if (user.Tarjetas != null)
-                                                {
-                                                    <!-- Display existing cards dynamically -->
-                                                    <div class="row g-2 mt-4">
-                                                        <!-- Add  Section -->
-                                                        <div class="col-lg-3">
-                                                            <div class="card h-100" style="cursor: pointer;" onclick="enableCardFields()">
-                                                                <div class="card-body">
-                                                                    <p class="card-title text-dark fw-bold">Add</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @foreach (var card in user.Tarjetas)
-                                                        {
-                                                            <!-- Card Section -->
-                                                            <div class="col-lg-3">
-                                                                <div class="card h-100" style="cursor: pointer;" onclick="selectCard('@card.IDTarjeta','@card.Numero', '@card.Expiracion', '@card.CVV')">
-                                                                    <div class="card-body">
-                                                                        <p class="card-title text-dark"><b>**** @card.Numero.Substring(card.Numero.Length - 4)</b></p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                }
-                                            }
-
-                                            <!-- Selected Card Input -->
-                                            <div class="form-row mt-3">
-                                                <!-- Selected Card Input -->
-                                                <div class="form-row mt-3">
-                                                    <input type="hidden" id="cardId" name="IDTarjeta">
-                                                    <div class="form-group col-md-6">
-                                                        <label for="selectedCardNumber">Card Number</label>
-                                                        <input type="text" class="form-control" id="selectedCardNumber">
-                                                    </div>
-                                                    <div class="form-group col-md-5">
-                                                        <label for="selectedExpirationDate">Expiration Date</label>
-                                                        <input type="date" class="form-control" id="selectedExpirationDate">
-                                                    </div>
-                                                    <div class="form-group col-md-3">
-                                                        <label for="selectedCvv">CVV</label>
-                                                        <input type="text" class="form-control" id="selectedCvv">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <hr class="my-4">
-
-                                        <div class="container">
-                                            <h5>Shipping Address</h5>
-
-                                            <!-- Display existing addresses -->
-                                            @if (user != null)
-                                            {
-                                                if (user.Direccions != null)
-                                                {
-                                                    <!-- Display existing cards dynamically -->
-                                                    <div class="row g-2 mt-4 d-flex">
-                                                        <!-- Add Address Section -->
-                                                        <div class="col-lg-6">
-                                                            <div class="card h-100" style="cursor: pointer;" onclick="enableAddressFields()">
-                                                                <div class="card-body text-dark fw-bold">
-                                                                    <p class="card-title text-bold">Add</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @foreach (var address in user.Direccions)
-                                                        {
-                                                            <!-- Card Section -->
-                                                            <div class="col-lg-6">
-                                                                <div class="card h-100" style="cursor: pointer;" onclick='selectAddress("@address.IDDireccion","@address.Nombre","@address.Apellido", "@address.Linea", "@address.Ciudad", "@address.Estado", "@address.ZIP", "@address.Telefono")'>
-                                                                    <div class="card-body text-dark">
-                                                                        <p class="card-title"><b>@address.Nombre @address.Apellido</b></p>
-                                                                        <p class="card-text">@address.Linea, @address.Ciudad, @address.Estado</p>
-                                                                        <p class="card-text">Phone: @address.Telefono</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                }
-                                            }
-
-                                            <!-- Selected Address Input -->
-                                            <div class="row mt-3">
-                                                <input type="hidden" id="addressId" name="IDDireccion">
-                                                <div class="form-group col-md-6">
-                                                    <label for="firstName">First Name</label>
-                                                    <input type="text" class="form-control" id="firstName">
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="lastName">Last Name</label>
-                                                    <input type="text" class="form-control" id="lastName">
-                                                </div>
-                                            </div>
-
-
-                                            <div class="row mt-3">
-                                                <div class="form-group col-md-12">
-                                                    <label for="line1">Address Line 1</label>
-                                                    <input type="text" class="form-control" id="line1" style="max-width:100%">
-                                                </div>
-                                                <div class="form-group  mt-3 col-md-6">
-                                                    <label for="city">City</label>
-                                                    <input type="text" class="form-control" id="city" style="max-width:100%">
-                                                </div>
-                                                <div class="form-group  mt-3 col-md-6">
-                                                    <label for="state">State</label>
-                                                    <input type="text" class="form-control" id="state" style="max-width:100%">
-                                                </div>
-                                                <div class="form-group  mt-3 col-md-6">
-                                                    <label for="zip">ZIP Code</label>
-                                                    <input type="text" class="form-control" id="zip" style="max-width:100%">
-                                                </div>
-                                                <div class="form-group mt-3 col-md-6">
-                                                    <label for="phoneNumber">Phone Number</label>
-                                                    <input type="text" class="form-control" id="phoneNumber" style="max-width:100%">
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <hr class="my-4">
-
-                                        <div class="d-flex justify-content-between">
-                                            <p class="mb-2">Subtotal</p>
-                                            <p class="mb-2">
-                                                $@{ 
-                                                    decimal? subtotald = 0;
-                                                    decimal subtotal = 0;
-                                                    if (Model != null)
-                                                    {
-                                                        foreach (var item in Model)
-                                                        {
-                                                            subtotald += item.Inventario.Precio;
-                                                        }
-                                                        subtotal = (decimal)subtotald;
-                                                    }
-                                                    <span>@subtotal</span>
-                                                }
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <div>
+                                            <p class="mb-1">Shopping cart</p>
+                                            <p class="mb-0">
+                                                You have @if (Model != null)
+                                                {<span>@Model.Count</span>} items in your cart
                                             </p>
                                         </div>
+                                    </div>
 
-                                        <div class="d-flex justify-content-between">
-                                            <p class="mb-2">Shipping</p>
-                                            <p class="mb-2">$50.00</p>
-                                        </div>
-
-                                        <div class="d-flex justify-content-between">
-                                            <p class="mb-2">Taxes</p>
-                                            <p class="mb-2">$@{decimal tax = Math.Round(subtotal * 0.10m, 2);<span>@tax</span>}</p>
-                                        </div>
-
-                                        <div class="d-flex justify-content-between mb-4">
-                                            <p class="mb-2">Total(Incl. taxes)</p>
-                                            <p class="mb-2">$@{var total = (subtotal + tax)+50;<span>@total</span>}</p>
-                                        </div>
-
-                                        <button type="button" class="btn btn-dark text-white btn-block btn-lg w-100">
-                                            <div class="d-flex justify-content-center">
-                                                <span>Checkout <i class="bi bi-arrow-right-circle-fill m"></i></span>
+                                    @if (Model != null)
+                                    {
+                                        var count = 0;
+                                        foreach (var cartItem in Model)
+                                        {
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="d-flex flex-row align-items-center">
+                                                            <div>
+                                                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(cartItem.Producto.Imagen)"
+                                                                     class="img-fluid rounded-3" alt="Shopping item" style="width: 150px;">
+                                                            </div>
+                                                            <div class="ms-3">
+                                                                <h6>@cartItem.Producto.Marca @cartItem.Producto.Modelo</h6>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex flex-row align-items-center">
+                                                            <div style="width: 50px;">
+                                                                <h5 class="fw-normal mb-0 text-center">@cartItem.Cantidad</h5>
+                                                            </div>
+                                                            <div style="width: 80px;">
+                                                                <h5 class="mb-0">$@cartItem.Inventario.Precio</h5>
+                                                            </div>
+                                                            <button class="btn" onclick="deleteProduct(@cartItem.IDCarrito)" style="color: #cecece;">
+                                                                <i class="bi bi-trash-fill text-muted"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </button>
+                                            <input type="hidden" id="productID" name="DetallesOrdens[@count].IDProducto" value="@cartItem.IDProducto">
+                                            <input type="hidden" id="qty" name="DetallesOrdens[@count].Cantidad" value="@cartItem.Cantidad">
+                                            <input type="hidden" id="cartId" name="CartItems[@count].IDCarrito" value="@cartItem.IDCarrito">
+                                            count++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="h-25">
+                                            <p>There are no items on the Cart.</p>
+                                        </div>
+                                    }
 
+                                </div>
+                                <div class="col-lg-5">
+
+                                    <div class="card bg-success text-white rounded-3">
+                                        <div class="card-body">
+                                            <h5>Checkout</h5>
+                                            <hr class="my">
+                                            <div class="container">
+                                                <h5>Payment</h5>
+
+                                                @if (user != null)
+                                                {
+                                                    if (user.Tarjetas != null)
+                                                    {
+                                                        <!-- Display existing cards dynamically -->
+                                                        <div class="row g-2 mt-4">
+                                                            <!-- Add  Section -->
+                                                            <div class="col-lg-3">
+                                                                <div class="card h-100" style="cursor: pointer;" onclick="enableCardFields()">
+                                                                    <div class="card-body">
+                                                                        <p class="card-title text-dark fw-bold">Add</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            @foreach (var card in user.Tarjetas)
+                                                            {
+                                                                <!-- Card Section -->
+                                                                <div class="col-lg-3">
+                                                                    <div class="card h-100" style="cursor: pointer;" onclick="selectCard('@card.IDTarjeta','@card.Numero', '@card.Expiracion', '@card.CVV')">
+                                                                        <div class="card-body">
+                                                                            <p class="card-title text-dark"><b>**** @card.Numero.Substring(card.Numero.Length - 4)</b></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    }
+                                                }
+
+                                                <!-- Selected Card Input -->
+                                                <div class="form-row mt-3">
+                                                    <!-- Selected Card Input -->
+                                                    <div class="form-row mt-3">
+                                                        <input type="hidden" id="cardId" name="IDTarjeta">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="selectedCardNumber">Card Number</label>
+                                                            <input type="text" class="form-control" id="selectedCardNumber" name="Tarjeta.Numero">
+                                                        </div>
+                                                        <div class="form-group col-md-5">
+                                                            <label for="selectedExpirationDate">Expiration Date</label>
+                                                            <input type="date" class="form-control" id="selectedExpirationDate" name="Tarjeta.Expiracion">
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label for="selectedCvv">CVV</label>
+                                                            <input type="text" class="form-control" id="selectedCvv" name="Tarjeta.CVV">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <hr class="my-4">
+
+                                            <div class="container">
+                                                <h5>Shipping Address</h5>
+
+                                                <!-- Display existing addresses -->
+                                                @if (user != null)
+                                                {
+                                                    if (user.Direccions != null)
+                                                    {
+                                                        <!-- Display existing cards dynamically -->
+                                                        <div class="row g-2 mt-4 d-flex">
+                                                            <!-- Add Address Section -->
+                                                            <div class="col-lg-6">
+                                                                <div class="card h-100" style="cursor: pointer;" onclick="enableAddressFields()">
+                                                                    <div class="card-body text-dark fw-bold">
+                                                                        <p class="card-title text-bold">Add</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            @foreach (var address in user.Direccions)
+                                                            {
+                                                                <!-- Card Section -->
+                                                                <div class="col-lg-6">
+                                                                    <div class="card h-100" style="cursor: pointer;" onclick='selectAddress("@address.IDDireccion","@address.Nombre","@address.Apellido", "@address.Linea", "@address.Ciudad", "@address.Estado", "@address.ZIP", "@address.Telefono")'>
+                                                                        <div class="card-body text-dark">
+                                                                            <p class="card-title"><b>@address.Nombre @address.Apellido</b></p>
+                                                                            <p class="card-text">@address.Linea, @address.Ciudad, @address.Estado</p>
+                                                                            <p class="card-text">Phone: @address.Telefono</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    }
+                                                }
+
+                                                <!-- Selected Address Input -->
+                                                <div class="row mt-3">
+                                                    <input type="hidden" id="addressId" name="IDDireccion">
+                                                    <input type="hidden" name="Direccion.IDCliente" value="@user.IDCliente">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="firstName">First Name</label>
+                                                        <input type="text" class="form-control" id="firstName" name="Direccion.Nombre">
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="lastName">Last Name</label>
+                                                        <input type="text" class="form-control" id="lastName" name="Direccion.Apellido">
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row mt-3">
+                                                    <div class="form-group col-md-12">
+                                                        <label for="line1">Address Line 1</label>
+                                                        <input type="text" class="form-control" id="line1" name="Direccion.Linea" style="max-width:100%">
+                                                    </div>
+                                                    <div class="form-group  mt-3 col-md-6">
+                                                        <label for="city">City</label>
+                                                        <input type="text" class="form-control" id="city" name="Direccion.Ciudad" style="max-width:100%">
+                                                    </div>
+                                                    <div class="form-group  mt-3 col-md-6">
+                                                        <label for="state">State</label>
+                                                        <input type="text" class="form-control" id="state" name="Direccion.Estado" style="max-width:100%">
+                                                    </div>
+                                                    <div class="form-group  mt-3 col-md-6">
+                                                        <label for="zip">ZIP Code</label>
+                                                        <input type="text" class="form-control" id="zip" name="Direccion.ZIP" style="max-width:100%">
+                                                    </div>
+                                                    <div class="form-group mt-3 col-md-6">
+                                                        <label for="phoneNumber">Phone Number</label>
+                                                        <input type="text" class="form-control" id="phoneNumber" name="Direccion.Telefono" style="max-width:100%">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <hr class="my-4">
+
+                                            <div class="d-flex justify-content-between">
+                                                <p class="mb-2">Subtotal</p>
+                                                <p class="mb-2">
+                                                    $@{
+                                                        decimal? subtotald = 0;
+                                                        decimal subtotal = 0;
+                                                        if (Model != null)
+                                                        {
+                                                            foreach (var item in Model)
+                                                            {
+                                                                subtotald += item.Inventario.Precio;
+                                                            }
+                                                            subtotal = (decimal)subtotald;
+                                                        }
+                                                        <span>@subtotal</span>
+                                                    }
+                                                </p>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between">
+                                                <p class="mb-2">Shipping</p>
+                                                <p class="mb-2">$50.00</p>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between">
+                                                <p class="mb-2">Taxes</p>
+                                                <p class="mb-2">$@{decimal tax = Math.Round(subtotal * 0.10m, 2);<span>@tax</span>}</p>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between mb-4">
+                                                <p class="mb-2">Total(Incl. taxes)</p>
+                                                <p class="mb-2">$@{var total = (subtotal + tax) + 50;<span>@total</span>}</p>
+                                                <input type="hidden" id="total" name="MontoTotal" value="@total">
+                                            </div>
+
+                                            @*Remaining inputs*@
+                                           
+
+                                            <button type="submit" class="btn btn-dark text-white btn-block btn-lg w-100">
+                                                <div class="d-flex justify-content-center">
+                                                    <span>Checkout <i class="bi bi-arrow-right-circle-fill m"></i></span>
+                                                </div>
+                                            </button>
+
+                                        </div>
                                     </div>
                                 </div>
-
                             </div>
-
                         </div>
-
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<div class="loading-screen" id="loadingScreen">
+    <div class="spinner"></div>
+</div>
 
 <script>
     // Function to update the selected card input and change the background color
@@ -370,5 +386,61 @@
         document.getElementById('zip').readOnly = true;
         document.getElementById('phoneNumber').readOnly = true;
     }
+
+    function showLoadingScreen() {
+        document.getElementById('loadingScreen').style.display = 'block';
+    }
+
+    function hideLoadingScreen() {
+        document.getElementById('loadingScreen').style.display = 'none';
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+    console.log("Script loaded");
+        //1. CAPTURAR LO VALORES DEL LOGIN
+        const orderForm = document.getElementById("checkout");
+        if (!orderForm) {
+            console.error("Form with id 'login' not found");
+            return;
+        }
+
+        orderForm.addEventListener("submit", function (ev) {
+            ev.preventDefault();
+            showLoadingScreen();
+            console.log("Form submitted");
+
+            //2. Conectarnos al Controllador / API
+            const URL = "@Url.Content("~/Order/Place")";
+            console.log("URL:", URL);
+
+            //3. Enviar todo al controlador
+            let formData = new FormData(orderForm);
+
+            //4. Use promises with fetch
+            const loginPromise = fetch(URL, {
+                method: "POST",
+                body: formData
+            }).then(function (response) {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.text();
+            });
+
+            //5. Handle the promise
+            loginPromise.then(function (data) {
+                console.log("Response data:", data);
+                if (data === "200") {
+                    hideLoadingScreen();
+                    window.location.href = "@Url.Content("~/Home?showToast=orderSuccessful")";
+                    console.log("Redirecting to home page");
+                } else {
+                    displayToast(data,"danger");
+                }
+            }).catch(function (error) {
+                console.error("Error:", error);
+            });
+    });
+});
 </script>
 

@@ -100,29 +100,34 @@ namespace shoeyStore.Controllers
         public ActionResult Add(CartViewModel model)
         {
             if (!ModelState.IsValid) return Content("The item could not be added.");
+            var user = (Cliente)Session["Logged"];
 
-            using (var db = new ShoeyDatabaseEntities())
+            if (user != null) 
             {
-                //First we get the Inventory to confirm there are existing items
-                Inventario inventory = db.Inventarios.Find(model.IDInventario);
-                if (inventory != null)
+                using (var db = new ShoeyDatabaseEntities())
                 {
-                    if (inventory.Cantidad >= model.Cantidad) //Checks if the quantity in Inventory is higher or equal than the one from the Model
+                    //First we get the Inventory to confirm there are existing items
+                    Inventario inventory = db.Inventarios.Find(model.IDInventario);
+                    if (inventory != null)
                     {
-                        Carrito cart = new Carrito();
-                        cart.IDCliente = model.IDCliente;
-                        cart.IDProducto = model.IDProducto;
-                        cart.IDInventario = model.IDInventario;
-                        cart.Cantidad = model.Cantidad;
+                        if (inventory.Cantidad >= model.Cantidad) //Checks if the quantity in Inventory is higher or equal than the one from the Model
+                        {
+                            Carrito cart = new Carrito();
+                            cart.IDCliente = user.IDCliente;
+                            cart.IDProducto = model.IDProducto;
+                            cart.IDInventario = model.IDInventario;
+                            cart.Cantidad = model.Cantidad;
 
-                        db.Carritoes.Add(cart);
-                        db.SaveChanges();
+                            db.Carritoes.Add(cart);
+                            db.SaveChanges();
 
-                        return Content("Nice pick!");
+                            return Content("200");
+                        }
                     }
                 }
+                return Content("We're sorry, but it looks like we don't have enough in stock");
             }
-            return Content("We're sorry, but it looks like we don't have enough in stock");
+            return Content("You must login to add an item.");
         }
         //Function to delete an item from the cart
         [HttpPost]

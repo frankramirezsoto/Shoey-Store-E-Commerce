@@ -34,7 +34,6 @@ namespace shoeyStore.Controllers
                                       FechaOrden = o.FechaOrden,
                                       MontoTotal = o.MontoTotal,
                                       Estado = o.Estado,
-                                      Cliente = (Cliente)Session["SellerLogged"],
                                       DetallesOrdens = o.DetallesOrdens,
                                       OrderDetails = (from od in db.DetallesOrdens
                                                       where od.IDOrden == o.IDOrden
@@ -54,56 +53,88 @@ namespace shoeyStore.Controllers
         }
         //Method to post an order to the database   
         [HttpPost]
-        public ActionResult AddOrder(OrderViewModel order)
+        public ActionResult Place(OrderViewModel order)
         {
             //Checks if model is valid
             if (!ModelState.IsValid) return View(order);
             //Check on user session to see if it's logged
-            var user = (Cliente)Session["SellerLogged"];
-            using (var db = new ShoeyDatabaseEntities())
+            var user = (Cliente)Session["Logged"];
+            try 
             {
-                Orden orderTO = new Orden();
-                //If the card ID is null then it will add the new card to the database 
-                if (order.IDTarjeta == null)
+                using (var db = new ShoeyDatabaseEntities())
                 {
-                    Tarjeta cardTO = new Tarjeta
+                    Orden orderTO = new Orden();
+                    //If the card ID is null then it will add the new card to the database 
+                    if (order.IDTarjeta == null)
                     {
-                        IDCliente = user.IDCliente,
-                        Numero = order.Tarjeta.Numero,
-                        Expiracion = order.Tarjeta.Expiracion,
-                        CVV = order.Tarjeta.CVV,
-                    };
-                    db.Tarjetas.Add(cardTO);
-                    db.SaveChanges();
-                }
-                else 
-                {
-                    orderTO.IDTarjeta = order.IDTarjeta;
-                }
+                        Tarjeta cardTO = new Tarjeta
+                        {
+                            IDCliente = user.IDCliente,
+                            Numero = order.Tarjeta.Numero,
+                            Expiracion = order.Tarjeta.Expiracion,
+                            CVV = order.Tarjeta.CVV,
+                        };
+                        db.Tarjetas.Add(cardTO);
+                        db.SaveChanges();
 
-                if (order.IDDireccion == null) 
-                { 
-                    Direccion addressTO = new Direccion { 
-                        Nombre = order.Direccion.Nombre,
-                        Apellido = order.Direccion.Apellido,
-                        Linea = order.Direccion.Linea,
-                        Ciudad = order.Direccion.Ciudad,
-                        Estado = order.Direccion.Estado,
-                        ZIP = order.Direccion.ZIP,
-                        Telefono = order.Direccion.Telefono,
-                    };
-                    db.Direccions.Add(addressTO);
-                    db.SaveChanges();
-                }
-                else
-                {
-                    orderTO.IDDireccion = order.IDDireccion;
-                }
+                        orderTO.IDTarjeta = cardTO.IDTarjeta;
+                    }
+                    else
+                    {
+                        orderTO.IDTarjeta = order.IDTarjeta;
+                    }
 
-                orderTO
+                    if (order.IDDireccion == null)
+                    {
+                        Direccion addressTO = new Direccion
+                        {
+                            Nombre = order.Direccion.Nombre,
+                            Apellido = order.Direccion.Apellido,
+                            Linea = order.Direccion.Linea,
+                            Ciudad = order.Direccion.Ciudad,
+                            Estado = order.Direccion.Estado,
+                            ZIP = order.Direccion.ZIP,
+                            Telefono = order.Direccion.Telefono,
+                        };
+                        db.Direccions.Add(addressTO);
+                        db.SaveChanges();
+
+                        orderTO.IDDireccion = addressTO.IDDireccion;
+                    }
+                    else
+                    {
+                        orderTO.IDDireccion = order.IDDireccion;
+                    }
+                    orderTO.FechaOrden = DateTime.Now;
+                    orderTO.MontoTotal = order.MontoTotal;
+                    orderTO.IDCliente = user.IDCliente;
+
+                    db.Ordens.Add(orderTO);
+                    db.SaveChanges();
+
+                    foreach (var orderDetail in order.DetallesOrdens)
+                    {
+                        DetallesOrden orderDetailsTO = new DetallesOrden
+                        {
+                            IDOrden = orderTO.IDOrden,
+                            IDProducto = orderDetail.IDProducto,
+                            Cantidad = orderDetail.Cantidad,
+                        };
+                        db.DetallesOrdens.Add(orderDetailsTO);
+                        db.SaveChanges();
+                    }
+                    foreach (var cart in order.CartItems) 
+                    {
+                        var cartTO = db.Carritoes.Find(cart.IDCarrito);
+                        db.Entry(cartTO).State = System.Data.Entity.EntityState.Deleted;
+                        db.SaveChanges();
+                    }
+                    return Content("200");
+                }
+            } catch (Exception ex)
+            {
+                return Content("Error:" + ex);
             }
-
-                return View();
         }
 
         //This functions returns a ProductViewModel that will be used to populate the Order Object 

@@ -11,6 +11,7 @@ namespace shoeyStore.Models.ViewModels
         public OrderViewModel()
         {
             this.DetallesOrdens = new HashSet<DetallesOrden>();
+            this.CartItems = new HashSet<CartViewModel>();
         }
 
         public int IDOrden { get; set; }
@@ -21,10 +22,11 @@ namespace shoeyStore.Models.ViewModels
         public Nullable<decimal> MontoTotal { get; set; }
         public string Estado { get; set; }
 
-
         public virtual Cliente Cliente { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetallesOrden> DetallesOrdens { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CartViewModel> CartItems { get; set; }
         public virtual Direccion Direccion { get; set; }
         public virtual Tarjeta Tarjeta { get; set; }
     }

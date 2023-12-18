@@ -44,8 +44,8 @@
                                     <p class="card-tex d-inline-block text-truncate">@product.Nombre</p>
                                     <p class="card-title">Price: $@product.GetMinimumPrice()</p>
                                     <div class="d-flex">
-                                        <a href="#" class="btn btn-dark flex-fill me-3">View Item</a>
-                                        <a href="#" class="btn btn-success"><i class="bi bi-plus-lg text-white p-2"></i></a>
+                                        <a href="@Url.Content("~/ItemDescription/Details/"+product.IDProducto)" class="btn btn-dark flex-fill me-3">View Item</a>
+                                        <a href="@Url.Content("~/ItemDescription/Details/"+product.IDProducto)" class="btn btn-success"><i class="bi bi-plus-lg text-white p-2"></i></a>
                                     </div>
                                 </div>
                             </div>
