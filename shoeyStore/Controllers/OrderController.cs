@@ -12,12 +12,13 @@ namespace shoeyStore.Controllers
     {
         //The Order model has to be loaded with all of the tables that are related to in the database 
         // GET: Order
+        [HttpGet]
         public ActionResult Index()
         {
             //List of Orders will be populated with the database request
             List<OrderTableViewModel> listOrders = null;
             //Check on user session to see if it's logged
-            var user = (Cliente)Session["SellerLogged"];
+            var user = (Cliente)Session["Logged"];
 
             using (ShoeyDatabaseEntities db = new ShoeyDatabaseEntities())
             {
@@ -31,6 +32,8 @@ namespace shoeyStore.Controllers
                                   {
                                       IDOrden = o.IDOrden,
                                       IDCliente = o.IDCliente,
+                                      IDDireccion = o.IDDireccion,
+                                      IDTarjeta = o.IDTarjeta,
                                       FechaOrden = o.FechaOrden,
                                       MontoTotal = o.MontoTotal,
                                       Estado = o.Estado,
@@ -41,12 +44,23 @@ namespace shoeyStore.Controllers
                                                       {
                                                           IDDetalleOrden = od.IDDetalleOrden,
                                                           IDOrden = od.IDOrden,
+                                                          IDInventario = od.IDInventario,
+                                                          Cantidad = od.Cantidad,
                                                           IDProducto = od.IDProducto,
-                                                          Orden = o,
                                                           Producto = od.Producto,
-                                                          Product = getProduct(od.IDProducto),  
                                                       }).ToList()
-                                  }).ToList(); 
+                }).ToList();
+
+                    foreach (var o in listOrders) 
+                    {
+                        o.Direccion = db.Direccions.Find(o.IDDireccion);
+                        o.Tarjeta = db.Tarjetas.Find(o.IDTarjeta);
+                        foreach (var od in o.OrderDetails)  
+                        {
+                            od.Inventario = db.Inventarios.Find(od.IDInventario);
+                            od.Producto = db.Productoes.Find(od.IDProducto);
+                        }
+                    };
                 }
             }
             return View(listOrders);
@@ -118,6 +132,7 @@ namespace shoeyStore.Controllers
                         {
                             IDOrden = orderTO.IDOrden,
                             IDProducto = orderDetail.IDProducto,
+                            IDInventario = orderDetail.IDInventario,
                             Cantidad = orderDetail.Cantidad,
                         };
                         db.DetallesOrdens.Add(orderDetailsTO);
@@ -135,46 +150,6 @@ namespace shoeyStore.Controllers
             {
                 return Content("Error:" + ex);
             }
-        }
-
-        //This functions returns a ProductViewModel that will be used to populate the Order Object 
-        public ProductViewModel getProduct(int? id)
-        {
-            using (ShoeyDatabaseEntities db = new ShoeyDatabaseEntities())
-            {
-                // Retrieve the product from the database based on its id
-                var product = db.Productoes.Find(id);
-                // Fills a list with the Inventory items where the IDProducto matches the same as in the product to edit 
-                List<InventoryViewModel> inventoryList = db.Inventarios.Where(i => i.IDProducto == product.IDProducto).Select(i => new InventoryViewModel
-                {
-                    IDInventario = i.IDInventario,
-                    TallaUS = i.TallaUS,
-                    Cantidad = i.Cantidad,
-                    Precio = i.Precio,
-                }).ToList();
-                //If no product found, we redirect 
-                if (product == null)
-                {
-                    // Handle the case where the product is not found
-                    return null;
-                }
-                // Map the product
-                var viewModel = new ProductViewModel
-                {
-                    IDProducto = product.IDProducto,
-                    IDVendedor = product.IDVendedor,
-                    Nombre = product.Nombre,
-                    Categoria = product.Categoria,
-                    Genero = product.Genero,
-                    Marca = product.Marca,
-                    Modelo = product.Modelo,
-                    ImagenBase64 = Convert.ToBase64String(product.Imagen),
-                    InventoryEntries = inventoryList,
-                };
-                //Return the product view model
-                return viewModel;
-            }
-
         }
     }
 }

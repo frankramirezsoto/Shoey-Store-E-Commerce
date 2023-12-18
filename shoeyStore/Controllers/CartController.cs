@@ -38,7 +38,6 @@ namespace shoeyStore.Controllers
                     //Then populates the object reference of the CartViewModel
                     foreach(var cartItem in CartItems) 
                     {
-                        cartItem.Cliente = db.Clientes.Find(user.IDCliente);
                         cartItem.Inventario = db.Inventarios.Find(cartItem.IDInventario);
                         cartItem.Producto = db.Productoes.Find(cartItem.IDProducto);
                     }

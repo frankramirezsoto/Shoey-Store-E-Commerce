@@ -41,6 +41,7 @@
           <Property Name="IDOrden" Type="int" />
           <Property Name="IDProducto" Type="int" />
           <Property Name="Cantidad" Type="int" />
+          <Property Name="IDInventario" Type="int" />
         </EntityType>
         <EntityType Name="Direccion">
           <Key>
@@ -62,7 +63,7 @@
           </Key>
           <Property Name="IDInventario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IDProducto" Type="int" Nullable="false" />
-          <Property Name="TallaUS" Type="decimal" Precision="2" Scale="1" />
+          <Property Name="TallaUS" Type="numeric" Precision="10" Scale="2" />
           <Property Name="Cantidad" Type="int" />
           <Property Name="Precio" Type="decimal" Precision="10" Scale="2" />
         </EntityType>
@@ -77,6 +78,7 @@
           <Property Name="FechaOrden" Type="datetime" />
           <Property Name="MontoTotal" Type="decimal" Precision="10" Scale="2" />
           <Property Name="Estado" Type="varchar" MaxLength="50" />
+          <Property Name="IDVendedor" Type="int" />
         </EntityType>
         <EntityType Name="Producto">
           <Key>
@@ -84,7 +86,7 @@
           </Key>
           <Property Name="IDProducto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IDVendedor" Type="int" />
-          <Property Name="Nombre" Type="varchar" MaxLength="100" />
+          <Property Name="Nombre" Type="varchar" MaxLength="1000" />
           <Property Name="Categoria" Type="varchar" MaxLength="50" />
           <Property Name="Genero" Type="char" MaxLength="1" />
           <Property Name="Marca" Type="varchar" MaxLength="50" />
@@ -125,14 +127,14 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__DetallesO__IDOrd__403A8C7D">
-          <End Role="Orden" Type="Self.Orden" Multiplicity="0..1" />
+          <End Role="Inventario" Type="Self.Inventario" Multiplicity="0..1" />
           <End Role="DetallesOrden" Type="Self.DetallesOrden" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Orden">
-              <PropertyRef Name="IDOrden" />
+            <Principal Role="Inventario">
+              <PropertyRef Name="IDInventario" />
             </Principal>
             <Dependent Role="DetallesOrden">
-              <PropertyRef Name="IDOrden" />
+              <PropertyRef Name="IDInventario" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -208,6 +210,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_DetallesOrden_DetallesOrden">
+          <End Role="DetallesOrden" Type="Self.DetallesOrden" Multiplicity="1" />
+          <End Role="DetallesOrden1" Type="Self.DetallesOrden" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="DetallesOrden">
+              <PropertyRef Name="IDDetalleOrden" />
+            </Principal>
+            <Dependent Role="DetallesOrden1">
+              <PropertyRef Name="IDDetalleOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DetallesOrden_Orden">
+          <End Role="Orden" Type="Self.Orden" Multiplicity="0..1" />
+          <End Role="DetallesOrden" Type="Self.DetallesOrden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orden">
+              <PropertyRef Name="IDOrden" />
+            </Principal>
+            <Dependent Role="DetallesOrden">
+              <PropertyRef Name="IDOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Direccion_Cliente1">
           <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
           <End Role="Direccion" Type="Self.Direccion" Multiplicity="*" />
@@ -244,6 +270,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Orden_Orden">
+          <End Role="Orden" Type="Self.Orden" Multiplicity="1" />
+          <End Role="Orden1" Type="Self.Orden" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Orden">
+              <PropertyRef Name="IDOrden" />
+            </Principal>
+            <Dependent Role="Orden1">
+              <PropertyRef Name="IDOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Orden_Tarjeta">
           <End Role="Tarjeta" Type="Self.Tarjeta" Multiplicity="0..1" />
           <End Role="Orden" Type="Self.Orden" Multiplicity="*" />
@@ -253,6 +291,18 @@
             </Principal>
             <Dependent Role="Orden">
               <PropertyRef Name="IDTarjeta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orden_Vendedor">
+          <End Role="Vendedor" Type="Self.Vendedor" Multiplicity="0..1" />
+          <End Role="Orden" Type="Self.Orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendedor">
+              <PropertyRef Name="IDVendedor" />
+            </Principal>
+            <Dependent Role="Orden">
+              <PropertyRef Name="IDVendedor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -284,7 +334,7 @@
             <End Role="Calificacion" EntitySet="Calificacion" />
           </AssociationSet>
           <AssociationSet Name="FK__DetallesO__IDOrd__403A8C7D" Association="Self.FK__DetallesO__IDOrd__403A8C7D">
-            <End Role="Orden" EntitySet="Orden" />
+            <End Role="Inventario" EntitySet="Inventario" />
             <End Role="DetallesOrden" EntitySet="DetallesOrden" />
           </AssociationSet>
           <AssociationSet Name="FK__DetallesO__IDPro__412EB0B6" Association="Self.FK__DetallesO__IDPro__412EB0B6">
@@ -311,6 +361,14 @@
             <End Role="Producto" EntitySet="Producto" />
             <End Role="Carrito" EntitySet="Carrito" />
           </AssociationSet>
+          <AssociationSet Name="FK_DetallesOrden_DetallesOrden" Association="Self.FK_DetallesOrden_DetallesOrden">
+            <End Role="DetallesOrden" EntitySet="DetallesOrden" />
+            <End Role="DetallesOrden1" EntitySet="DetallesOrden" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DetallesOrden_Orden" Association="Self.FK_DetallesOrden_Orden">
+            <End Role="Orden" EntitySet="Orden" />
+            <End Role="DetallesOrden" EntitySet="DetallesOrden" />
+          </AssociationSet>
           <AssociationSet Name="FK_Direccion_Cliente1" Association="Self.FK_Direccion_Cliente1">
             <End Role="Cliente" EntitySet="Cliente" />
             <End Role="Direccion" EntitySet="Direccion" />
@@ -323,8 +381,16 @@
             <End Role="Direccion" EntitySet="Direccion" />
             <End Role="Orden" EntitySet="Orden" />
           </AssociationSet>
+          <AssociationSet Name="FK_Orden_Orden" Association="Self.FK_Orden_Orden">
+            <End Role="Orden" EntitySet="Orden" />
+            <End Role="Orden1" EntitySet="Orden" />
+          </AssociationSet>
           <AssociationSet Name="FK_Orden_Tarjeta" Association="Self.FK_Orden_Tarjeta">
             <End Role="Tarjeta" EntitySet="Tarjeta" />
+            <End Role="Orden" EntitySet="Orden" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orden_Vendedor" Association="Self.FK_Orden_Vendedor">
+            <End Role="Vendedor" EntitySet="Vendedor" />
             <End Role="Orden" EntitySet="Orden" />
           </AssociationSet>
           <AssociationSet Name="FK_Tarjeta_Cliente" Association="Self.FK_Tarjeta_Cliente">
@@ -381,8 +447,12 @@
           <Property Name="IDOrden" Type="Int32" />
           <Property Name="IDProducto" Type="Int32" />
           <Property Name="Cantidad" Type="Int32" />
-          <NavigationProperty Name="Orden" Relationship="Self.FK__DetallesO__IDOrd__403A8C7D" FromRole="DetallesOrden" ToRole="Orden" />
+          <Property Name="IDInventario" Type="Int32" />
+          <NavigationProperty Name="Inventario" Relationship="Self.FK__DetallesO__IDOrd__403A8C7D" FromRole="DetallesOrden" ToRole="Inventario" />
           <NavigationProperty Name="Producto" Relationship="Self.FK__DetallesO__IDPro__412EB0B6" FromRole="DetallesOrden" ToRole="Producto" />
+          <NavigationProperty Name="DetallesOrden1" Relationship="Self.FK_DetallesOrden_DetallesOrden" FromRole="DetallesOrden" ToRole="DetallesOrden1" />
+          <NavigationProperty Name="DetallesOrden2" Relationship="Self.FK_DetallesOrden_DetallesOrden" FromRole="DetallesOrden1" ToRole="DetallesOrden" />
+          <NavigationProperty Name="Orden" Relationship="Self.FK_DetallesOrden_Orden" FromRole="DetallesOrden" ToRole="Orden" />
         </EntityType>
         <EntityType Name="Direccion">
           <Key>
@@ -406,10 +476,11 @@
           </Key>
           <Property Name="IDInventario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IDProducto" Type="Int32" Nullable="false" />
-          <Property Name="TallaUS" Type="Decimal" Precision="2" Scale="1" />
+          <Property Name="TallaUS" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="Cantidad" Type="Int32" />
           <Property Name="Precio" Type="Decimal" Precision="10" Scale="2" />
           <NavigationProperty Name="Carritoes" Relationship="Self.FK_Carrito_Inventario1" FromRole="Inventario" ToRole="Carrito" />
+          <NavigationProperty Name="DetallesOrdens" Relationship="Self.FK__DetallesO__IDOrd__403A8C7D" FromRole="Inventario" ToRole="DetallesOrden" />
           <NavigationProperty Name="Producto" Relationship="Self.FK_Inventario_Producto1" FromRole="Inventario" ToRole="Producto" />
         </EntityType>
         <EntityType Name="Orden">
@@ -423,10 +494,14 @@
           <Property Name="FechaOrden" Type="DateTime" Precision="3" />
           <Property Name="MontoTotal" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="Estado" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IDVendedor" Type="Int32" />
           <NavigationProperty Name="Cliente" Relationship="Self.FK__Orden__IDCliente__3D5E1FD2" FromRole="Orden" ToRole="Cliente" />
-          <NavigationProperty Name="DetallesOrdens" Relationship="Self.FK__DetallesO__IDOrd__403A8C7D" FromRole="Orden" ToRole="DetallesOrden" />
+          <NavigationProperty Name="DetallesOrdens" Relationship="Self.FK_DetallesOrden_Orden" FromRole="Orden" ToRole="DetallesOrden" />
           <NavigationProperty Name="Direccion" Relationship="Self.FK_Orden_Direccion" FromRole="Orden" ToRole="Direccion" />
+          <NavigationProperty Name="Orden1" Relationship="Self.FK_Orden_Orden" FromRole="Orden" ToRole="Orden1" />
+          <NavigationProperty Name="Orden2" Relationship="Self.FK_Orden_Orden" FromRole="Orden1" ToRole="Orden" />
           <NavigationProperty Name="Tarjeta" Relationship="Self.FK_Orden_Tarjeta" FromRole="Orden" ToRole="Tarjeta" />
+          <NavigationProperty Name="Vendedor" Relationship="Self.FK_Orden_Vendedor" FromRole="Orden" ToRole="Vendedor" />
         </EntityType>
         <EntityType Name="Producto">
           <Key>
@@ -434,7 +509,7 @@
           </Key>
           <Property Name="IDProducto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IDVendedor" Type="Int32" />
-          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Nombre" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="Categoria" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Genero" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <Property Name="Marca" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -468,6 +543,7 @@
           <Property Name="Contrasenna" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="IBAN" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="Verificado" Type="Boolean" />
+          <NavigationProperty Name="Ordens" Relationship="Self.FK_Orden_Vendedor" FromRole="Vendedor" ToRole="Orden" />
           <NavigationProperty Name="Productoes" Relationship="Self.FK__Producto__IDVend__38996AB5" FromRole="Vendedor" ToRole="Producto" />
         </EntityType>
         <Association Name="FK__Calificac__IDPro__440B1D61">
@@ -555,14 +631,14 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK__DetallesO__IDOrd__403A8C7D">
-          <End Role="Orden" Type="Self.Orden" Multiplicity="0..1" />
+          <End Role="Inventario" Type="Self.Inventario" Multiplicity="0..1" />
           <End Role="DetallesOrden" Type="Self.DetallesOrden" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Orden">
-              <PropertyRef Name="IDOrden" />
+            <Principal Role="Inventario">
+              <PropertyRef Name="IDInventario" />
             </Principal>
             <Dependent Role="DetallesOrden">
-              <PropertyRef Name="IDOrden" />
+              <PropertyRef Name="IDInventario" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -575,6 +651,30 @@
             </Principal>
             <Dependent Role="DetallesOrden">
               <PropertyRef Name="IDProducto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DetallesOrden_DetallesOrden">
+          <End Role="DetallesOrden" Type="Self.DetallesOrden" Multiplicity="1" />
+          <End Role="DetallesOrden1" Type="Self.DetallesOrden" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="DetallesOrden">
+              <PropertyRef Name="IDDetalleOrden" />
+            </Principal>
+            <Dependent Role="DetallesOrden1">
+              <PropertyRef Name="IDDetalleOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DetallesOrden_Orden">
+          <End Role="Orden" Type="Self.Orden" Multiplicity="0..1" />
+          <End Role="DetallesOrden" Type="Self.DetallesOrden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orden">
+              <PropertyRef Name="IDOrden" />
+            </Principal>
+            <Dependent Role="DetallesOrden">
+              <PropertyRef Name="IDOrden" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -602,6 +702,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Orden_Orden">
+          <End Role="Orden" Type="Self.Orden" Multiplicity="1" />
+          <End Role="Orden1" Type="Self.Orden" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Orden">
+              <PropertyRef Name="IDOrden" />
+            </Principal>
+            <Dependent Role="Orden1">
+              <PropertyRef Name="IDOrden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Orden_Tarjeta">
           <End Role="Tarjeta" Type="Self.Tarjeta" Multiplicity="0..1" />
           <End Role="Orden" Type="Self.Orden" Multiplicity="*" />
@@ -611,6 +723,18 @@
             </Principal>
             <Dependent Role="Orden">
               <PropertyRef Name="IDTarjeta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orden_Vendedor">
+          <End Role="Vendedor" Type="Self.Vendedor" Multiplicity="0..1" />
+          <End Role="Orden" Type="Self.Orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendedor">
+              <PropertyRef Name="IDVendedor" />
+            </Principal>
+            <Dependent Role="Orden">
+              <PropertyRef Name="IDVendedor" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -666,11 +790,19 @@
             <End Role="Tarjeta" EntitySet="Tarjetas" />
           </AssociationSet>
           <AssociationSet Name="FK__DetallesO__IDOrd__403A8C7D" Association="Self.FK__DetallesO__IDOrd__403A8C7D">
-            <End Role="Orden" EntitySet="Ordens" />
+            <End Role="Inventario" EntitySet="Inventarios" />
             <End Role="DetallesOrden" EntitySet="DetallesOrdens" />
           </AssociationSet>
           <AssociationSet Name="FK__DetallesO__IDPro__412EB0B6" Association="Self.FK__DetallesO__IDPro__412EB0B6">
             <End Role="Producto" EntitySet="Productoes" />
+            <End Role="DetallesOrden" EntitySet="DetallesOrdens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DetallesOrden_DetallesOrden" Association="Self.FK_DetallesOrden_DetallesOrden">
+            <End Role="DetallesOrden" EntitySet="DetallesOrdens" />
+            <End Role="DetallesOrden1" EntitySet="DetallesOrdens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DetallesOrden_Orden" Association="Self.FK_DetallesOrden_Orden">
+            <End Role="Orden" EntitySet="Ordens" />
             <End Role="DetallesOrden" EntitySet="DetallesOrdens" />
           </AssociationSet>
           <AssociationSet Name="FK_Orden_Direccion" Association="Self.FK_Orden_Direccion">
@@ -681,8 +813,16 @@
             <End Role="Producto" EntitySet="Productoes" />
             <End Role="Inventario" EntitySet="Inventarios" />
           </AssociationSet>
+          <AssociationSet Name="FK_Orden_Orden" Association="Self.FK_Orden_Orden">
+            <End Role="Orden" EntitySet="Ordens" />
+            <End Role="Orden1" EntitySet="Ordens" />
+          </AssociationSet>
           <AssociationSet Name="FK_Orden_Tarjeta" Association="Self.FK_Orden_Tarjeta">
             <End Role="Tarjeta" EntitySet="Tarjetas" />
+            <End Role="Orden" EntitySet="Ordens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orden_Vendedor" Association="Self.FK_Orden_Vendedor">
+            <End Role="Vendedor" EntitySet="Vendedors" />
             <End Role="Orden" EntitySet="Ordens" />
           </AssociationSet>
           <AssociationSet Name="FK__Producto__IDVend__38996AB5" Association="Self.FK__Producto__IDVend__38996AB5">
@@ -734,6 +874,7 @@
                 <ScalarProperty Name="IDOrden" ColumnName="IDOrden" />
                 <ScalarProperty Name="IDProducto" ColumnName="IDProducto" />
                 <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="IDInventario" ColumnName="IDInventario" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -773,6 +914,7 @@
                 <ScalarProperty Name="FechaOrden" ColumnName="FechaOrden" />
                 <ScalarProperty Name="MontoTotal" ColumnName="MontoTotal" />
                 <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="IDVendedor" ColumnName="IDVendedor" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

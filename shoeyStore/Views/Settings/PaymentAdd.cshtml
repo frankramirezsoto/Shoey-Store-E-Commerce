@@ -1,0 +1,36 @@
+﻿@model shoeyStore.Models.ViewModels.CardViewModel
+@{
+    ViewBag.Title = "PaymentAdd";
+}
+
+<div class="container">
+    <h2 class="text-center mt-4">Add Payment Method</h2>
+    <hr />
+
+    @using (Html.BeginForm("PaymentAdd", "Settings", FormMethod.Post, new { role = "form", @class = "" }))
+    {
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                @Html.LabelFor(e => e.Numero)
+                @Html.TextBoxFor(e => e.Numero, new { @class = "form-control" })
+                @Html.ValidationMessageFor(e => e.Numero, "", new { @class = "d-block text-danger mb-2" })
+
+                @Html.LabelFor(e => e.Expiracion)
+                @Html.TextBoxFor(e => e.Expiracion, new { @class = "form-control" })
+                @Html.ValidationMessageFor(e => e.Expiracion, "", new { @class = "d-block text-danger mb-2" })
+
+                @Html.LabelFor(e => e.CVV)
+                @Html.TextBoxFor(e => e.CVV, new { @class = "form-control" })
+                @Html.ValidationMessageFor(e => e.CVV, "", new { @class = "d-block text-danger mb-2" })
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <input type="submit" class="btn btn-success btn-block" value="Save" />
+                <input type="button" class="btn btn-outline-danger btn-block" value="Back"
+                       onclick="document.location.href = '@Url.Content("~/Settings/Payment")'" />
+            </div>
+        </div>
+    }
+</div>

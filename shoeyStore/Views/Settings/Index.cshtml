@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<body>
+    <div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Shipping</h5>
+                            <p class="card-text">Change your shipping information</p>
+                            <a href="@Url.Content("~/Settings/Shipping")" class="btn btn-success">Go to Shipping Settings</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Payment</h5>
+                            <p class="card-text">Change your account bank</p>
+                            <a href="@Url.Content("~/Settings/Payment")" class="btn btn-success">Go to Payment Settings</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Access</h5>
+                            <p class="card-text">Change your access information</p>
+                            <a href="@Url.Content("~/Settings/Access")" class="btn btn-success">Go to Access Settings</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Orders</h5>
+                            <p class="card-text">Your orders</p>
+                            <a href="@Url.Content("~/Order")" class="btn btn-success">View My Orders</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+

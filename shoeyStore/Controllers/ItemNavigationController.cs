@@ -69,7 +69,8 @@ namespace shoeyStore.Controllers
 
                 // Now 'query' contains the filtered products
                 var products = query.ToList();
-
+                Random rng = new Random();
+                products.Sort((a, b) => rng.Next(3) - 1);
                 // You can pass the 'products' to the view
                 return View(products);
             }

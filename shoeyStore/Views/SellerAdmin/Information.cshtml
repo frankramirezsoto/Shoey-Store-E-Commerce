@@ -1,0 +1,34 @@
+﻿@model shoeyStore.Models.ViewModels.SellerViewModel
+@{
+    ViewBag.Title = "Information";
+    Layout = "~/Views/Shared/_LayoutSellerAdmin.cshtml";
+}
+
+
+
+<div class="container pt-3">
+    <h2>Login information</h2>
+    <hr />
+
+    @using (Html.BeginForm("Information", "SellerAdmin", FormMethod.Post, new { role = "form", @class = "" }))
+    {
+        <div class="row">
+            <div class="col-6">
+                <input type="hidden" id="IDVendedor" name="IDVendedor" value="@Model.IDVendedor"/>
+                @Html.LabelFor(e => e.CorreoElectronico,"Email")
+                @Html.TextBoxFor(e => e.CorreoElectronico, new { @class = "form-control" })
+                @Html.ValidationMessageFor(e => e.CorreoElectronico, "", new { @class = "d-block text-danger mb-2" })
+
+                @Html.LabelFor(e => e.Contrasenna,"Password")
+                @Html.TextBoxFor(e => e.Contrasenna, new { @class = "form-control" })
+                @Html.ValidationMessageFor(e => e.Contrasenna, "", new { @class = "d-block text-danger mb-2" })
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <input type="submit" class="btn btn-success" value="Save" />
+            <input type="button" class="btn btn-outline-danger" value="Back"
+                   onclick="document.location.href = '@Url.Content("~/SellerAdmin/Index")'" />
+        </div>
+    }
+</div>

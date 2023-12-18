@@ -4,17 +4,17 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="72a57747b02b4defae08351d8e0f2338" Name="Diagram1">
-        <EntityTypeShape EntityType="ShoeyDatabaseModel.Calificacion" Width="1.5" PointX="5.25" PointY="4.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoeyDatabaseModel.Carrito" Width="1.5" PointX="7.5" PointY="9.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoeyDatabaseModel.Cliente" Width="1.5" PointX="0.75" PointY="10.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoeyDatabaseModel.DetallesOrden" Width="1.5" PointX="5.25" PointY="8" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoeyDatabaseModel.Direccion" Width="1.5" PointX="0.75" PointY="13.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoeyDatabaseModel.Inventario" Width="1.5" PointX="5.25" PointY="13.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoeyDatabaseModel.Orden" Width="1.5" PointX="3" PointY="13.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoeyDatabaseModel.Producto" Width="1.5" PointX="3" PointY="5.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoeyDatabaseModel.Tarjeta" Width="1.5" PointX="0.75" PointY="17.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="ShoeyDatabaseModel.Vendedor" Width="1.5" PointX="0.75" PointY="5.875" IsExpanded="true" />
+      <Diagram DiagramId="c39a4cb0440b4cf99a208f7324aa9b43" Name="Diagram1">
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.Calificacion" Width="1.5" PointX="3.75" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.Carrito" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.Cliente" Width="1.5" PointX="0.75" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.DetallesOrden" Width="1.5" PointX="7.5" PointY="14" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.Direccion" Width="1.5" PointX="3" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.Inventario" Width="1.5" PointX="0.75" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.Orden" Width="1.5" PointX="5.25" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.Producto" Width="1.5" PointX="1.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.Tarjeta" Width="1.5" PointX="3" PointY="19.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoeyDatabaseModel.Vendedor" Width="1.5" PointX="1.5" PointY="15.125" IsExpanded="true" />
         <AssociationConnector Association="ShoeyDatabaseModel.FK__Calificac__IDPro__440B1D61" ManuallyRouted="false" />
         <AssociationConnector Association="ShoeyDatabaseModel.FK_Carrito_Cliente1" ManuallyRouted="false" />
         <AssociationConnector Association="ShoeyDatabaseModel.FK_Carrito_Inventario1" ManuallyRouted="false" />
@@ -24,9 +24,13 @@
         <AssociationConnector Association="ShoeyDatabaseModel.FK_Tarjeta_Cliente" ManuallyRouted="false" />
         <AssociationConnector Association="ShoeyDatabaseModel.FK__DetallesO__IDOrd__403A8C7D" ManuallyRouted="false" />
         <AssociationConnector Association="ShoeyDatabaseModel.FK__DetallesO__IDPro__412EB0B6" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoeyDatabaseModel.FK_DetallesOrden_DetallesOrden" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoeyDatabaseModel.FK_DetallesOrden_Orden" ManuallyRouted="false" />
         <AssociationConnector Association="ShoeyDatabaseModel.FK_Orden_Direccion" ManuallyRouted="false" />
         <AssociationConnector Association="ShoeyDatabaseModel.FK_Inventario_Producto1" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoeyDatabaseModel.FK_Orden_Orden" ManuallyRouted="false" />
         <AssociationConnector Association="ShoeyDatabaseModel.FK_Orden_Tarjeta" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoeyDatabaseModel.FK_Orden_Vendedor" ManuallyRouted="false" />
         <AssociationConnector Association="ShoeyDatabaseModel.FK__Producto__IDVend__38996AB5" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

@@ -1,0 +1,30 @@
+﻿@model shoeyStore.Models.ViewModels.AccessViewModel
+@{
+    ViewBag.Title = "AccessEdit";
+}
+
+
+<div class="container">
+    <h2>Access Credentials</h2>
+
+    @using (Html.BeginForm("AccessEdit", "Settings", FormMethod.Post, new { role = "form", @class = "" }))
+    {
+        <div class="row">
+            <div class="col-6">
+                @Html.LabelFor(e => e.CorreoElectronico,"Email")
+                @Html.TextBoxFor(e => e.CorreoElectronico, new { @class = "form-control" })
+                @Html.ValidationMessageFor(e => e.CorreoElectronico, "", new { @class = "d-block text-danger mb-2" })
+
+                @Html.LabelFor(e => e.Contrasenna,"Password")
+                @Html.TextBoxFor(e => e.Contrasenna, new { @class = "form-control" })
+                @Html.ValidationMessageFor(e => e.Contrasenna, "", new { @class = "d-block text-danger mb-2" })
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <input type="submit" class="btn btn-success" value="Save" />
+            <input type="button" class="btn btn-outline-danger" value="Back"
+                   onclick="document.location.href = '@Url.Content("~/Settings/Access")'" />
+        </div>
+    }
+</div>

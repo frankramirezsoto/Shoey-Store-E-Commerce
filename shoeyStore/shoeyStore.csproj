@@ -179,6 +179,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StoreModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\TableViewModels\AccessTableViewModel.cs" />
+    <Compile Include="Models\TableViewModels\AddressTableViewModel.cs" />
+    <Compile Include="Models\TableViewModels\ClientTableViewModel.cs" />
     <Compile Include="Models\TableViewModels\OrderTableViewModel.cs" />
     <Compile Include="Models\TableViewModels\ProductTableViewModel.cs" />
     <Compile Include="Models\Tarjeta.cs">
@@ -187,6 +190,8 @@
     <Compile Include="Models\Vendedor.cs">
       <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\AccessViewModel .cs" />
+    <Compile Include="Models\ViewModels\AddressViewModel.cs" />
     <Compile Include="Models\ViewModels\CardViewModel.cs" />
     <Compile Include="Models\ViewModels\CartViewModel.cs" />
     <Compile Include="Models\ViewModels\InventoryViewModel.cs" />
@@ -309,11 +314,20 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Carousel.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
+    <Content Include="Views\SellerAdmin\Orders.cshtml" />
+    <Content Include="Views\SellerAdmin\Information.cshtml" />
+    <Content Include="Views\Settings\Access.cshtml" />
+    <Content Include="Views\Settings\AccessEdit.cshtml" />
+    <Content Include="Views\Settings\Index.cshtml" />
+    <Content Include="Views\Settings\Payment.cshtml" />
+    <Content Include="Views\Settings\PaymentAdd.cshtml" />
+    <Content Include="Views\Settings\Shipping.cshtml" />
+    <Content Include="Views\Settings\ShippingAdd.cshtml" />
+    <Content Include="Views\Settings\ShippingEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
-    <Folder Include="Views\Settings\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

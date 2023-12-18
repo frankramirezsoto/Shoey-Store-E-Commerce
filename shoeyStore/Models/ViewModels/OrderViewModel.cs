@@ -28,6 +28,8 @@ namespace shoeyStore.Models.ViewModels
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CartViewModel> CartItems { get; set; }
         public virtual Direccion Direccion { get; set; }
+        public virtual Orden Orden1 { get; set; }
+        public virtual Orden Orden2 { get; set; }
         public virtual Tarjeta Tarjeta { get; set; }
     }
 }

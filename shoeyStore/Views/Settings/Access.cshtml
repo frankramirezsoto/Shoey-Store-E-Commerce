@@ -1,0 +1,40 @@
+﻿@model List<shoeyStore.Models.ViewModels.AccessTableViewModel>
+@{
+    ViewBag.Title = "Access";
+}
+
+
+<div class="container">
+    <h2>Access Credentials</h2>
+    <a class="btn btn-danger mb-3" onclick="document.location.href ='@Url.Content("~/Settings/")'">
+        <i class="bi bi-backspace-fill text-white"></i> Back
+    </a>
+    <main>
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var info in Model)
+                        {
+                            <tr>
+                                <td>@info.CorreoElectronico</td>
+                                <td>@info.Contrasenna</td>
+                                <td>
+                                    <a onclick="document.location.href ='@Url.Content("~/Settings/AccessEdit/")@info.IDCliente'" class="btn btn-primary">Edit</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>

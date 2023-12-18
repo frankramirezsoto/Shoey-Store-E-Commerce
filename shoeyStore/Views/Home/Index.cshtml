@@ -9,10 +9,13 @@
             <source src="~/Content/assets/shoeyVideo.mp4" type="video/mp4" />
         </video>
     </div>
-
     <div class="">
-        <div class="d-flex justify-content-center mt-4">
-            <button class="btn btn-success btn-lg rounded-pill py-3" href="@Url.Content("~/ItemNavigation")">SHOP NOW <i class="bi bi-arrow-right-circle-fill ms-3 text-white"></i></button>
+        <div class="d-flex justify-content-center mt-3">
+            <a class="btn btn-success btn-lg rounded-pill py-3" href="@Url.Content("~/ItemNavigation")">SHOP NOW <i class="bi bi-arrow-right-circle-fill ms-3 text-white"></i></a>
+        </div>
+
+        <div class="d-flex justify-content-center mt-5">
+            <div><h3 class="fw-bold">Check out our latest shoes!</h3><hr /></div>
         </div>
         <div id="carousel">
             @Html.Action("Carousel", "Home");

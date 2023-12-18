@@ -1,10 +1,83 @@
 ﻿@model List<shoeyStore.Models.ViewModels.OrderTableViewModel>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Orders";
 }
 
-<h2>Index</h2>
+@if (Model != null)
+{
+    <div class="container mx-auto row">
+        <div class="d-flex justify-content-center">
+            <h2>Your Orders</h2>
+        </div>
+        <hr />
+        @foreach (var order in Model)
+        {
+            <div class="row col-lg-6 d-flex justify-content-center align-items-center mb-4">
+                <div class="col-12">
+                    <div class="card border-top border-bottom border-3" style="border-color: #157247 !important;">
+                        <div class="card-body p-5">
+
+                            <p class="lead fw-bold mb-3">Order: @order.IDOrden</p>
+                            <p class="lead fw-bold mb-3">Ship to: @order.Direccion.Nombre @order.Direccion.Apellido</p>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <p class="small text-muted mb-1">Date</p>
+                                    <p>@order.FechaOrden</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <p class="small text-muted mb-1">Order No.</p>
+                                    <p>@order.IDOrden</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <p class="small text-muted mb-1">Card</p>
+                                    <p>**** **** **** @order.Tarjeta.Numero.Substring(order.Tarjeta.Numero.Length - 4)</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <p class="small text-muted mb-1">Address</p>
+                                    <p>@order.Direccion.Linea, @order.Direccion.Ciudad, @order.Direccion.ZIP</p>
+                                </div>
+                            </div>
+
+                            <div class="mx-n5 px-5 py-4">
+                                @foreach (var item in order.OrderDetails)
+                                {
+                                    <div class="row bg-light p-2">
+                                        <div class="col-lg-2">
+                                            <p class="small">x @item.Cantidad</p>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <p class="small">@item.Producto.Marca @item.Producto.Modelo</p>
+                                            <p>Size: @item.Inventario.TallaUS</p>
+                                        </div>
+                                        <div class="col-lg-4 ">
+                                            <p class="small">Total: $@item.Inventario.Precio</p>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+
+                            <div class="row my-4">
+                                <div class="col-md-4 offset-md-8 col-lg-3 offset-lg-9">
+                                    <p class="lead fw-bold mb-0" style="color: #157247;">$@order.MontoTotal</p>
+                                </div>
+                            </div>
+
+                            <p class="mt-4 pt-2 mb-0">
+                                Want any help? <a href="#!" style="color: #157247;">
+                                    Please contact
+                                    us
+                                </a>
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
 <script>
-    console.log();
+
 </script>
 

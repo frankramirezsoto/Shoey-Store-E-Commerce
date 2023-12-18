@@ -47,6 +47,7 @@
                                                             </div>
                                                             <div class="ms-3">
                                                                 <h6>@cartItem.Producto.Marca @cartItem.Producto.Modelo</h6>
+                                                                <p>Size: @cartItem.Inventario.TallaUS</p>
                                                             </div>
                                                         </div>
                                                         <div class="d-flex flex-row align-items-center">
@@ -63,9 +64,11 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <input type="hidden" id="inventoryID" name="DetallesOrdens[@count].IDInventario" value="@cartItem.IDInventario">
                                             <input type="hidden" id="productID" name="DetallesOrdens[@count].IDProducto" value="@cartItem.IDProducto">
                                             <input type="hidden" id="qty" name="DetallesOrdens[@count].Cantidad" value="@cartItem.Cantidad">
                                             <input type="hidden" id="cartId" name="CartItems[@count].IDCarrito" value="@cartItem.IDCarrito">
+
                                             count++;
                                         }
                                     }
@@ -432,7 +435,7 @@
                 console.log("Response data:", data);
                 if (data === "200") {
                     hideLoadingScreen();
-                    window.location.href = "@Url.Content("~/Home?showToast=orderSuccessful")";
+                    window.location.href = "@Url.Content("~/Order?showToast=orderSuccessful")";
                     console.log("Redirecting to home page");
                 } else {
                     displayToast(data,"danger");

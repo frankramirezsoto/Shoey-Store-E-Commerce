@@ -1,0 +1,75 @@
+﻿@model List<shoeyStore.Models.ViewModels.CardViewModel>
+
+@{
+    ViewBag.Title = "Payment";
+}
+
+<div class="container">
+    <h2 class="mb-3">Payment Information</h2>
+
+    <div class="container mb-3">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="@Url.Action("PaymentAdd", "Settings")" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i> Add
+                </a>
+                <a class="btn btn-danger" onclick="document.location.href ='@Url.Content("~/Settings/")'">
+                    <i class="bi bi-backspace-fill text-white"></i> Back
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var card in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Bank Card</h5>
+                            <p class="card-text">Card Number: @card.Numero</p>
+                            <p class="card-text"><b>Expiration:</b> @card.Expiracion</p>
+                            <p class="card-text">CCV: @card.CVV</p>
+                            <a href="#" onclick="deleteCard(@card.IDTarjeta)" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-md-12">
+                <p>No cards found.</p>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function deleteCard(cardId) {
+            if (confirm("¿Estás seguro de eliminar esta tarjeta?")) {
+                $.ajax({
+                    url: "@Url.Action("Delete", "Settings")",
+                    type: "POST",
+                    data: { IDTarjetas: cardId },
+                    success: function (result) {
+                        if (result === "200") {
+                            location.reload();
+                        } else {
+                            alert("Hubo un error al eliminar la tarjeta.");
+                        }
+                    },
+                    error: function () {
+                        alert("Hubo un error al procesar la solicitud.");
+                    }
+                });
+            }
+        }
+    </script>
+}
+
+
+
+

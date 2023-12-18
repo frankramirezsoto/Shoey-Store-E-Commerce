@@ -1,0 +1,83 @@
+﻿@model List<shoeyStore.Models.ViewModels.AddressTableViewModel>
+@{
+    ViewBag.Title = "Shipping";
+}
+<div class="container">
+    <h2>Shipping Settings</h2>
+    <hr />
+    <!-- SECCION BOTONES -->
+    <div class="col-12 my-2">
+        <a class="btn btn-success" onclick="document.location.href ='@Url.Content("~/Settings/ShippingAdd")'">
+            <i class="bi bi-plus-lg"></i> Add
+        </a>
+        <a class="btn btn-danger" onclick="document.location.href ='@Url.Content("~/Settings/")'">
+            <i class="bi bi-backspace-fill text-white"></i> Back
+        </a>
+    </div>
+
+    <!-- SECCION TABLA -->
+    <main>
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Last Name</th>
+                        <th>Line</th>
+                        <th>City</th>
+                        <th>Estate</th>
+                        <th>ZIP</th>
+                        <th>Phone</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var card in Model)
+                        {
+                            <tr>
+                                <td>@card.Nombre</td>
+                                <td>@card.Apellido</td>
+                                <td>@card.Linea</td>
+                                <td>@card.Ciudad</td>
+                                <td>@card.Estado</td>
+                                <td>@card.ZIP</td>
+                                <td>@card.Telefono</td>
+                                <td>
+                                    <a onclick="document.location.href ='@Url.Content("~/Settings/ShippingEdit/" + @card.IDDireccion)'" class="btn btn-success">Edit</a>
+                                    <a href="#" onclick="deleteShip(@card.IDDireccion)" class="btn btn-danger">Delete</a>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+    <script>
+        function deleteShip(shipId) {
+            if (confirm("¿Estás seguro de eliminar esta direccion?")) {
+                $.ajax({
+                    url: "@Url.Action("DeleteShipping", "Settings")", // Corregir la URL aquí
+                    type: "POST",
+                    data: { IDDireccion: shipId },
+                    success: function (result) {
+                        if (result === "200") {
+                            location.reload();
+                        } else {
+                            alert("Hubo un error al eliminar la tarjeta.");
+                        }
+                    },
+                    error: function () {
+                        alert("Hubo un error al procesar la solicitud.");
+                    }
+                });
+            }
+        }
+    </script>
+
+
+

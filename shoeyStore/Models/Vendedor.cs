@@ -17,6 +17,7 @@ namespace shoeyStore.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Vendedor()
         {
+            this.Ordens = new HashSet<Orden>();
             this.Productoes = new HashSet<Producto>();
         }
     
@@ -27,6 +28,8 @@ namespace shoeyStore.Models
         public string IBAN { get; set; }
         public Nullable<bool> Verificado { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Orden> Ordens { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Producto> Productoes { get; set; }
     }

@@ -246,5 +246,47 @@ namespace shoeyStore.Controllers
 
             return Content("200");
         }
+
+        [HttpGet]
+        public ActionResult Information()
+        {
+            SellerViewModel model = new SellerViewModel();
+            var user = (Vendedor)Session["SellerLogged"];
+
+            using (var db = new ShoeyDatabaseEntities())
+            {
+                var infoTO = db.Vendedors.Find(user.IDVendedor);
+                if (infoTO != null)
+                {
+                    model.IDVendedor = infoTO.IDVendedor;
+                    model.CorreoElectronico = infoTO.CorreoElectronico;
+                    model.Contrasenna = infoTO.Contrasenna;
+                }
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Information(SellerViewModel model)
+        {
+            if (!ModelState.IsValid) { return View(model); }
+
+            using (var db = new ShoeyDatabaseEntities())
+            {
+                var infoTO = db.Vendedors.Find(model.IDVendedor);
+                if (infoTO != null)
+                {
+                    infoTO.CorreoElectronico = model.CorreoElectronico;
+                    infoTO.Contrasenna = model.Contrasenna;
+
+                    db.Entry(infoTO).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index", "SellerAdmin");
+                }
+            }
+
+            return View(model); // If there's an issue, return to the view with the model data
+        }
     }
 }

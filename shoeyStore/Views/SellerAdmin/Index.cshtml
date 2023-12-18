@@ -4,5 +4,41 @@
     Layout = "~/Views/Shared/_LayoutSellerAdmin.cshtml";
 }
 
-<h2>Dashboard</h2>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card custom-card">
+                <div class="card-body">
+                    <h5 class="card-title">Information</h5>
+                    <p class="card-text">Edit your personal information such as email and password.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Content("~/SellerAdmin/Information")" class="btn btn-success mt-auto">Go to Information</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card custom-card">
+                <div class="card-body">
+                    <h5 class="card-title">Payment</h5>
+                    <p class="card-text">Edit your Iban account.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Content("~/SellerAdmin/Payment")" class="btn btn-success mt-auto">Go to Payment</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card custom-card">
+                <div class="card-body">
+                    <h5 class="card-title">Products</h5>
+                    <p class="card-text">Add products to sell.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Content("~/SellerAdmin/Products")" class="btn btn-success mt-auto">Go to Products</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
